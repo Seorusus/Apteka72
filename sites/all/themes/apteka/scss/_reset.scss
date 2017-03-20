@@ -1,0 +1,164 @@
+@import "http://fonts.fontstorage.com/import/opensans.css";
+
+$orange: #f66600;
+
+html, body {
+  overflow-x: hidden;
+}
+
+body {
+  color: #555;
+  font: 400 15px 'Open Sans';
+}
+
+a {
+  color: #555;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  @include box-sizing(border-box);
+}
+
+.wrap {
+  @include container;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.menu {
+  list-style: none;
+  a {
+    text-decoration: none;
+    transition: .3s;
+    &:hover {
+      color: $orange;
+    }
+  }
+}
+
+h2 {
+  font-size: 21px;
+  font-weight: 600;
+}
+
+button {
+  cursor: pointer;
+}
+
+.visually-hidden, .breadcrumb__title, .element-invisible {
+  display: none;
+}
+
+ul.tabs {
+  list-style: none;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  li {
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 10px;
+  }
+  a {
+    border-bottom: 2px solid #9d9d9d;
+    border-radius: 5px;
+    display: block;
+    font-weight: 600;
+    text-decoration: none;
+    background-color: #e8e8e8;
+    padding: 10.5px 25px;
+    transition: .3s;
+    &.active,
+    &:hover {
+      color: #fff;
+      background-color: $orange;
+      border-bottom: 2px solid darken(#9d9d9d, 15%);
+    }
+  }
+}
+
+#user-register-form, #user-login, #user-pass {
+  @include container;
+  label {
+    display: none;
+  }
+  .form-item {
+    max-width: 460px;
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    &:before {
+      content: '*';
+      color: $orange;
+      position: absolute;
+      top: 9px;
+      left: 8px;
+    }
+  }
+  .description {
+    display: none;
+  }
+  [type="text"], [type="password"] {
+    width: 100%;
+    background-color: #f0f0f0;
+    border: 1px solid #c1c1c1;
+    border-radius: 4px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+  }
+  [type="submit"] {
+    border: none;
+    border-bottom: 2px solid #218f26;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    background-color: #45af4a;
+    @include border-radius(5px);
+    cursor: pointer;
+    padding: 7.5px 60px;
+    transition: .3s;
+    &:hover {
+      background-color: darken(#45af4a, 15%);
+      border-bottom-color: darken(#218f26, 15%);
+    }
+  }
+  ::-webkit-input-placeholder {
+    color: #555;
+    font-size: 15px;
+    font-style: italic;
+  }
+  ::-moz-placeholder {
+    color: #555;
+    font-size: 15px;
+    font-style: italic;
+  }
+  :-moz-placeholder {
+    color: #555;
+    font-size: 15px;
+    font-style: italic;
+  }
+  :-ms-input-placeholder {
+    color: #555;
+    font-size: 15px;
+    font-style: italic;
+  }
+}
+
+.messages {
+  color: #fff;
+  width: 100%;
+  background-color: #000;
+  margin-bottom: 15px;
+  padding: 0.7%;
+  text-align: center;
+  text-transform: uppercase;
+  .messages__icon {
+    display: none
+  }
+  a {
+    color: #fff;
+    text-decoration: underline;
+  }
+}
