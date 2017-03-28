@@ -1,11 +1,14 @@
 <?php
 
 
-function apteka_form_alter(&$form, &$form_state, $form_id)
-{
+function apteka_form_alter(&$form, &$form_state, $form_id){
     if (in_array($form_id, array('user_login', 'user_login_block'))) {
         $form['name']['#attributes']['placeholder'] = t('Введите логин...');
         $form['pass']['#attributes']['placeholder'] = t('Введите пароль...');
+    }
+
+    if (commerce_form_callback($form_id, $form_state) == "commerce_cart_add_to_cart_form") {
+        $form['submit']['#value'] = t('В корзину');
     }
 }
 

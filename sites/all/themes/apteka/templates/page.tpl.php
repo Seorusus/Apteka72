@@ -48,26 +48,15 @@
         <?php print $feed_icons; ?>
     </div>
 </div>
+
 <div class="content-bottom">
     <div class="wrap">
         <?php print render($page['content_bottom']); ?>
     </div>
 </div>
+
 <div class="footer">
     <div class="wrap">
-        <div class="footer-top">
-            <?php print render($page['footer_top']); ?>
-        </div>
-        <div class="footer-bottom">
-            <div class="footer-logo">
-                <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"><img
-                            src="<?php print base_path() . path_to_theme() . '/logo.jpg'; ?>"></a>
-            </div>
-            <div class="footer-bottom-right">
-                <?php print render($page['footer_bottom']); ?>
-            </div>
-        </div>
+        <?php print render($page['footer']); ?>
     </div>
 </div>
-
-<?php print render($page['bottom']); ?>

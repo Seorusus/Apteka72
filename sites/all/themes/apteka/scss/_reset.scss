@@ -162,3 +162,34 @@ ul.tabs {
     text-decoration: underline;
   }
 }
+
+.block-views {
+  .block__title {
+    margin-top: 35px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #555;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+  }
+}
+
+[type="submit"] {
+  background-color: #45af4a;
+  border: none;
+  border-radius: 5px;
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid #218f26;
+  color: #fff;
+  cursor: pointer;
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+  width: 100%;
+  padding-top: 5.5px;
+  padding-bottom: 5.5px;
+  transition: .35s;
+  &:hover {
+    background-color: #218f26;
+    border-bottom-color: #45af4a;
+  }
+}
