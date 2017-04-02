@@ -1,7 +1,49 @@
-@mixin transform($transforms) {
-  -moz-transform: $transforms;
-  -o-transform: $transforms;
-  -ms-transform: $transforms;
-  -webkit-transform: $transforms;
-  transform: $transforms;
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: "";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+@mixin p-setting() {
+  p {
+    line-height: 1.8;
+    margin-bottom: 15px;
+    a {
+      color: $orange;
+      text-decoration: none;
+      transition: .3s;
+      &:hover {
+        color: darken($orange, 10%);
+      }
+    }
+  }
+}
+
+
+@mixin ul-setting() {
+  ul {
+    list-style: none;
+    li {
+      position: relative;
+      padding-left: 25px;
+      &:before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        background-color: $orange;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        margin-top: auto;
+        margin-bottom: auto;
+        border-radius: 100%;
+      }
+    }
+  }
 }

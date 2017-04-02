@@ -1,0 +1,6 @@
+name = PRidea Patch
+description = Заплатки от PRidea
+package = PRidea
+core = 7.x
+
+configure = admin/config/callme

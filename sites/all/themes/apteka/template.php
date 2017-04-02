@@ -12,6 +12,9 @@ function apteka_form_alter(&$form, &$form_state, $form_id){
     }
 }
 
+function apteka_page_alter(&$page) {
+    drupal_add_css('http://fonts.fontstorage.com/import/opensans.css');
+}
 
 /**
  * Override or insert variables into the maintenance page template.

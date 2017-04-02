@@ -1,0 +1,515 @@
+<?php 
+function prideapatch_help($path, $arg) {
+  switch ($path) {
+    case "admin/help#current_posts":
+      return '<p>' . t("Модуль содержит различные правки и хуки от PRidea") . '</p>';
+      break;
+  }
+} 
+
+
+/**
+* Implements commerce_currency_info_alter().
+*/
+function prideapatch_commerce_currency_info_alter(&$currencies) {
+    $currencies['RUB']['format_callback'] = 'prideapatch_rub_currency_format'; //указываем функцию, которую будем использовать вместо штатного обработчика цены
+    $currencies['RUB']['symbol'] = 'Р'; // символ валюты (нам он не нужен, но для удобства просто пишем)
+    $currencies['RUB']['code_placement'] = '';
+    $currencies['RUB']['symbol_placement'] = 'after'; // тоже не используем
+}
+//функция переопределяющая вывод валюты (название выше указано)
+function prideapatch_rub_currency_format($amount, $currency, $object) {
+    $round_amount = commerce_currency_round(abs($amount), $currency); //округляем, нам копейки не нужны
+    $price = number_format($round_amount, 2, $currency['decimal_separator'], ''); //форматируем значение
+    return $price.'<span class="rub">Р</span>'; //выводим цену и значок Р в конце
+}
+
+
+
+
+function prideapatch_update_projects_alter(&$projects){
+    unset($projects['zen']);
+}
+
+function prideapatch_menu() {
+  // ...
+  $items['ajax/addtocart/%'] = array(
+    'title' => 'Get content by AJAX',
+    'page callback' => 'prideapatch_ajax_increment',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    //'delivery callback' => 'ajax_deliver',
+  );
+  $items['ajax/deccart/%'] = array(
+    'title' => 'Get content by AJAX',
+    'page callback' => 'prideapatch_ajax_decrement',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    //'delivery callback' => 'ajax_deliver',
+  );
+  $items['ajax/remcart/%'] = array(
+    'title' => 'Get content by AJAX',
+    'page callback' => 'prideapatch_ajax_remove',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    //'delivery callback' => 'ajax_deliver',
+  );
+  $items['ajax/addpresent/%'] = array(
+    'title' => 'Get content by AJAX',
+    'page callback' => 'prideapatch_ajax_addpresent',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    //'delivery callback' => 'ajax_deliver',
+  );
+  $items['ajax/empty'] = array(
+    'title' => 'Очистить',
+    'access arguments' => array('access content'),
+    'page callback' => 'prideapatch_empty_cart',
+    'type' => MENU_CALLBACK
+  );
+  $items['admin/config/system/callme'] = array(
+    'title' => 'Настройки обратного звонка',
+    'access arguments' => array('access administration pages'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('prideapatch_admin_form'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+
+
+
+
+function prideapatch_js() {
+    return array(
+      'blah' => array(
+        'callback'     => 'prideapatch_blah',
+        'file'         => '/includes/path.inc',
+        'includes'     => array('theme', 'unicode', 'block'),
+        'dependencies' => array('locale', 'filter', 'user','block'),
+        'bootstrap'    => DRUPAL_BOOTSTRAP_PATH,
+        
+        //'access arguments' => array('access content'),
+        'page arguments'  => array(1,2),
+        //'skip_hook_init' => FALSE,
+      ),
+    );
+  }
+
+
+
+function prideapatch_blah($p1 = 0, $p2 = 0){
+	return prideapatch_getblock();
+}
+
+
+
+function prideapatch_item_add($product_id, $quantity, $uid) {
+  $line_item = NULL;
+  if ($product = commerce_product_load($product_id)) {
+    $line_item = commerce_product_line_item_new($product, $quantity);
+    $line_item->data['context']['add_to_cart_combine'] = TRUE;
+    $line_item = commerce_cart_product_add($uid, $line_item, TRUE);
+  }
+  return $line_item;
+}
+
+
+
+function prideapatch_getcounts() {
+	global $user;
+	//Считаем количество элементов в каждом каталоге, которые уже заказаны в корзинку.
+
+	$order = commerce_cart_order_load($user->uid);
+	$wrapper = entity_metadata_wrapper('commerce_order', $order);
+
+	$counts = array();
+
+	foreach ($wrapper->commerce_line_items as $delta => $line_item_wrapper) {                                  
+	  $data = $line_item_wrapper->commerce_product->value();
+	  $tid = $data->field_catalog['und'][0]['tid'];
+	  if (!isset($counts[$tid])) $counts[$tid] = 0;
+	  $counts[$tid] += $line_item_wrapper->quantity->value();
+	}   
+	return $counts;
+}
+
+
+
+
+function prideapatch_getblock() {
+	//получаем и рендерим блок с корзинкой
+	$block = block_load('commerce_cart', 'cart');     
+	$rblock = _block_render_blocks(array($block));
+	$dblock = _block_get_renderable_array($rblock);
+	return drupal_render($dblock);
+}
+
+
+function prideapatch_ajax_increment($product_id) {
+	//Добавляем товар по его ID (не путать с NODE ID - nid)
+	commerce_cart_product_add_by_id($product_id);
+
+	$counts = prideapatch_getcounts();
+	$block_rendered = prideapatch_getblock();    
+
+	//Отправляем JSON назад   
+	print json_encode(array('block'=>$block_rendered, 'data'=>$counts));
+
+  //чистим ненужные нам сообщения, что товар добавлен
+	drupal_get_messages();
+}
+
+
+function prideapatch_ajax_decrement($product_id) {
+	product_alter_quanity($product_id,1,'remove');
+
+	$counts = prideapatch_getcounts();
+	$block_rendered = prideapatch_getblock();    
+
+	//Отправляем JSON назад   
+	print json_encode(array('block'=>$block_rendered, 'data'=>$counts));
+
+  //чистим ненужные нам сообщения, что товар добавлен
+	drupal_get_messages();
+}
+
+
+function prideapatch_ajax_remove($product_id) {
+	product_delete_cart($product_id);
+
+	$counts = prideapatch_getcounts();
+	$block_rendered = prideapatch_getblock();    
+
+	//Отправляем JSON назад   
+	print json_encode(array('block'=>$block_rendered, 'data'=>$counts));
+
+  //чистим ненужные нам сообщения, что товар добавлен
+	drupal_get_messages();
+}
+
+
+function prideapatch_empty_cart() {
+  global $user;
+  // Load the order and empty the cart
+  $order = commerce_cart_order_load($user->uid);
+  commerce_cart_order_empty($order);
+
+  $counts = prideapatch_getcounts();
+	$block_rendered = prideapatch_getblock();    
+
+	//Отправляем JSON назад   
+	print json_encode(array('block'=>$block_rendered, 'data'=>$counts));
+
+  //чистим ненужные нам сообщения, что товар добавлен
+	drupal_get_messages();
+}
+
+
+function prideapatch_ajax_addpresent($product_id) {
+  $pres = remove_presents();
+  prideapatch_ajax_increment($product_id);
+  /*if ($pres > 0){
+    drupal_set_message('Ваш приз добавлен в корзину! Другие подарки были удалены, так как вы можете взять себе тольк один!','status');
+  }
+  else{ 
+    drupal_set_message('Ваш приз добавлен в корзину!','status');
+  }*/
+}
+
+
+
+function remove_presents() {
+  global $user;
+  $current_order = commerce_cart_order_load($user->uid);
+  if (count($current_order->commerce_line_items) > 0) {
+    /*$query = 'SELECT li.order_id, p.product_id,  li.line_item_id, c.field_catalog_tid, t.field_threshold_value FROM commerce_line_item li LEFT JOIN  commerce_product p ON p.sku = li.line_item_label LEFT JOIN field_data_field_catalog c ON c.entity_id = p.product_id LEFT JOIN field_data_field_threshold t ON t.entity_id = p.product_id WHERE order_id = ' . $current_order->order_number;*/
+    $query = 'SELECT p.product_id,  li.line_item_id FROM commerce_line_item li LEFT JOIN  commerce_product p ON p.sku = li.line_item_label LEFT JOIN field_data_field_catalog c ON c.entity_id = p.product_id LEFT JOIN field_data_field_threshold t ON t.entity_id = p.product_id WHERE t.field_threshold_value > -1 and order_id = ' . $current_order->order_number;
+    $result = 0;
+    $dbres = db_query($query);
+    foreach ($dbres as $record) {
+      //$record->line_item_id;
+      commerce_cart_order_product_line_item_delete($current_order, $record->line_item_id);
+      $result++;
+    }
+    return $result;
+
+    /*foreach ($line_items['und'] as $key => $value) {
+      $line_item = commerce_line_item_load($value['line_item_id']);
+
+      $product_id = $line_item->commerce_product['und'][0]['product_id'];
+      $product =  commerce_product_load($product_id);
+      return print_r($product,true);
+    } 
+    if (isset($line_item_ids) >= 1) {
+      return $line_item_ids;
+    }
+    else {
+      return -1;
+    }*/
+  } else
+    return -1;
+}
+
+
+function product_in_cart($product_id) {
+	if (!is_array($product_id)) {
+		global $user;
+		$current_order = commerce_cart_order_load($user->uid);
+		if (count($current_order->commerce_line_items) > 0) {
+			$line_items = $current_order->commerce_line_items;
+				foreach ($line_items['und'] as $key => $value) {
+				$line_item = commerce_line_item_load($value['line_item_id']);
+				$products = $line_item->commerce_product['und'];
+				foreach ($products as $product_key => $product_value) {
+					if ($product_id == $product_value['product_id']) {
+						return $value['line_item_id'];
+					}
+				}
+			}
+			return -1;
+		} else
+		return -2;
+	}
+	else {
+		global $user;
+		$current_order = commerce_cart_order_load($user->uid);
+		if (count($current_order->commerce_line_items) > 0) {
+			$line_items = $current_order->commerce_line_items;
+			foreach ($line_items['und'] as $key => $value) {
+				$line_item = commerce_line_item_load($value['line_item_id']);
+				$products = $line_item->commerce_product['und'][0]['product_id'];
+				foreach ($product_id as $id) {
+					if ($id == $products) {
+						$line_item_ids[] = $value['line_item_id'];
+					}
+				}
+			} 
+			if (isset($line_item_ids) >= 1) {
+				return $line_item_ids;
+			}
+			else {
+				return -1;
+			}
+		} else
+			return -2;
+	}
+}
+
+/**
+ * function to delete a product from cart.
+ * @param
+ * $product_ids takes product id to be deleted as argument
+ * type it can be array of product ids or can be single product ids.
+ * @return
+ * returns -1 on failure.
+ * faliure is possible because of
+ * given product does not exist
+ * current cart object is empty
+ */
+function product_delete_cart($product_ids) {
+	if (!is_array($product_ids)) {
+		$line_item_id = product_in_cart($product_ids);
+		if ($line_item_id != -1 && $line_item_id != -2) {
+			global $user;
+			$current_order = commerce_cart_order_load($user->uid);
+			commerce_cart_order_product_line_item_delete($current_order, $line_item_id);
+		} else
+		return -1;
+	}
+	else {
+		$line_item_ids = product_in_cart($product_ids);
+		if ($line_item_ids != -1 && $line_item_ids != -2) {
+			global $user;
+			$current_order = commerce_cart_order_load($user->uid);
+			foreach ($line_item_ids as $line_item_id) {
+				commerce_cart_order_product_line_item_delete($current_order, $line_item_id);
+			}
+		}
+		else {
+			return -1;
+		}
+	}
+}
+
+
+
+function product_alter_quanity($product_id, $quantity, $param) {
+	$line_item_id = product_in_cart($product_id);
+	if ($line_item_id != -1 && $line_item_id != -2) {
+		if ($param == 'remove') {
+			$product_quantity_in_cart = commerce_line_items_quantity(array($line_item_id));
+			if ($quantity >= $product_quantity_in_cart) {
+				product_delete_cart($product_id);
+			}
+			else {
+				$line_item = commerce_line_item_load($line_item_id);
+				$line_item->quantity = $line_item->quantity - $quantity;
+				commerce_line_item_save($line_item);
+			}
+		}
+		elseif ($param == 'add') {
+			//$line_item_id = product_in_cart($product_id);
+			$line_item = commerce_line_item_load($line_item_id);
+			$line_item->quantity = $line_item->quantity + $quantity;
+			commerce_line_item_save($line_item);
+		}
+	}
+		else {
+		return -1;
+	}
+}
+
+
+function prideapatch_admin_form($form, &$form_state){
+
+	$form['callme_email'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Email для отправки обратного звонка'),
+    '#default_value' => variable_get('callme_email', variable_get('site_mail', '')),
+    '#size' => 30,
+    '#maxlength' => 30,
+    '#description' => t("Укажите номер, на который будут отправляться заявки на обратный звонок."),
+    '#required' => TRUE,
+  );
+
+  return system_settings_form($form);
+}
+
+
+function prideapatch_callme_form($form, &$form_state) {
+ 	$form['callme']['uname'] = array(
+                '#type' => 'textfield',
+                //'#title' => '',
+                '#rows' => 1,
+                '#required' => TRUE,
+                '#attributes' => array('placeholder' => t('Ваше имя')),
+                );
+  $form['callme']['phone'] = array(
+                '#type' => 'textfield',
+                //'#title' => '',
+                '#rows' => 1,
+                '#required' => TRUE,
+                '#attributes' => array('placeholder' => t('Номер телефона')),
+                );
+  $form['callme']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Перезвоните мне!'),
+    
+    '#ajax' => array(
+  		"wrapper" => "prideapatch-callme-form",
+  		"effect" => "fade",
+  		'#validate' => "prideapatch_callme_form_validate",
+  		"callback" => "prideapatch_callme_form_callback",
+
+  	),
+  );
+  $form['callme']['markup'] = array(
+    '#type' => 'markup',
+    '#markup' => '<span class="dontcall">&#x274c;</span>',
+  );
+ 
+  return $form;
+}
+
+
+
+
+
+
+function prideapatch_callme_form_callback($form, &$fstate) {
+	if (!form_get_errors()) {
+		$language = language_default();
+		$from = variable_get('site_mail', '');
+		$to = variable_get('callme_email', $from);
+		$params = array('current_conditions' => $fstate['values']);
+		$message = drupal_mail('prideapatch','notice',$to,$language,$params,$from,false);
+		$message['subject'] = 'Перезвоните мне! ('.variable_get('site_name', '').')';
+    $message['body'] = array();
+    $message['body'][] = 'Имя: '.$fstate['values']['uname'];
+    $message['body'][] = 'Номер: '.$fstate['values']['phone'];
+
+		return '<h3 class="hl">Спасибо!</h3><div class="hl">Мы перезвоним Вам!<span id="callclose"></span></div>';
+	}else{
+		return render(drupal_get_form('prideapatch_callme_form'));
+	};
+  
+}
+
+function prideapatch_callme_form_validate($form, &$fstate) {
+	//form_set_error(print_r($fstate));
+	if ($fstate['values']['uname'] == '') {form_set_error("name", "Забыли имя указать!");};
+	if ($fstate['values']['phone'] == '') {form_set_error("name", "А куда звонить-то?");};
+}
+
+
+function prideapatch_block_info() {
+  $blocks['callme'] = array(
+    // The name that will appear in the block list.
+    'info' => t('Перезвоните мне'),
+    // Default setting.
+    'cache' => DRUPAL_CACHE_PER_ROLE,
+  );
+  return $blocks;
+}
+
+
+function prideapatch_block_view($delta = '') {
+  switch ($delta) {
+    case 'callme':
+      $block['subject'] = t('Обратный звонок');
+      if (user_access('access content')) {
+        $block['content'] = drupal_get_form("prideapatch_callme_form") ;
+      }
+    return $block;
+  }
+}
+
+
+function prideapatch_form_commerce_cart_add_to_cart_form_alter(&$form, $form_state, $form_id) {
+  // Add ajax to our add to cart form.
+  if (isset($form['quantity'])) {
+    $form['quantity']['#ajax'] = array(
+      'callback' => 'commerce_cart_add_to_cart_form_attributes_refresh',
+    );
+  }
+}
+
+function mymodule_commerce_cart_attributes_refresh_alter(&$commands, $form, $form_state) {
+  // Do our own quantity calculation and alter the replacement command.
+  if (isset($form_state['line_item']->quantity)) {
+    if (!empty($form_state['context'])) {
+      $product = $form_state['default_product'];
+      $product->display_context = $form_state['context'];
+      $product->commerce_price['und'][0]['original']['amount'] = $form['quantity']['#value'] * $product->commerce_price['und'][0]['amount'];
+      // First render the actual fields attached to the referenced product.
+      foreach (field_info_instances('commerce_product', $product->type) as $product_field_name => $product_field) {
+        if ($product_field_name == 'commerce_price') {
+          // Rebuild the same array of classes used when the field was first rendered.
+          $replacement_class = drupal_html_class(implode('-', array($form_state['context']['class_prefix'], 'product', $product_field_name)));
+          $classes = array(
+            'commerce-product-field',
+            drupal_html_class('commerce-product-field-' . $product_field_name),
+            drupal_html_class('field-' . $product_field_name),
+            $replacement_class,
+          );
+          $element = field_view_field('commerce_product', $product, $product_field_name, $form_state['context']['view_mode']);
+          // Add an extra class to distinguish empty product fields.
+          if (empty($element)) {
+            $classes[] = 'commerce-product-field-empty';
+          }
+          $element += array(
+            '#prefix' => '<div class="' . implode(' ', $classes) . '">',
+            '#suffix' => '</div>',
+          );
+          $commands[] = ajax_command_replace('.' . $replacement_class, drupal_render($element));
+        }
+      }
+    }
+  }
+}

@@ -12,32 +12,51 @@
 // - http://www.adequatelygood.com/2010/3/JavaScript-Module-Pattern-In-Depth
 (function ($, Drupal, window, document) {
 
-  'use strict';
+    'use strict';
 
-  // To understand behaviors, see https://drupal.org/node/756722#behaviors
-  Drupal.behaviors.general = {
-    attach: function (context, settings) {
+    // To understand behaviors, see https://drupal.org/node/756722#behaviors
+    Drupal.behaviors.general = {
+        attach: function (context, settings) {
 
-        $("#block-block-1 button", context).click(function(){
-            $("#block-block-3",context).toggleClass("show");
-        });
+            $(".line-item-quantity-raw", context).wrap("<a href='/cart'></a>");
 
-        $("#block-taxonomy-menu-block-1 .hamburger", context).click(function(){
-            $("#block-taxonomy-menu-block-1 .menu-wrap",context).toggleClass("hide");
-        });
-
-        var forEach=function(t,o,r){if("[object Object]"===Object.prototype.toString.call(t))for(var c in t)Object.prototype.hasOwnProperty.call(t,c)&&o.call(r,t[c],c,t);else for(var e=0,l=t.length;l>e;e++)o.call(r,t[e],e,t)};
-
-        var hamburgers = document.querySelectorAll(".hamburger");
-        if (hamburgers.length > 0) {
-            forEach(hamburgers, function(hamburger) {
-                hamburger.addEventListener("click", function() {
-                    this.classList.toggle("is-active");
-                }, false);
+            $("#block-block-1 button", context).click(function () {
+                $("#block-block-3", context).toggleClass("show");
             });
-        }
 
-    }
-  };
+            $("#block-taxonomy-menu-block-1 .hamburger", context).click(function () {
+                $("#block-taxonomy-menu-block-1 .menu-wrap", context).toggleClass("hide");
+            });
+
+            var forEach = function (t, o, r) {
+                if ("[object Object]" === Object.prototype.toString.call(t))for (var c in t)Object.prototype.hasOwnProperty.call(t, c) && o.call(r, t[c], c, t); else for (var e = 0, l = t.length; l > e; e++)o.call(r, t[e], e, t)
+            };
+
+            var hamburgers = document.querySelectorAll(".hamburger");
+            if (hamburgers.length > 0) {
+                forEach(hamburgers, function (hamburger) {
+                    hamburger.addEventListener("click", function () {
+                        this.classList.toggle("is-active");
+                    }, false);
+                });
+            }
+
+            $(".view-catalog .view-content", context).justifiedGallery();
+
+            $(".description > div", context).readmore({
+                speed: 100,
+                moreLink: '<a href="#">Читать полностью</a>',
+                lessLink: '<a href="#">Скрыть текст</a>',
+
+                afterToggle: function (trigger, element, expanded) {
+                    if (!expanded) { // The "Close" link was clicked
+                        $('html, body').animate({scrollTop: element.offset().top}, {duration: 100});
+                    }
+                }
+
+            });
+
+        }
+    };
 
 })(jQuery, Drupal, this, this.document);

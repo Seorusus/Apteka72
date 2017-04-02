@@ -7,8 +7,22 @@ $susy: (
         gutters: 0,
 );
 
-@import "flex";
+@font-face {
+  font-family: 'PTRoubleSerif';
+  src: url('../fonts/PTRoubleSerif.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/PTRoubleSerif.otf') format('opentype'),
+  url('../fonts/PTRoubleSerif.woff') format('woff'),
+  url('../fonts/PTRoubleSerif.ttf') format('truetype'),
+  url('../fonts/PTRoubleSerif.svg#PTRoubleSerif') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+$rub: 'PTRoubleSerif';
+
 @import "mixin";
+@import "flex";
 @import "reset";
 @import "base";
 @import "hamburgers";
+@import "justifiedGallery.min";

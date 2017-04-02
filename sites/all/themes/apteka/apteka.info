@@ -65,6 +65,8 @@ stylesheets[all][] = css/main.css
 
 ; Optionally add some JavaScripts to your theme.
 
+scripts[] = js/justifiedGallery.js
+scripts[] = js/readmore.min.js
 scripts[] = js/script.js
 
 

@@ -30,8 +30,12 @@
         <?php print render($page['sidebar']); ?>
     </div>
     <?php print render($page['banner']); ?>
+
     <div class="main-container">
+
         <?php print render($page['highlighted']); ?>
+
+        <?php print $breadcrumb; ?>
 
         <?php print render($title_prefix); ?>
         <?php if ($title): ?>
@@ -45,8 +49,9 @@
             <ul class="action-links"><?php print render($action_links); ?></ul>
         <?php endif; ?>
         <?php print render($page['content']); ?>
-        <?php print $feed_icons; ?>
+
     </div>
+
 </div>
 
 <div class="content-bottom">
@@ -57,6 +62,8 @@
 
 <div class="footer">
     <div class="wrap">
-        <?php print render($page['footer']); ?>
+        <div class="row">
+            <?php print render($page['footer']); ?>
+        </div>
     </div>
 </div>
