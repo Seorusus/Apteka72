@@ -1,0 +1,14 @@
+name = SY Commerce Add
+description = Additional functions for Drupal Commerce of SY-Soft
+package = Commerce (stock)
+core = 7.x
+version = "7.x-1.0"
+dependencies[] = commerce
+dependencies[] = commerce_stock
+dependencies[] = commerce_stock_calculation
+dependencies[] = commerce_stock_sources
+dependencies[] = device_geolocation
+dependencies[] = smart_ip
+dependencies[] = feeds
+dependencies[] = feeds_xpathparser
+dependencies[] = feeds_tamper

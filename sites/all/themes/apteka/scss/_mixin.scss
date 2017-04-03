@@ -24,7 +24,6 @@
   }
 }
 
-
 @mixin ul-setting() {
   ul {
     list-style: none;
@@ -46,4 +45,13 @@
       }
     }
   }
+}
+
+@mixin alight-center {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }

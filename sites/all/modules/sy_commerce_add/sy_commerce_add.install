@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function sy_commerce_add_schema() {
+  $schema = array();
+
+  $schema['sy_commerce_add_quantity'] = array(
+    'fields' => array(
+      'qty_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'line_item_id' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'quantity' => array(
+        'type' => 'numeric',
+        'size' => 'normal',
+        'not null' => TRUE,
+        'default' => 0,
+        'precision' => 10,
+        'scale' => 2,
+      ),
+    ),
+    'primary key' => array('qty_id'),
+  );
+
+
+  return $schema;
+}

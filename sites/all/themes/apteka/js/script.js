@@ -41,7 +41,7 @@
                 });
             }
 
-            $(".view-catalog .view-content", context).justifiedGallery();
+            $(".view-catalog .view-content").justifiedGallery();
 
             $(".description > div", context).readmore({
                 speed: 100,
@@ -55,6 +55,8 @@
                 }
 
             });
+
+            $(".commerce-line-item-actions").prepend("<a class='catalog-link' href='/catalog'>Продолжить покупки</a>");
 
         }
     };

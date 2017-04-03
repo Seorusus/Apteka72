@@ -1,0 +1,104 @@
+<?php
+
+include_once('sy_commerce_add_functions.inc');
+include_once('sy_commerce_add_block.inc');
+function sy_commerce_add_ctools_plugin_directory($owner, $plugin_type){
+    if ($owner == 'feeds_tamper' && $plugin_type == 'plugins') {
+        return 'plugins';
+    }
+}
+function sy_commerce_add_feeds_after_import(FeedsSource $source) {
+    if ($source->id == 'import_catalog_pharm') {
+        $fetcher_config = $source->getConfigFor($source->importer->fetcher);
+        $second_source = feeds_source('import_product_pharm');
+        $second_source->setConfigFor($second_source->importer->fetcher, $fetcher_config);
+        $second_source->save();
+        $second_source->startImport();
+    }
+    if ($source->id == 'import_product_pharm') {
+        $fetcher_config = $source->getConfigFor($source->importer->fetcher);
+        $second_source = feeds_source('import_display_product_pharm');
+        $second_source->setConfigFor($second_source->importer->fetcher, $fetcher_config);
+        $second_source->save();
+        $second_source->startImport();
+    }
+}
+
+function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$form_state, $form_id)
+{
+    if(isset($form_state['context']['entity_id']) && isset($form_state['default_product']->type) && $form_state['default_product']->type=='product') {
+        if (!isset($form_state['list_product_in_stok'])) $form_state['list_product_in_stok'] = sy_commerce_add_get_list_product_in_stocks($form_state['context']['entity_id']);
+        $city_stocks = sy_commerce_add_get_city_stocks_in($form_state['list_product_in_stok']);
+        $city_stocks_all = sy_commerce_add_get_city_stocks();
+        $keys_location = array_keys($city_stocks_all);
+        if(count($city_stocks_all)>0) {
+
+            $form['#prefix'] = '<div id="cart-gip-form-wrapper">';
+            $form['#suffix'] = '</div>';
+            $form['fs_city'] = array(
+                '#type' => 'fieldset',
+                '#title' => 'Город',
+                '#collapsible' => TRUE,
+                '#collapsed' => FALSE,
+            );
+
+            if (isset($form_state['values']['city'])) {
+                $def_city = $form_state['values']['city'];
+            } elseif (isset($_SESSION['sy_commerce_add_city']) /* && array_key_exists($_SESSION['sy_commerce_add_city'], $city_stocks) */) {
+                $def_city = $_SESSION['sy_commerce_add_city'];
+            } else {
+                $city_location = sy_commerce_add_get_city_stocks_location();
+                if (is_string($city_location) && in_array($city_location, $city_stocks_all)) {
+                    $def_city = $city_location;
+                } else {
+                    $def_city = $keys_location[0];
+                }
+            }
+            $form['fs_city']['city'] = array(
+                '#type' => 'select',
+                '#title' => 'Город',
+                '#default_value' => $def_city,
+                '#options' => $city_stocks_all,
+                '#ajax' => array(
+                    'callback' => 'sy_commerce_add_city_choice_js',
+                    'wrapper' => 'cart-gip-form-wrapper',
+                    'method' => 'replace',
+                    'effect' => 'fade',
+                ),
+            );
+            if(array_key_exists($def_city, $city_stocks) ) {
+                $options_product = sy_commerce_add_get_options_product($form_state['list_product_in_stok'], $def_city);
+                $form['product_id']['#options'] = $options_product;
+                $form['city_information'] = array('#markup' => 'show', );
+            }
+            else
+            {
+                $form['city_information'] = array('#markup' => 'В этом городе нет', );
+                $form['product_id']['#disabled'] = TRUE;
+                $form['product_id']['#attributes']['style'] = 'display:none;';
+                $form['quantity']['#disabled'] = TRUE;
+                $form['submit']['#disabled'] = TRUE;
+            }
+        }
+        else
+        {
+            $form['city_information'] = array('#markup' => 'Нет городов', );
+        }
+
+        /*
+        $keys_product = array_keys($options_product);
+        $form['product_id']['#default_value'] = $keys_product[0];
+        $form_state['default_product'] = commerce_product_load($keys_product[0]);
+        $form_state['values']['product_id'] = $keys_product[0];
+        $form_state['input']['product_id'] = $keys_product[0];*/
+    }
+}
+
+function sy_commerce_add_city_choice_js($form, &$form_state)
+{
+    $_SESSION['sy_commerce_add_city'] = $form_state['values']['city'];
+    $form_state['no_cache'] = TRUE;
+    $form_state['rebuild'] = TRUE;
+    return commerce_cart_add_to_cart_form_attributes_refresh($form, $form_state);
+
+}
