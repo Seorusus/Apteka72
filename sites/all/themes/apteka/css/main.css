@@ -1888,50 +1888,29 @@ ul.tabs a.active, ul.tabs a:hover {
   padding-top: 15px;
   padding-bottom: 15px;
 }
-/* line 1181, ../scss/_base.scss */
-#commerce-checkout-form-checkout tbody tr {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  align-items: center;
+/* line 1182, ../scss/_base.scss */
+#commerce-checkout-form-checkout tr {
+  vertical-align: middle !important;
 }
-/* line 1186, ../scss/_base.scss */
-#commerce-checkout-form-checkout .views-field-field-image {
-  width: 15%;
-}
-/* line 1189, ../scss/_base.scss */
-#commerce-checkout-form-checkout .views-field-line-item-title {
-  width: 35%;
-}
-/* line 1192, ../scss/_base.scss */
-#commerce-checkout-form-checkout .views-field-quantity {
-  width: 25%;
-}
-/* line 1198, ../scss/_base.scss */
+/* line 1185, ../scss/_base.scss */
 #commerce-checkout-form-checkout table, #commerce-checkout-form-checkout th, #commerce-checkout-form-checkout td {
   border: 1px solid #c1c1c1;
 }
-/* line 1201, ../scss/_base.scss */
+/* line 1188, ../scss/_base.scss */
 #commerce-checkout-form-checkout .views-field {
   position: relative;
 }
-/* line 1204, ../scss/_base.scss */
+/* line 1191, ../scss/_base.scss */
 #commerce-checkout-form-checkout .cart_contents {
   padding-bottom: 25px;
   margin-bottom: 25px;
   border-bottom: 1px solid #c1c1c1;
 }
-/* line 1209, ../scss/_base.scss */
+/* line 1196, ../scss/_base.scss */
 #commerce-checkout-form-checkout .checkout-buttons {
   padding-top: 25px;
 }
-/* line 1211, ../scss/_base.scss */
+/* line 1198, ../scss/_base.scss */
 #commerce-checkout-form-checkout .checkout-buttons .fieldset-wrapper {
   display: -webkit-box;
   display: -webkit-flex;
@@ -1944,7 +1923,7 @@ ul.tabs a.active, ul.tabs a:hover {
   -moz-justify-content: flex-end;
   justify-content: flex-end;
 }
-/* line 1218, ../scss/_base.scss */
+/* line 1202, ../scss/_base.scss */
 #commerce-checkout-form-checkout .checkout-buttons #edit-continue {
   max-width: 240px;
   width: 100%;
@@ -1954,7 +1933,7 @@ ul.tabs a.active, ul.tabs a:hover {
   -ms-flex-order: 2;
   order: 2;
 }
-/* line 1223, ../scss/_base.scss */
+/* line 1207, ../scss/_base.scss */
 #commerce-checkout-form-checkout .checkout-buttons .checkout-cancel {
   border-top: 2px solid transparent;
   border-bottom: 2px solid #9d9d9d;
@@ -1974,49 +1953,77 @@ ul.tabs a.active, ul.tabs a:hover {
   border-radius: 5px;
   transition: .3s;
 }
-/* line 1237, ../scss/_base.scss */
+/* line 1221, ../scss/_base.scss */
 #commerce-checkout-form-checkout .checkout-buttons .checkout-cancel:hover {
   background-color: #dbdbdb;
   text-decoration: none;
   border-bottom-color: #555;
 }
-/* line 1244, ../scss/_base.scss */
+/* line 1228, ../scss/_base.scss */
 #commerce-checkout-form-checkout .button-operator {
   display: none;
 }
-/* line 1247, ../scss/_base.scss */
+/* line 1231, ../scss/_base.scss */
 #commerce-checkout-form-checkout .views-field-field-image {
   text-align: center;
 }
-/* line 1249, ../scss/_base.scss */
+/* line 1233, ../scss/_base.scss */
 #commerce-checkout-form-checkout .views-field-field-image img {
   width: 55px;
   height: auto;
 }
-/* line 1254, ../scss/_base.scss */
+/* line 1238, ../scss/_base.scss */
 #commerce-checkout-form-checkout .title {
   padding-left: 15px;
 }
-/* line 1257, ../scss/_base.scss */
+/* line 1241, ../scss/_base.scss */
 #commerce-checkout-form-checkout .view-footer {
   background-color: #e8e8e8;
   padding: 18px 20px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
 }
-/* line 1262, ../scss/_base.scss */
+/* line 1246, ../scss/_base.scss */
 #commerce-checkout-form-checkout .view-footer .line-item-summary {
   margin-bottom: 0;
 }
-/* line 1265, ../scss/_base.scss */
+/* line 1249, ../scss/_base.scss */
 #commerce-checkout-form-checkout .view-footer .line-item-total-raw {
   color: #f66600;
   padding-left: 10px;
 }
-/* line 1270, ../scss/_base.scss */
+/* line 1254, ../scss/_base.scss */
 #commerce-checkout-form-checkout .views-field-commerce-unit-price,
 #commerce-checkout-form-checkout .views-field-quantity {
   text-align: center;
+}
+
+/* line 1264, ../scss/_base.scss */
+#edit-commerce-fieldgroup-pane-group-buyer-information {
+  padding-bottom: 25px;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #c1c1c1 !important;
+}
+
+/* line 1271, ../scss/_base.scss */
+#commerce-fieldgroup-pane-group-buyer-information-field-buyer-information-markup-add-more-wrapper p {
+  padding-top: 5px;
+  padding-bottom: 20px;
+}
+
+/* line 1278, ../scss/_base.scss */
+#commerce-fieldgroup-pane-group-buyer-information-field-your-email-add-more-wrapper [type="text"] {
+  font-size: 15px;
+  font-style: italic;
+  color: #555;
+  border: 1px solid #c1c1c1;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+/* line 1288, ../scss/_base.scss */
+.order-title {
+  font-weight: bold;
 }
 
 /*!

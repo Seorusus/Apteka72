@@ -157,13 +157,13 @@ function sy_commerce_add_get_city_stocks()
       ->execute()
       ->fetchAllKeyed();
   return $citys;
-}
+} 
 function sy_commerce_add_get_options_product($list_product_in_stok, $def_city)
 {
   $arr_out = array();
   foreach ($list_product_in_stok as $key => $value) {
     if (count($value['settings']) > 0 && $value['settings'][0]['field_city_value'] == $def_city) {
-      $arr_out[$value['product_id']] =$value['product_id'].'==='. $value['settings'][0]['name'] . '(' . $value['settings'][0]['quantity'] . ') ' . $value['sku'];
+      $arr_out[$value['product_id']] = $value['settings'][0]['name'] . '(' . $value['settings'][0]['quantity'] . ') ' . $value['sku'];
     }
   }
   return $arr_out;

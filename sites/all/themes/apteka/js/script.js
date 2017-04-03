@@ -58,6 +58,8 @@
 
             $(".commerce-line-item-actions").prepend("<a class='catalog-link' href='/catalog'>Продолжить покупки</a>");
 
+            $("#commerce-checkout-form-checkout td").attr('valign', 'center');
+
         }
     };
 

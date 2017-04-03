@@ -69,7 +69,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
             if(array_key_exists($def_city, $city_stocks) ) {
                 $options_product = sy_commerce_add_get_options_product($form_state['list_product_in_stok'], $def_city);
                 $form['product_id']['#options'] = $options_product;
-                $form['city_information'] = array('#markup' => 'show', );
+//                $form['city_information'] = array('#markup' => 'show', );
             }
             else
             {

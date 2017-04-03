@@ -1178,22 +1178,9 @@
       padding-top: 15px;
       padding-bottom: 15px;
     }
-    tr {
-      @include flexbox;
-      @include align-items(center);
-    }
   }
-  .views-field-field-image {
-    width: 15%;
-  }
-  .views-field-line-item-title {
-    width: 35%;
-  }
-  .views-field-quantity {
-    width: 25%;
-  }
-  .views-field-commerce-unit-price {
-    width: 25%;
+  tr {
+    vertical-align: middle !important;
   }
   table, th, td {
     border: 1px solid #c1c1c1;
@@ -1211,9 +1198,6 @@
     .fieldset-wrapper {
       @include flexbox;
       @include justify-content(flex-end);
-    }
-    input {
-
     }
     #edit-continue {
       max-width: 240px;
@@ -1271,4 +1255,36 @@
   .views-field-quantity {
     text-align: center;
   }
+}
+
+.page-checkout {
+
+}
+
+#edit-commerce-fieldgroup-pane-group-buyer-information {
+  padding-bottom: 25px;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #c1c1c1 !important;
+}
+
+#commerce-fieldgroup-pane-group-buyer-information-field-buyer-information-markup-add-more-wrapper {
+  p {
+    padding-top: 5px;
+    padding-bottom: 20px;
+  }
+}
+
+#commerce-fieldgroup-pane-group-buyer-information-field-your-email-add-more-wrapper {
+  [type="text"] {
+    font-size: 15px;
+    font-style: italic;
+    color: #555;
+    border: 1px solid #c1c1c1;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+  }
+}
+
+.order-title {
+  font-weight: bold;
 }
