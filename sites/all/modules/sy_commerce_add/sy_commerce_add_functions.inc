@@ -78,7 +78,7 @@ $quantity = db_select('sy_commerce_add_quantity', 'q')
   ->condition('q.line_item_id', $line_item_id)
   ->execute()
   ->fetchField();
-return (is_numeric($quantity)?$quantity:0);
+return (is_numeric($quantity)?floatval($quantity):0);
 }
 
 function sy_commerce_add_get_list_product_in_stocks($nid)
@@ -167,6 +167,47 @@ function sy_commerce_add_get_options_product($list_product_in_stok, $def_city)
     }
   }
   return $arr_out;
+}
+
+
+function sy_commerce_add_get_stocks_table($nid)
+{
+  $stoks = db_query("SELECT product.product_id, product.sku, s_s.`name`, qty.commerce_stock_value,
+                    f_city.field_city_value, s_s.source_id, price.commerce_price_amount,price.commerce_price_currency_code, edr.field_expected_date_receipt_value 
+                    FROM {commerce_product} AS product
+                    INNER JOIN {field_data_field_product} AS f_pr ON f_pr.field_product_product_id = product.product_id
+                    INNER JOIN {field_data_commerce_stock} AS qty ON qty.revision_id = product.revision_id 
+                    INNER JOIN {commerce_stock_quantity} AS s_qty ON s_qty.product_id = product.product_id 
+                    INNER JOIN {commerce_stock_sources} AS s_s ON s_s.source_id = s_qty.source_id
+                    INNER JOIN {field_data_field_city} AS f_city ON f_city.entity_id = s_s.source_id 
+                    INNER JOIN {field_data_commerce_price} AS price ON price.revision_id = product.revision_id 
+                    LEFT JOIN {field_data_field_expected_date_receipt} AS edr ON edr.revision_id = product.revision_id
+                    WHERE f_pr.entity_id = :nid AND product.type = 'product' AND f_city.bundle = 'commerce_stock_sources' 
+                    ORDER BY  f_city.field_city_value ASC, s_s.`name` ASC", array(':nid' => $nid))->fetchAll();
+  $rows = array();
+  foreach ($stoks as $stok) {
+    $stock_sets = db_query("SELECT * FROM {commerce_stock_calculation} WHERE name = :name", array(':name' => 'stock_calculation:' . $stok->product_id))->fetchObject();
+    if (isset($stock_sets->plugin)) {
+      if ($stock_sets->plugin == 'sum_calculation') {
+        $settings = unserialize($stock_sets->settings);
+        if ($settings[$stok->source_id] == $stok->source_id) {
+          $edr='';
+          if($stok->commerce_stock_value >=0 && $stok->field_expected_date_receipt_value>0 )
+          {
+            $edr='Ожидаемое поступление '.$stok->field_expected_date_receipt_value;
+          }
+          $rows[] = array(
+              check_plain($stok->field_city_value), check_plain($stok->name), check_plain($stok->sku),
+              floatval($stok->commerce_stock_value > 0 ? $stok->commerce_stock_value : 0),
+              commerce_currency_format($stok->commerce_price_amount, $stok->commerce_price_currency_code), $edr
+
+          );
+        }
+      }
+    }
+  }
+  $header = array('Город', 'Аптека', 'Артикуль', 'Кол-во', 'Цена', '');
+  if(count($rows)>0)   return array('#markup' => theme('table', array('header' => $header, 'rows' => $rows))); else return '';
 }
 function sy_commerce_add_get_city_stocks_location()
 {

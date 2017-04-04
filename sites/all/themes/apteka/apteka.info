@@ -11,16 +11,16 @@
 ; The name, description and screenshot used for this theme on the Appearance
 ; page at admin/appearance.
 
-screenshot  = screenshot.png
-name        = Apteka
+screenshot = screenshot.png
+name = Apteka
 description = Read the <a href="https://drupal.org/node/873778">online docs</a> or the included README.txt on how to create a theme with Zen.
 
 
 
 ; This theme is compatible with Drupal 7 core. And it is a sub-theme of Zen.
 
-core        = 7.x
-base theme  = zen
+core = 7.x
+base theme = zen
 
 
 
@@ -86,24 +86,27 @@ scripts[] = js/script.js
 ; And you'll use this variable in maintenance-page.tpl.php:
 ;   <?php print $header_top; ?>
 
-regions[header]         = Header
-regions[search]         = Search
-regions[department]     = Department
-regions[main_menu]      = Main menu
-regions[banner]         = Banner
-regions[highlighted]    = Highlighted
-regions[help]           = Help
-regions[sidebar]        = Sidebar
-regions[content]        = Content
+regions[header_mobile_left] = Header Mobile Left
+regions[header_mobile_right] = Header Mobile Right
+regions[header_mobile_bottom] = Header Mobile Bottom
+regions[header] = Header
+regions[search] = Search
+regions[department] = Department
+regions[main_menu] = Main menu
+regions[banner] = Banner
+regions[highlighted] = Highlighted
+regions[help] = Help
+regions[sidebar] = Sidebar
+regions[content] = Content
 regions[content_bottom] = Content Bottom
-regions[footer]     = Footer
+regions[footer] = Footer
 
 ; The page_top and page_bottom regions are hidden, which means they will not
 ; show up on the blocks administration page. But they are required in order for
 ; the html.tpl.php to work properly, so do not delete them.
 
-regions[page_top]       = Page top
-regions[page_bottom]    = Page bottom
+regions[page_top] = Page top
+regions[page_bottom] = Page bottom
 
 
 
@@ -127,16 +130,16 @@ features[] = secondary_menu
 
 ; Set the default values of settings on the theme-settings.php form.
 
-settings[zen_breadcrumb]           = yes
+settings[zen_breadcrumb] = yes
 settings[zen_breadcrumb_separator] = ' › '
-settings[zen_breadcrumb_home]      = 1
-settings[zen_breadcrumb_trailing]  = 0
-settings[zen_breadcrumb_title]     = 0
-settings[zen_skip_link_anchor]     = main-menu
-settings[zen_skip_link_text]       = Jump to navigation
-settings[zen_meta][]               = html5
-settings[zen_meta][]               = meta
-settings[zen_rebuild_registry]     = 1
+settings[zen_breadcrumb_home] = 1
+settings[zen_breadcrumb_trailing] = 0
+settings[zen_breadcrumb_title] = 0
+settings[zen_skip_link_anchor] = main-menu
+settings[zen_skip_link_text] = Jump to navigation
+settings[zen_meta][] = html5
+settings[zen_meta][] = meta
+settings[zen_rebuild_registry] = 1
 
 ; To make this sub-theme an admin theme with shortcut links next to titles,
 ; uncomment the line below.

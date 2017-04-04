@@ -1,21 +1,54 @@
-<div class="header">
-    <div class="wrap">
+<div class="header-mobile">
 
-        <?php print render($page['header']); ?>
+    <div class="header-mobile-top">
+
+        <div class="wrap">
+            <div class="header-mobile-left">
+                <?php print render($page['header_mobile_left']); ?>
+            </div>
+
+            <div class="header-mobile-center">
+                <?php if ($logo): ?>
+                    <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"
+                       class="header__logo"><img
+                                src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>"/></a>
+                <?php endif; ?>
+            </div>
+
+            <div class="header-mobile-right">
+                <?php print render($page['header_mobile_right']); ?>
+            </div>
+        </div>
 
     </div>
+
+    <div class="header-mobile-bottom">
+        <div class="wrap">
+            <?php print render($page['header_mobile_bottom']); ?>
+        </div>
+    </div>
+
 </div>
 
-<div class="delivery">
-    <div class="wrap">
-        <div class="logo-search">
-            <?php if ($logo): ?>
-                <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home" class="header__logo"><img
-                            src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>"/></a>
-            <?php endif; ?>
-            <?php print render($page['search']); ?>
+<div class="header-destop">
+    <div class="header">
+        <div class="wrap">
+            <?php print render($page['header']); ?>
         </div>
-        <?php print render($page['department']); ?>
+    </div>
+
+    <div class="delivery">
+        <div class="wrap">
+            <div class="logo-search">
+                <?php if ($logo): ?>
+                    <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"
+                       class="header__logo"><img
+                                src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>"/></a>
+                <?php endif; ?>
+                <?php print render($page['search']); ?>
+            </div>
+            <?php print render($page['department']); ?>
+        </div>
     </div>
 </div>
 <div class="main-menu">

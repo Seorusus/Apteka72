@@ -66,6 +66,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
                     'effect' => 'fade',
                 ),
             );
+            $form['fs_city']['table']=sy_commerce_add_get_stocks_table($form_state['context']['entity_id']);
             if(array_key_exists($def_city, $city_stocks) ) {
                 $options_product = sy_commerce_add_get_options_product($form_state['list_product_in_stok'], $def_city);
                 $form['product_id']['#options'] = $options_product;
@@ -79,6 +80,11 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
                 $form['quantity']['#disabled'] = TRUE;
                 $form['submit']['#disabled'] = TRUE;
             }
+            if($_SERVER['REMOTE_ADDR']=='31.131.96.135')
+            {
+                dpm($city_stocks);
+            }
+
         }
         else
         {

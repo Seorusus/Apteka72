@@ -25,7 +25,6 @@ function sy_commerce_add_sy_plugin_validate(&$settings) {
 
 function sy_commerce_add_sy_plugin_callback($source, $item_key, $element_key, &$field, $settings) {
 
-
     $product=commerce_product_load_by_sku($source->current_item['xpathparser:0']);
     if($product){ // Склад не обновим до создания  продукта
     $shop_quantity=$source->current_item['xpathparser:'.(( (int) str_replace('xpathparser:','',$element_key) )+1)];
@@ -34,7 +33,6 @@ function sy_commerce_add_sy_plugin_callback($source, $item_key, $element_key, &$
 }
 function sy_commerce_add_change_stocks_settings($product_id, $shop_name, $shop_quantity)
 {
-
     $product=commerce_product_load($product_id);
     $plugin_type = commerce_stock_calculation_get_active_plugin($product);
     $plugin = commerce_stock_calculation_get_plugin_instance($plugin_type, array( 'product' => $product,));
