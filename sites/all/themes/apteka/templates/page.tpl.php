@@ -58,7 +58,7 @@
     </div>
 </div>
 
-<div class="wrap">
+<div class="wrap main-wrap">
     <div class="sidebar">
         <?php print render($page['sidebar']); ?>
     </div>

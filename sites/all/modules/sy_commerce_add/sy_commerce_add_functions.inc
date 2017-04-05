@@ -119,13 +119,14 @@ function sy_commerce_add_get_stoks_for_product($pid, $settings)
   $stok_id = array_values(unserialize($settings));
   $stoks = db_query("SELECT
                     sq.source_id as sid,
-                    sq.quantity,
+                    stock.commerce_stock_value as qty, 
                     s.`name`,
                     c.field_city_value
                     FROM
                     {commerce_stock_quantity} AS sq
                     LEFT JOIN {commerce_stock_sources} AS s ON s.source_id = sq.source_id
                     LEFT JOIN {field_data_field_city} AS c ON c.entity_id = s.source_id
+                    LEFT JOIN {field_data_commerce_stock} AS stock ON stock.entity_id = sq.product_id
                     WHERE
                     sq.product_id = :pid AND
                     sq.source_id IN (:source_ids) AND
@@ -142,7 +143,7 @@ function sy_commerce_add_get_city_stocks_in($list_product_in_stok)
   {
     foreach ($item['settings'] as $value)
     {
-      if($value['quantity']>0) $citys[$value['field_city_value']]=$value['field_city_value'];
+      if($value['qty']>0) $citys[$value['field_city_value']]=$value['field_city_value'];
     }
   }
 
@@ -162,8 +163,8 @@ function sy_commerce_add_get_options_product($list_product_in_stok, $def_city)
 {
   $arr_out = array();
   foreach ($list_product_in_stok as $key => $value) {
-    if (count($value['settings']) > 0 && $value['settings'][0]['field_city_value'] == $def_city) {
-      $arr_out[$value['product_id']] = $value['settings'][0]['name'] . '(' . $value['settings'][0]['quantity'] . ') ' . $value['sku'];
+    if (count($value['settings']) > 0 && $value['settings'][0]['field_city_value'] == $def_city && $value['settings'][0]['qty']>0) {
+      $arr_out[$value['product_id']] = $value['settings'][0]['name'] . '(' . $value['settings'][0]['qty'] . ') ' . $value['sku'];
     }
   }
   return $arr_out;
@@ -194,7 +195,7 @@ function sy_commerce_add_get_stocks_table($nid)
           $edr='';
           if($stok->commerce_stock_value >=0 && $stok->field_expected_date_receipt_value>0 )
           {
-            $edr='Ожидаемое поступление '.$stok->field_expected_date_receipt_value;
+            $edr='Ожидаемое поступление '.date("d/m/Y",$stok->field_expected_date_receipt_value);
           }
           $rows[] = array(
               check_plain($stok->field_city_value), check_plain($stok->name), check_plain($stok->sku),

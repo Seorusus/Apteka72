@@ -24,8 +24,16 @@
                 $("#block-block-3", context).toggleClass("show");
             });
 
+            $("#block-multiblock-1 > button", context).click(function () {
+                $("#block-multiblock-1 .content", context).toggleClass("show");
+            });
+
             $("#block-taxonomy-menu-block-1 .hamburger", context).click(function () {
                 $("#block-taxonomy-menu-block-1 .menu-wrap", context).toggleClass("hide");
+            });
+
+            $("#block-multiblock-7 .hamburger", context).click(function () {
+                $("#block-multiblock-7 .content", context).toggleClass("show");
             });
 
             var forEach = function (t, o, r) {
@@ -44,6 +52,7 @@
             $(".view-catalog .view-content").justifiedGallery();
 
             $(".description > div", context).readmore({
+                collapsedHeight: 160,
                 speed: 100,
                 moreLink: '<a href="#">Читать полностью</a>',
                 lessLink: '<a href="#">Скрыть текст</a>',

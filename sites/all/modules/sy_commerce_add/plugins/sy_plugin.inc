@@ -70,7 +70,10 @@ function sy_commerce_add_change_stocks_settings($product_id, $shop_name, $shop_q
     $plugin = commerce_stock_calculation_get_plugin_instance('sum_calculation', array('product' => $product));
     $quantity = $plugin->calculate();
     $wrapper = entity_metadata_wrapper('commerce_product', $product);
-    $wrapper->commerce_stock->set($quantity);
+    $wrapper->commerce_stock->set($shop_quantity);
     $wrapper->save();
+
+
+
 }
 
