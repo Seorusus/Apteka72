@@ -153,10 +153,28 @@ ul.tabs {
   }
 }
 
+#user-register-form {
+  [type="submit"] {
+    width: 165px;
+    margin-top: 10px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 #user-login {
   [type="submit"] {
     width: 165px;
     margin-top: 10px;
+  }
+}
+
+#user-pass {
+  [type="submit"] {
+    width: 225px;
+    margin-top: 10px;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 
