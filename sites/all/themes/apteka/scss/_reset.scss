@@ -198,7 +198,7 @@ ul.tabs {
 
 .block-views {
   .block__title {
-    margin-top: 35px;
+    margin-top: 15px;
     text-transform: uppercase;
     border-bottom: 1px solid #555;
     padding-bottom: 15px;
@@ -275,5 +275,33 @@ ul.tabs {
   }
   .nivo-nextNav {
     background: url("../images/nivo-nextNav.png") transparent no-repeat center center !important;
+  }
+}
+
+.view-commerce-user-orders {
+  margin-top: 25px;
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  thead {
+    background-color: #e8e8e8;
+    .views-field {
+      font-weight: 600;
+      padding-top: 7px;
+      padding-bottom: 7px;
+    }
+  }
+  tbody {
+    .views-field {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+  }
+  table, th, td {
+    border: 1px solid #c1c1c1;
+  }
+  .views-field {
+    text-align: center;
   }
 }

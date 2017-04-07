@@ -235,11 +235,11 @@ function sy_commerce_add_get_city_stocks_location()
 function sy_commerce_add_get_location()
 {
   $smart_ip_session = smart_ip_session_get('smart_ip');
-  if (variable_get('sy_b_block_temp', 0) > 0 || !isset($smart_ip_session['location']['country_code'])) {
+  if (!isset($smart_ip_session['location']['country_code'])) {
     $location = array(
-      'country_code' => 'UA',
-      'region' => variable_get('sy_b_block_temp', 0) == 1 ? "Dnipropetrovs'ka Oblast'" : 'Kyiv',
-      'city' => variable_get('sy_b_block_temp', 0) == 1 ? 'Dnepropetrovsk' : 'Kiev'
+      'country_code' => 'RU',
+      'region' => "Tyumen'",
+      'city' => "Tyumen"
     );
   } else {
     $location = array(

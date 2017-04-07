@@ -5,8 +5,7 @@ function prideapatch_help($path, $arg) {
       return '<p>' . t("Модуль содержит различные правки и хуки от PRidea") . '</p>';
       break;
   }
-} 
-
+}
 
 /**
 * Implements commerce_currency_info_alter().

@@ -2,6 +2,22 @@
 
 include_once('sy_commerce_add_functions.inc');
 include_once('sy_commerce_add_block.inc');
+
+
+function sy_commerce_add_menu() {
+    $items = array();
+
+    $items['change-sity'] = array(
+        'page callback' => 'sy_commerce_add_change_sity',
+        'page arguments' => array(1),
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+
+
+    return $items;
+}
+
 function sy_commerce_add_ctools_plugin_directory($owner, $plugin_type){
     if ($owner == 'feeds_tamper' && $plugin_type == 'plugins') {
         return 'plugins';
@@ -96,7 +112,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
 
 function sy_commerce_add_city_choice_js($form, &$form_state)
 {
-    $_SESSION['sy_commerce_add_city'] = $form_state['values']['city'];
+//    $_SESSION['sy_commerce_add_city'] = $form_state['values']['city'];
     $form_state['no_cache'] = TRUE;
     $form_state['rebuild'] = TRUE;
     return commerce_cart_add_to_cart_form_attributes_refresh($form, $form_state);

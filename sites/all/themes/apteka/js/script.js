@@ -69,6 +69,38 @@
 
             $("[name='search_block_form']").attr('placeholder', 'Поиск по сайту');
 
+
+            $("#commerce-checkout-form-checkout label").each(function () {
+
+                var labelText = $(this).text().replace(' *', '').toLowerCase();
+
+                $(this).hide();
+
+                //$(this).next().attr('placeholder', 'Введите ' + labelText);
+
+
+            });
+
+            $("#commerce-checkout-form-checkout .form-item").each(function () {
+
+                if ($(this).children().hasClass("required")) {
+
+                    $(this).addClass('required-row');
+
+                }
+
+            });
+
+
+            $("#edit-customer-profile-billing-commerce-customer-address .name-block div").first().find('input').attr('placeholder', 'Введите имя');
+            $("#edit-customer-profile-billing-commerce-customer-address .name-block div").last().find('input').attr('placeholder', 'Введите фамилию');
+            $(".form-item-customer-profile-billing-commerce-customer-address-und-0-organisation-name").find('input').attr('placeholder', 'Введите организацию');
+            $("#edit-customer-profile-billing-commerce-customer-address .street-block > div").first().find('input').attr('placeholder', 'Введите адрес');
+            // $("#edit-customer-profile-billing-commerce-customer-address .street-block > div").last().hide();
+            $("#edit-customer-profile-billing-commerce-customer-address .locality-block > div").first().find('input').attr('placeholder', 'Введите город');
+            $("#edit-customer-profile-billing-commerce-customer-address .locality-block > div").last().find('input').attr('placeholder', 'Почтовый код');
+
+
         }
     };
 
