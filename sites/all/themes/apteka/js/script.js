@@ -71,24 +71,15 @@
 
 
             $("#commerce-checkout-form-checkout label").each(function () {
-
                 var labelText = $(this).text().replace(' *', '').toLowerCase();
-
                 $(this).hide();
-
                 //$(this).next().attr('placeholder', 'Введите ' + labelText);
-
-
             });
 
             $("#commerce-checkout-form-checkout .form-item").each(function () {
-
                 if ($(this).children().hasClass("required")) {
-
                     $(this).addClass('required-row');
-
                 }
-
             });
 
 
