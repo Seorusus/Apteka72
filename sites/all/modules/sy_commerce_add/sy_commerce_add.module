@@ -42,7 +42,7 @@ function sy_commerce_add_feeds_after_import(FeedsSource $source) {
 
 function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$form_state, $form_id)
 {
-    if(isset($form_state['context']['entity_id']) && isset($form_state['default_product']->type) && $form_state['default_product']->type=='product') {
+    if(isset($form_state['context']['entity_id']) && isset($form_state['default_product']->type) && $form_state['default_product']->type=='product2') {
         if (!isset($form_state['list_product_in_stok'])) $form_state['list_product_in_stok'] = sy_commerce_add_get_list_product_in_stocks($form_state['context']['entity_id']);
         $city_stocks = sy_commerce_add_get_city_stocks_in($form_state['list_product_in_stok']);
         $city_stocks_all = sy_commerce_add_get_city_stocks();

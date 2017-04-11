@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<commerce_orders>
+  <commerce_order>
+    <ID-order>5</ID-order>
+    <E-mail>admin@razum.io</E-mail>
+    <Date-created>04/03/2017 - 22:00</Date-created>
+    <Order-total>18.2</Order-total>
+    <list-products>  <product>
+    <name>Тестовьгй товар №1</name>
+    <SKU>(test1)</SKU>
+    <price>1.2</price>
+    <qty>11</qty>
+    <qty-add>4</qty-add>
+  </product>
+</list-products>
+  </commerce_order>
+  <commerce_order>
+    <ID-order>6</ID-order>
+    <E-mail>admin@razum.io</E-mail>
+    <Date-created>04/07/2017 - 00:11</Date-created>
+    <Order-total>60.66</Order-total>
+    <list-products>  <product>
+    <name>Тестовьгй товар №1</name>
+    <SKU>(test2)</SKU>
+    <price>5.7</price>
+    <qty>3</qty>
+    <qty-add>0</qty-add>
+  </product>
+  <product>
+    <name>Тестовьгй товар №2</name>
+    <SKU>(testd1)</SKU>
+    <price>1</price>
+    <qty>1</qty>
+    <qty-add>0</qty-add>
+  </product>
+  <product>
+    <name>Antehabeo Nibh</name>
+    <SKU>(sku58d94b9b3d67e)</SKU>
+    <price>37.56</price>
+    <qty>1</qty>
+    <qty-add>0</qty-add>
+  </product>
+</list-products>
+  </commerce_order>
+  <commerce_order>
+    <ID-order>7</ID-order>
+    <E-mail>admin@razum.io</E-mail>
+    <Date-created>04/05/2017 - 01:13</Date-created>
+    <Order-total>30.7</Order-total>
+    <list-products>  <product>
+    <name>Тестовьгй товар №2</name>
+    <SKU>(testd2)</SKU>
+    <price>2</price>
+    <qty>10</qty>
+    <qty-add>8</qty-add>
+  </product>
+  <product>
+    <name>Тестовьгй товар №1</name>
+    <SKU>(test2)</SKU>
+    <price>5.7</price>
+    <qty>1</qty>
+    <qty-add>0</qty-add>
+  </product>
+</list-products>
+  </commerce_order>
+</commerce_orders>
