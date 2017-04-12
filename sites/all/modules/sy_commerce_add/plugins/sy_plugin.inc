@@ -56,12 +56,12 @@ function sy_commerce_add_change_stocks_settings($product_id, $shop_name, $shop_q
         $calculation_plugin_settings[$key]=$value==$shop_name?$key:0;
         $quantity = commerce_stock_sources_load_quantity_by_product_and_source($product_id, $key);
         $values=array(
-            'stq_id'=>$quantity->stq_id,
             'source_id'=>$key,
             'product_id'=>$product_id,
             'quantity'=>$item_quantity,
             'uid'=>1
         );
+        if(isset($quantity->stq_id)){$values['stq_id']=$quantity->stq_id;}
         $controller = entity_get_controller('commerce_stock_quantity');
         $entity = $controller->create($values);
         $controller->save($entity);

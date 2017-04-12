@@ -13,30 +13,12 @@ function sy_commerce_add_menu() {
         'access callback' => TRUE,
         'type' => MENU_CALLBACK,
     );
-
-
     return $items;
 }
 
 function sy_commerce_add_ctools_plugin_directory($owner, $plugin_type){
     if ($owner == 'feeds_tamper' && $plugin_type == 'plugins') {
         return 'plugins';
-    }
-}
-function sy_commerce_add_feeds_after_import(FeedsSource $source) {
-    if ($source->id == 'import_catalog_pharm') {
-        $fetcher_config = $source->getConfigFor($source->importer->fetcher);
-        $second_source = feeds_source('import_product_pharm');
-        $second_source->setConfigFor($second_source->importer->fetcher, $fetcher_config);
-        $second_source->save();
-        $second_source->startImport();
-    }
-    if ($source->id == 'import_product_pharm') {
-        $fetcher_config = $source->getConfigFor($source->importer->fetcher);
-        $second_source = feeds_source('import_display_product_pharm');
-        $second_source->setConfigFor($second_source->importer->fetcher, $fetcher_config);
-        $second_source->save();
-        $second_source->startImport();
     }
 }
 
@@ -116,5 +98,43 @@ function sy_commerce_add_city_choice_js($form, &$form_state)
     $form_state['no_cache'] = TRUE;
     $form_state['rebuild'] = TRUE;
     return commerce_cart_add_to_cart_form_attributes_refresh($form, $form_state);
+
+}
+
+function sy_commerce_add_cron()
+{
+    $output = views_embed_view('expot_orders', 'views_data_export_1');
+    file_unmanaged_save_data($output , drupal_realpath('public://feeds-tmp/output.xml'), FILE_EXISTS_REPLACE);
+    sy_commerce_add_feeds_run();// 2 раза для прописи склада
+    sy_commerce_add_feeds_run();// 2 раза для прописи склада
+}
+
+function sy_commerce_add_feeds_run() {
+    $source=drupal_realpath('public://feeds-tmp/import.xml');
+    $myFeed = feeds_source('import_catalog_pharm');
+    $config = array('FeedsFileFetcher'=>array('source'=>$source));
+    $myFeed->addConfig($config);
+    while (FEEDS_BATCH_COMPLETE != $myFeed->import());
+    $myFeed->state(FEEDS_FETCH);
+    $myFeed->state(FEEDS_PROCESS);
+    $myFeed->state(FEEDS_PROCESS_CLEAR);
+
+    $myFeed = feeds_source('import_product_pharm');
+    $config = array('FeedsFileFetcher'=>array('source'=>$source));
+    $myFeed->addConfig($config);
+    while (FEEDS_BATCH_COMPLETE != $myFeed->import());
+    $myFeed->state(FEEDS_FETCH);
+    $myFeed->state(FEEDS_PROCESS);
+    $myFeed->state(FEEDS_PROCESS_CLEAR);
+
+
+    $myFeed = feeds_source('import_display_product_pharm');
+    $config = array('FeedsFileFetcher'=>array('source'=>$source));
+    $myFeed->addConfig($config);
+    while (FEEDS_BATCH_COMPLETE != $myFeed->import());
+    $myFeed->state(FEEDS_FETCH);
+    $myFeed->state(FEEDS_PROCESS);
+    $myFeed->state(FEEDS_PROCESS_CLEAR);
+
 
 }
