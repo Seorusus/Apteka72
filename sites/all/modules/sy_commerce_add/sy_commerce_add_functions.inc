@@ -210,10 +210,19 @@ function sy_commerce_add_get_stocks_table($nid)
   $header = array('Город', 'Аптека', 'Артикуль', 'Кол-во', 'Цена', '');
   if(count($rows)>0)   return array('#markup' => theme('table', array('header' => $header, 'rows' => $rows))); else return '';
 }
+
+
+
+
+
+
+
+
+
 function sy_commerce_add_get_city_stocks_location()
 {
   $location = sy_commerce_add_get_location();
-  return db_query("SELECT DISTINCTROW
+  $city= db_query("SELECT DISTINCTROW
     city.field_city_value
     FROM
     {commerce_stock_sources} AS stock
@@ -229,6 +238,9 @@ function sy_commerce_add_get_city_stocks_location()
     gcc.field_gip_country_code_value = :code AND
     gregion.field_gip_region_value = :region AND
     gcity.field_gip_city_value = :city LIMIT 0,1", array(':code' => $location['country_code'], ':region' => $location['region'], ':city' => $location['city'],))->fetchField();
+  if(!$city) $city="Тюмень";
+  $_SESSION['sy_commerce_add_city']=$city;
+  return $city;
 
 }
 
@@ -248,5 +260,6 @@ function sy_commerce_add_get_location()
       'city' => $smart_ip_session['location']['city']
     );
   }
+
   return $location;
 }

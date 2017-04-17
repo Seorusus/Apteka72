@@ -24,7 +24,8 @@ function sy_commerce_add_ctools_plugin_directory($owner, $plugin_type){
 
 function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$form_state, $form_id)
 {
-    if(isset($form_state['context']['entity_id']) && isset($form_state['default_product']->type) && $form_state['default_product']->type=='product2') {
+
+    if(isset($form_state['context']['entity_id']) && $form_state['context']['view_mode']=='node_full' && isset($form_state['default_product']->type) && $form_state['default_product']->type=='product') {
         if (!isset($form_state['list_product_in_stok'])) $form_state['list_product_in_stok'] = sy_commerce_add_get_list_product_in_stocks($form_state['context']['entity_id']);
         $city_stocks = sy_commerce_add_get_city_stocks_in($form_state['list_product_in_stok']);
         $city_stocks_all = sy_commerce_add_get_city_stocks();
@@ -52,6 +53,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
                     $def_city = $keys_location[0];
                 }
             }
+            dpm('-'.$def_city);
             $form['fs_city']['city'] = array(
                 '#type' => 'select',
                 '#title' => 'Город',
@@ -103,7 +105,7 @@ function sy_commerce_add_city_choice_js($form, &$form_state)
 
 function sy_commerce_add_cron()
 {
-    $output = views_embed_view('expot_orders', 'views_data_export_1');
+    $output = sy_commerce_add_get_orders_xml();
     file_unmanaged_save_data($output , drupal_realpath('public://feeds-tmp/output.xml'), FILE_EXISTS_REPLACE);
     sy_commerce_add_feeds_run();// 2 раза для прописи склада
     sy_commerce_add_feeds_run();// 2 раза для прописи склада
@@ -137,4 +139,47 @@ function sy_commerce_add_feeds_run() {
     $myFeed->state(FEEDS_PROCESS_CLEAR);
 
 
+}
+function sy_commerce_add_get_orders_xml()
+{
+    $out='<?xml version="1.0" encoding="UTF-8" ?>'." \n";
+    $oids = db_query("SELECT order_id FROM {commerce_order} WHERE status=:status", array(':status'=>'pending'))->fetchCol();
+    $orders=commerce_order_load_multiple($oids);
+    if(count($orders)>0) {
+        $out .= "<commerce_orders> \n";
+        foreach ($orders as $order) {
+            $out .= "<commerce_order> \n";
+            $out .= "<ID-order>$order->order_id</ID-order> \n";
+            $out .= "<E-mail>$order->mail</E-mail> \n";
+            $out .= "<Date-created>" . date("d/m/Y - H:i", $order->created) . "</Date-created> \n";
+            $out .= "<Order-total>" . ($order->commerce_order_total['und'][0]['amount'] / 100) . "</Order-total> \n";
+            $out .= "<list-products>" . sy_commerce_add_get_orders_xml_lines($order->order_id,$out) . "</list-products> \n";
+            $out .= "</commerce_order> \n";
+        }
+        $out .= "</commerce_orders> \n";
+
+        return $out;
+    }
+    else
+    {
+        return '';
+    }
+}
+function sy_commerce_add_get_orders_xml_lines($order_id,&$out) {
+    $oids = db_query("SELECT prd.title, prc.commerce_price_amount, prd.sku, cli.quantity, adqt.quantity as add_qty 
+                    FROM {commerce_line_item} AS cli
+                    LEFT JOIN {commerce_product} AS prd ON prd.sku = cli.line_item_label
+                    LEFT JOIN {field_data_commerce_price} AS prc ON prc.entity_id = prd.product_id 
+                    LEFT JOIN {sy_commerce_add_quantity} AS adqt ON adqt.line_item_id = cli.line_item_id  
+                    WHERE cli.order_id = :order_id AND cli.type = 'product'",array(':order_id'=>$order_id));
+    foreach ($oids as $key=>$val)
+    {
+        $out.="<product> \n";
+        $out.="<name>$val->title</name> \n";
+        $out.="<SKU>$val->sku</SKU> \n";
+        $out.="<price>".($val->commerce_price_amount/100)."</price> \n";
+        $out.="<qty>$val->quantity</qty> \n";
+        $out.="<qty-add>".($val->add_qty!=0?$val->add_qty:0)."</qty-add> \n";
+        $out.="</product> \n";
+    }
 }
