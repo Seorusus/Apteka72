@@ -34,12 +34,6 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
 
             $form['#prefix'] = '<div id="cart-gip-form-wrapper">';
             $form['#suffix'] = '</div>';
-            $form['fs_city'] = array(
-                '#type' => 'fieldset',
-                '#title' => 'Город',
-                '#collapsible' => TRUE,
-                '#collapsed' => FALSE,
-            );
 
             if (isset($form_state['values']['city'])) {
                 $def_city = $form_state['values']['city'];
@@ -53,8 +47,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
                     $def_city = $keys_location[0];
                 }
             }
-            dpm('-'.$def_city);
-            $form['fs_city']['city'] = array(
+            $form['city'] = array(
                 '#type' => 'select',
                 '#title' => 'Город',
                 '#default_value' => $def_city,
@@ -66,14 +59,14 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
                     'effect' => 'fade',
                 ),
             );
-            $form['fs_city']['table']=sy_commerce_add_get_stocks_table($form_state['context']['entity_id']);
+            $form['table']=sy_commerce_add_get_stocks_table($form_state['context']['entity_id'],$def_city);
+
             if(array_key_exists($def_city, $city_stocks) ) {
                 $options_product = sy_commerce_add_get_options_product($form_state['list_product_in_stok'], $def_city);
                 $form['product_id']['#options'] = $options_product;
             }
             else
             {
-                $form['city_information'] = array('#markup' => 'В этом городе нет', );
                 $form['product_id']['#disabled'] = TRUE;
                 $form['product_id']['#attributes']['style'] = 'display:none;';
                 $form['quantity']['#disabled'] = TRUE;
@@ -85,12 +78,6 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
             $form['city_information'] = array('#markup' => 'Нет городов', );
         }
 
-        /*
-        $keys_product = array_keys($options_product);
-        $form['product_id']['#default_value'] = $keys_product[0];
-        $form_state['default_product'] = commerce_product_load($keys_product[0]);
-        $form_state['values']['product_id'] = $keys_product[0];
-        $form_state['input']['product_id'] = $keys_product[0];*/
     }
 }
 

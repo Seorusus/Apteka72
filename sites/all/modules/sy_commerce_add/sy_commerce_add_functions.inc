@@ -171,21 +171,24 @@ function sy_commerce_add_get_options_product($list_product_in_stok, $def_city)
 }
 
 
-function sy_commerce_add_get_stocks_table($nid)
+function sy_commerce_add_get_stocks_table($nid,$city)
 {
   $stoks = db_query("SELECT product.product_id, product.sku, s_s.`name`, qty.commerce_stock_value,
-                    f_city.field_city_value, s_s.source_id, price.commerce_price_amount,price.commerce_price_currency_code, edr.field_expected_date_receipt_value 
+                    f_city.field_city_value, f_address.field_address_value, f_phone.field_phone_value, s_s.source_id, price.commerce_price_amount,price.commerce_price_currency_code, edr.field_expected_date_receipt_value 
                     FROM {commerce_product} AS product
                     INNER JOIN {field_data_field_product} AS f_pr ON f_pr.field_product_product_id = product.product_id
                     INNER JOIN {field_data_commerce_stock} AS qty ON qty.revision_id = product.revision_id 
                     INNER JOIN {commerce_stock_quantity} AS s_qty ON s_qty.product_id = product.product_id 
                     INNER JOIN {commerce_stock_sources} AS s_s ON s_s.source_id = s_qty.source_id
                     INNER JOIN {field_data_field_city} AS f_city ON f_city.entity_id = s_s.source_id 
+                    LEFT JOIN {field_data_field_address} AS f_address ON f_address.entity_id = s_s.source_id 
+                    LEFT JOIN {field_data_field_phone} AS f_phone ON f_phone.entity_id = s_s.source_id 
                     INNER JOIN {field_data_commerce_price} AS price ON price.revision_id = product.revision_id 
                     LEFT JOIN {field_data_field_expected_date_receipt} AS edr ON edr.revision_id = product.revision_id
-                    WHERE f_pr.entity_id = :nid AND product.type = 'product' AND f_city.bundle = 'commerce_stock_sources' 
-                    ORDER BY  f_city.field_city_value ASC, s_s.`name` ASC", array(':nid' => $nid))->fetchAll();
+                    WHERE f_pr.entity_id = :nid AND product.type = 'product' AND f_city.bundle = 'commerce_stock_sources'  AND f_city.field_city_value = :city 
+                    ORDER BY  s_s.`name` ASC", array(':nid' => $nid, ':city' => $city))->fetchAll();
   $rows = array();
+  $count_in=0;
   foreach ($stoks as $stok) {
     $stock_sets = db_query("SELECT * FROM {commerce_stock_calculation} WHERE name = :name", array(':name' => 'stock_calculation:' . $stok->product_id))->fetchObject();
     if (isset($stock_sets->plugin)) {
@@ -193,12 +196,13 @@ function sy_commerce_add_get_stocks_table($nid)
         $settings = unserialize($stock_sets->settings);
         if ($settings[$stok->source_id] == $stok->source_id) {
           $edr='';
-          if($stok->commerce_stock_value >=0 && $stok->field_expected_date_receipt_value>0 )
+          if($stok->commerce_stock_value <=0 && $stok->field_expected_date_receipt_value>0 )
           {
             $edr='Ожидаемое поступление '.date("d/m/Y",$stok->field_expected_date_receipt_value);
           }
+          if($stok->commerce_stock_value>0) $count_in++;
           $rows[] = array(
-              check_plain($stok->field_city_value), check_plain($stok->name), check_plain($stok->sku),
+               check_plain($stok->name),check_plain($stok->field_phone_value),check_plain($stok->field_address_value), check_plain($stok->sku),
               floatval($stok->commerce_stock_value > 0 ? $stok->commerce_stock_value : 0),
               commerce_currency_format($stok->commerce_price_amount, $stok->commerce_price_currency_code), $edr
 
@@ -207,11 +211,24 @@ function sy_commerce_add_get_stocks_table($nid)
       }
     }
   }
-  $header = array('Город', 'Аптека', 'Артикуль', 'Кол-во', 'Цена', '');
-  if(count($rows)>0)   return array('#markup' => theme('table', array('header' => $header, 'rows' => $rows))); else return '';
+  $header = array( 'Название магазина', 'Телефон', 'Адрес', 'Артикуль', 'Кол-во', 'Цена', '');
+  if(count($rows)>0){
+    $out='';
+    $out.=($count_in>0?'Товар в ':'Товара ').l(($count_in>0?$count_in:'нет'),'',array(
+            'query' => array('width' => 500, 'height' => 500, 'inline' => 'true'),
+            'fragment' =>'id-of-content',  // Replace $id
+            //'html' =>TRUE,
+            'attributes' => array('class' => 'colorbox-inline') // lightframe mode to create a modal frame
+        )).' '.($count_in>0?sy_commerce_add_human_plural($count_in):'в аптеках');
+    $out.='<div style="display: none;"><div id="id-of-content" style="padding: 10px;">'.theme('table', array('header' => $header, 'rows' => $rows)).'</div></div>';
+    return array('#markup' =>$out);
+  } else return array('#markup' => '');
 }
 
-
+function sy_commerce_add_human_plural($number, $titles=array('аптеке','аптеках','аптеках')){
+  $cases = array (2, 0, 1, 1, 1, 2);
+  return $titles[ ($number%100 >4 && $number%100< 20)? 2 : $cases[min($number%10, 5)] ];
+}
 
 
 
