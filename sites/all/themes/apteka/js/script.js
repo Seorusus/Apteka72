@@ -18,6 +18,8 @@
     Drupal.behaviors.general = {
         attach: function (context, settings) {
 
+            $("#block-sy-commerce-add-select-city a").removeAttr("href");
+
             $(".line-item-quantity-raw", context).wrap("<a href='/cart'></a>");
 
             $("#block-block-1 button", context).click(function () {
@@ -35,6 +37,21 @@
             $("#block-multiblock-7 .hamburger", context).click(function () {
                 $("#block-multiblock-7 .content", context).toggleClass("show");
             });
+
+            $("#block-sy-commerce-add-select-city a", context).click(function () {
+                $(this).toggleClass("active");
+            });
+
+            $("#block-sy-commerce-add-select-city a", context).first().click(function () {
+                $(this).toggleClass("active");
+                $("#block-block-3", context).toggleClass("show");
+            });
+
+            $("#block-sy-commerce-add-select-city a", context).last().click(function () {
+                $(this).toggleClass("active");
+                $("#block-block-9", context).toggleClass("show");
+            });
+
 
             var forEach = function (t, o, r) {
                 if ("[object Object]" === Object.prototype.toString.call(t))for (var c in t)Object.prototype.hasOwnProperty.call(t, c) && o.call(r, t[c], c, t); else for (var e = 0, l = t.length; l > e; e++)o.call(r, t[e], e, t)

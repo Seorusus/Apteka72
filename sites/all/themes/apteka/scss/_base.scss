@@ -352,7 +352,7 @@
   background: url("../images/local.png") no-repeat left center;
   padding-left: 43px;
   @media (min-width: 1081px) {
-    @include span(4.86);
+    @include span(3.5);
   }
   @media (max-width: 1080px) and (min-width: 601px) {
     @include span(8);
@@ -380,11 +380,46 @@
   }
 }
 
+#block-sy-commerce-add-select-city {
+  padding-left: 35px;
+  background: url("../images/local.png") no-repeat left center;
+  @media (min-width: 1081px) {
+    @include span(2.5);
+  }
+  a {
+    margin-right: 25px;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    transition: .3s;
+    &.active, &:hover {
+      color: $orange;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+#custom-search-blocks-form-1 {
+  > div {
+    position: relative;
+  }
+  .form-actions {
+    position: absolute;
+    top: 1px;
+    right: 35px;
+  }
+  [type="text"] {
+    padding-left: 10px;
+  }
+}
+
 #block-block-2 {
   background: url("../images/time.png") no-repeat 4px center;
   padding-left: 39px;
   @media (min-width: 1081px) {
-    @include span(3.25);
+    @include span(3);
     letter-spacing: .19px;
   }
   @media (max-width: 1080px) and (min-width: 601px) {
@@ -398,7 +433,7 @@
   }
 }
 
-#block-block-3 {
+#block-block-3, #block-block-9 {
   position: absolute;
   z-index: 99;
   width: 100%;
@@ -410,7 +445,7 @@
   }
   @media (min-width: 951px) {
     top: 38px;
-    right: 7.9%;
+    left: 15px;
     max-width: 675px;
   }
   @media (max-width: 950px) {
@@ -444,7 +479,7 @@
 
 #block-menu-menu-login {
   @media (min-width: 1081px) {
-    @include span(2.433);
+    @include span(2.4);
     padding-left: 26px;
   }
   @media (max-width: 1080px) and (min-width: 601px) {
@@ -2200,5 +2235,44 @@ article.node-5 {
     background-color: #f0f0f0;
     border-radius: 3px;
     padding: 9px 10px 9px 15px;
+  }
+}
+
+.view-price-xml {
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  thead {
+    background-color: #e8e8e8;
+    .views-field {
+      font-weight: 600;
+      padding-top: 7px;
+      padding-bottom: 7px;
+    }
+  }
+  tbody {
+    .views-field {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+  }
+  table, th, td {
+    border: 1px solid #c1c1c1;
+  }
+  .views-field {
+    text-align: center;
+  }
+}
+
+#block-multiblock-6 {
+  border-top: 1px solid #c1c1c1;
+  margin-top: 35px;
+  padding-top: 15px;
+  > ul {
+    list-style: none;
+    ul {
+      list-style: none;
+    }
   }
 }
