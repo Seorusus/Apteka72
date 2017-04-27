@@ -914,13 +914,13 @@ ul.tabs a.active, ul.tabs a:hover {
 @media (min-width: 1081px) {
   /* line 383, ../scss/_base.scss */
   #block-sy-commerce-add-select-city {
-    width: 20.83333%;
+    width: 25%;
     float: left;
   }
 }
 /* line 389, ../scss/_base.scss */
 #block-sy-commerce-add-select-city a {
-  margin-right: 25px;
+  margin-right: 15px;
   display: inline-block;
   cursor: pointer;
   text-decoration: none;
@@ -1044,7 +1044,7 @@ ul.tabs a.active, ul.tabs a:hover {
 @media (min-width: 1081px) {
   /* line 480, ../scss/_base.scss */
   #block-menu-menu-login {
-    width: 20%;
+    width: 25%;
     float: left;
     padding-left: 26px;
   }
@@ -1092,8 +1092,7 @@ ul.tabs a.active, ul.tabs a:hover {
 @media (min-width: 1081px) {
   /* line 510, ../scss/_base.scss */
   #block-commerce-cart-cart {
-    width: 12.14167%;
-    float: left;
+    float: right;
     background: url("../images/shopping-cart.png") no-repeat left center;
   }
 }
