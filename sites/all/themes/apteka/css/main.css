@@ -3506,6 +3506,78 @@ article.node-5 .step-1-p-last {
   list-style: none;
 }
 
+/* line 2281, ../scss/_base.scss */
+.node-product-display .group-price {
+  margin-bottom: 10px;
+}
+/* line 2284, ../scss/_base.scss */
+.node-product-display .group-wrap-price {
+  width: auto;
+  padding-right: 10px;
+}
+/* line 2288, ../scss/_base.scss */
+.node-product-display .old_price {
+  color: #555;
+  font-size: 21px;
+}
+/* line 2292, ../scss/_base.scss */
+.node-product-display .old-price-label {
+  font-family: "PTRoubleSerif";
+  font-size: 21px;
+  margin-top: -5px;
+  padding-left: 2px;
+}
+/* line 2298, ../scss/_base.scss */
+.node-product-display .commerce-product-field {
+  color: #c40000;
+  margin-left: 5px;
+  width: 70px;
+  font-weight: bold;
+  font-size: 21px;
+}
+/* line 2305, ../scss/_base.scss */
+.node-product-display .commerce-product-field .price div {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+}
+/* line 2310, ../scss/_base.scss */
+.node-product-display .commerce-product-field .rub {
+  margin-top: -5px;
+}
+/* line 2314, ../scss/_base.scss */
+.node-product-display .form-item-city {
+  margin-bottom: 10px;
+}
+/* line 2318, ../scss/_base.scss */
+.node-product-display form a {
+  color: #f66600;
+  font-weight: bold;
+}
+/* line 2323, ../scss/_base.scss */
+.node-product-display [name="city"] {
+  background: url("../images/arrow_down.svg") #F66600 no-repeat 80px center;
+  background-size: 15px auto;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  color: white;
+  margin-left: 10px;
+  padding: 8px 45px 8px 10px;
+}
+/* line 2334, ../scss/_base.scss */
+.node-product-display option {
+  border: none;
+}
+
 /*!
  * Hamburgers
  * @description Tasty CSS-animated hamburgers

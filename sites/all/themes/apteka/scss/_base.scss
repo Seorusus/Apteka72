@@ -2276,3 +2276,62 @@ article.node-5 {
     }
   }
 }
+
+.node-product-display {
+  .group-price {
+    margin-bottom: 10px;
+  }
+  .group-wrap-price {
+    width: auto;
+    padding-right: 10px;
+  }
+  .old_price {
+    color: #555;
+    font-size: 21px;
+  }
+  .old-price-label {
+    font-family: $rub;
+    font-size: 21px;
+    margin-top: -5px;
+    padding-left: 2px;
+  }
+  .commerce-product-field {
+    color: #c40000;
+    margin-left: 5px;
+    width: 70px;
+    font-weight: bold;
+    font-size: 21px;
+    .price {
+      div {
+        @include flexbox;
+        @include align-items(center);
+      }
+    }
+    .rub {
+      margin-top: -5px;
+    }
+  }
+  .form-item-city {
+    margin-bottom: 10px;
+  }
+  form {
+    a {
+      color: $orange;
+      font-weight: bold;
+    }
+  }
+  [name="city"] {
+    background: url("../images/arrow_down.svg") #F66600 no-repeat 80px center;
+    background-size: 15px auto;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    color: white;
+    margin-left: 10px;
+    padding: 8px 45px 8px 10px;
+  }
+  option {
+    border: none;
+  }
+}
