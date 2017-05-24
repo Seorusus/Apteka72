@@ -257,6 +257,10 @@ function sy_commerce_add_get_city_stocks_location()
     gcity.field_gip_city_value = :city LIMIT 0,1", array(':code' => $location['country_code'], ':region' => $location['region'], ':city' => $location['city'],))->fetchField();
   if(!$city) $city="Тюмень";
   $_SESSION['sy_commerce_add_city']=$city;
+
+  dpm($location);
+  dpm($city);
+  dpm($_SESSION);
   return $city;
 
 }
