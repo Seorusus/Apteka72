@@ -1561,16 +1561,21 @@ ul.tabs a.active, ul.tabs a:hover {
 }
 /* line 860, ../scss/_base.scss */
 #block-taxonomy-menu-block-1 .menu-wrap a {
-  background: url("../images/herbal.png") no-repeat left center;
+/*  background: url("../images/herbal.png") no-repeat left center; */
   display: block;
   text-decoration: none;
   font-weight: 600;
-  padding: 8px 0 8px 28px;
+  padding: 8px 0 ;
   -webkit-transition-duration: 0.3s;
   -moz-transition-duration: 0.3s;
   -ms-transition-duration: 0.3s;
   -o-transition-duration: 0.3s;
   transition-duration: 0.2s;
+}
+#block-taxonomy-menu-block-1 .menu-wrap a img{
+  margin: 0 5px 0 0;
+  position: relative;
+  top: 3px;
 }
 /* line 871, ../scss/_base.scss */
 #block-taxonomy-menu-block-1 .menu-wrap a.active, #block-taxonomy-menu-block-1 .menu-wrap a:hover {

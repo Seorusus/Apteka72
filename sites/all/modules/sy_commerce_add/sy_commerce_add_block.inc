@@ -31,8 +31,7 @@ function sy_commerce_add_change_sity($city)
 function sy_commerce_add_block_select_city()
 {
   $citys=sy_commerce_add_get_city_stocks();
-  dpm($citys);
-  dpm($_SESSION);
+  if(!isset($_SESSION['sy_commerce_add_city'])) sy_commerce_add_get_city_stocks_location();
   $out=array();
   foreach ($citys as $city)
   {

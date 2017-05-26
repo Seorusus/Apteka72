@@ -31,3 +31,48 @@ function apteka_page_alter(&$page)
 {
     drupal_add_css('http://fonts.fontstorage.com/import/opensans.css');
 }
+function apteka_taxonomy_menu_block__1($variables) {
+    $tree = $variables['items'];
+    $config = $variables['config'];
+
+    $num_items = count($tree);
+    $i = 0;
+
+    $output = '<ul>';
+    foreach ($tree as $tid => $term) {
+        $i++;
+        // Add classes.
+        $attributes = array();
+        if ($i == 1) {
+            $attributes['class'][] = 'first';
+        }
+        if ($i == $num_items) {
+            $attributes['class'][] = 'last';
+        }
+        if ($term['active_trail'] == '1') {
+            $attributes['class'][] = 'active-trail';
+        }
+        if ($term['active_trail'] == '2') {
+            $attributes['class'][] = 'active';
+        }
+
+        // Alter link text if we have to display the nodes attached.
+        if (isset($term['nodes'])) {
+            $term['name'] = $term['name'] . ' (' . $term['nodes'] . ')';
+        }
+
+        // Set alias option to true so we don't have to query for the alias every
+        // time, as this is cached anyway.
+        $lterm=taxonomy_term_load($tid);
+        $icons='<img src="/'.drupal_get_path('theme','apteka').'/images/herbal.png">';
+        if(isset($lterm->field_ikons['und'][0]['uri'])) $icons='<img src="' .image_style_url('menu_icons_17',$lterm->field_ikons['und'][0]['uri']). '">';
+        $output .= '<li' . drupal_attributes($attributes) . '>' . l($icons.$term['name'], $term['path'], $options = array('alias' => TRUE,'html' => TRUE));
+        if (!empty($term['children'])) {
+            $output .= theme('taxonomy_menu_block__' . $config['delta'], (array('items' => $term['children'], 'config' => $config)));
+        }
+        $output .= '</li>';
+    }
+    $output .= '</ul>';
+
+    return $output;
+}

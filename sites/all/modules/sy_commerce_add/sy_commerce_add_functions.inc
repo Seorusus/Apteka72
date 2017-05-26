@@ -80,7 +80,6 @@ $quantity = db_select('sy_commerce_add_quantity', 'q')
   ->fetchField();
 return (is_numeric($quantity)?floatval($quantity):0);
 }
-
 function sy_commerce_add_get_list_product_in_stocks($nid)
 {
 $arr_out = array();
@@ -169,8 +168,6 @@ function sy_commerce_add_get_options_product($list_product_in_stok, $def_city)
   }
   return $arr_out;
 }
-
-
 function sy_commerce_add_get_stocks_table($nid,$city)
 {
   $stoks = db_query("SELECT product.product_id, product.sku, s_s.`name`, qty.commerce_stock_value,
@@ -224,18 +221,10 @@ function sy_commerce_add_get_stocks_table($nid,$city)
     return array('#markup' =>$out);
   } else return array('#markup' => '');
 }
-
 function sy_commerce_add_human_plural($number, $titles=array('аптеке','аптеках','аптеках')){
   $cases = array (2, 0, 1, 1, 1, 2);
   return $titles[ ($number%100 >4 && $number%100< 20)? 2 : $cases[min($number%10, 5)] ];
 }
-
-
-
-
-
-
-
 function sy_commerce_add_get_city_stocks_location()
 {
   $location = sy_commerce_add_get_location();
@@ -258,13 +247,9 @@ function sy_commerce_add_get_city_stocks_location()
   if(!$city) $city="Тюмень";
   $_SESSION['sy_commerce_add_city']=$city;
 
-  dpm($location);
-  dpm($city);
-  dpm($_SESSION);
   return $city;
 
 }
-
 function sy_commerce_add_get_location()
 {
   $smart_ip_session = smart_ip_session_get('smart_ip');
