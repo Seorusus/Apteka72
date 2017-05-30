@@ -186,12 +186,14 @@ function sy_commerce_add_get_stocks_table($nid,$city)
                     ORDER BY  s_s.`name` ASC", array(':nid' => $nid, ':city' => $city))->fetchAll();
   $rows = array();
   $count_in=0;
+  $date_receipt_value=0;
   foreach ($stoks as $stok) {
     $stock_sets = db_query("SELECT * FROM {commerce_stock_calculation} WHERE name = :name", array(':name' => 'stock_calculation:' . $stok->product_id))->fetchObject();
     if (isset($stock_sets->plugin)) {
       if ($stock_sets->plugin == 'sum_calculation') {
         $settings = unserialize($stock_sets->settings);
         if ($settings[$stok->source_id] == $stok->source_id) {
+          if($stok->field_expected_date_receipt_value>$date_receipt_value ) $date_receipt_value=$stok->field_expected_date_receipt_value;
           $edr='';
           if($stok->commerce_stock_value <=0 && $stok->field_expected_date_receipt_value>0 )
           {
@@ -210,16 +212,28 @@ function sy_commerce_add_get_stocks_table($nid,$city)
   }
   $header = array( 'Название магазина', 'Телефон', 'Адрес', 'Артикуль', 'Кол-во', 'Цена', '');
   if(count($rows)>0){
-    $out='';
-    $out.=($count_in>0?'Товар в ':'Товара ').l(($count_in>0?$count_in:'нет'),'',array(
-            'query' => array('width' => 500, 'height' => 500, 'inline' => 'true'),
-            'fragment' =>'id-of-content',  // Replace $id
-            //'html' =>TRUE,
-            'attributes' => array('class' => 'colorbox-inline') // lightframe mode to create a modal frame
-        )).' '.($count_in>0?sy_commerce_add_human_plural($count_in):'в аптеках');
+
+    $lnk=array(
+        'query' => array('width' => 500, 'height' => 500, 'inline' => 'true'),
+        'fragment' =>'id-of-content',  // Replace $id
+      //'html' =>TRUE,
+        'attributes' => array('class' => 'colorbox-inline') // lightframe mode to create a modal frame
+    );
+    if($count_in==0 && $date_receipt_value==0)
+    {
+      $out='Товар временно отсутствует';
+    }
+    elseif($count_in==0 && $date_receipt_value>0)
+    {
+      $out='Товар '.l('ожидается','',$lnk).' '.date("d/m/Y",$date_receipt_value);
+    }
+    else
+    {
+      $out='Товар в '.l($count_in,'',$lnk).' '.sy_commerce_add_human_plural($count_in);
+    }
     $out.='<div style="display: none;"><div id="id-of-content" style="padding: 10px;">'.theme('table', array('header' => $header, 'rows' => $rows)).'</div></div>';
     return array('#markup' =>$out);
-  } else return array('#markup' => '');
+  } else return array('#markup' => 'Товар временно отсутствует');
 }
 function sy_commerce_add_human_plural($number, $titles=array('аптеке','аптеках','аптеках')){
   $cases = array (2, 0, 1, 1, 1, 2);

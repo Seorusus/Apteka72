@@ -416,7 +416,8 @@ class FeedsSource extends FeedsConfigurable {
     $result = $this->progressImporting();
     if ($result == FEEDS_BATCH_COMPLETE || isset($e)) {
       $this->imported = time();
-      $this->log('import', 'Imported in @s seconds.', array('@s' => $this->imported - $this->state[FEEDS_START]), WATCHDOG_INFO);
+      $this->log('import', 'Imported in @s seconds.', array('@s' => $this->imported), WATCHDOG_INFO);
+      //$this->log('import', 'Imported in @s seconds.', array('@s' => $this->imported - $this->state[FEEDS_START]), WATCHDOG_INFO);
       $this->importer->fetcher->afterImport($this);
       module_invoke_all('feeds_after_import', $this);
       if (module_exists('rules')) {
