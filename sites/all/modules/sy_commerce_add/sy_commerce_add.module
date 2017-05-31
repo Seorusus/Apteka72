@@ -101,6 +101,7 @@ function sy_commerce_add_city_choice_js($form, &$form_state)
 
 function sy_commerce_add_cron()
 {
+    watchdog('sy commerce add','GO');
     $output = sy_commerce_add_get_orders_xml();
     file_unmanaged_save_data($output , drupal_realpath('public://feeds-tmp/output.xml'), FILE_EXISTS_REPLACE);
     sy_commerce_add_feeds_run();// 2 раза для прописи склада
