@@ -1561,21 +1561,16 @@ ul.tabs a.active, ul.tabs a:hover {
 }
 /* line 860, ../scss/_base.scss */
 #block-taxonomy-menu-block-1 .menu-wrap a {
-/*  background: url("../images/herbal.png") no-repeat left center; */
+  background: url("../images/herbal.png") no-repeat left center;
   display: block;
   text-decoration: none;
   font-weight: 600;
-  padding: 8px 0 ;
+  padding: 8px 0 8px 28px;
   -webkit-transition-duration: 0.3s;
   -moz-transition-duration: 0.3s;
   -ms-transition-duration: 0.3s;
   -o-transition-duration: 0.3s;
   transition-duration: 0.2s;
-}
-#block-taxonomy-menu-block-1 .menu-wrap a img{
-  margin: 0 5px 0 0;
-  position: relative;
-  top: 3px;
 }
 /* line 871, ../scss/_base.scss */
 #block-taxonomy-menu-block-1 .menu-wrap a.active, #block-taxonomy-menu-block-1 .menu-wrap a:hover {
@@ -3581,6 +3576,48 @@ article.node-5 .step-1-p-last {
 /* line 2334, ../scss/_base.scss */
 .node-product-display option {
   border: none;
+}
+
+/* line 2340, ../scss/_base.scss */
+#id-of-content .sticky-table {
+  margin-top: 35px;
+  margin-bottom: 35px;
+}
+/* line 2344, ../scss/_base.scss */
+#id-of-content table {
+  border-collapse: collapse;
+  width: 100%;
+}
+/* line 2348, ../scss/_base.scss */
+#id-of-content thead {
+  background-color: #e8e8e8;
+}
+/* line 2350, ../scss/_base.scss */
+#id-of-content thead .views-field {
+  font-weight: 600;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+/* line 2357, ../scss/_base.scss */
+#id-of-content tbody .views-field {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+/* line 2362, ../scss/_base.scss */
+#id-of-content table, #id-of-content th, #id-of-content td {
+  border: 1px solid #c1c1c1;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+/* line 2368, ../scss/_base.scss */
+#id-of-content th:empty, #id-of-content td:empty {
+  display: none !important;
+}
+
+/* line 2373, ../scss/_base.scss */
+#cboxContent {
+  margin-bottom: unset !important;
 }
 
 /*!

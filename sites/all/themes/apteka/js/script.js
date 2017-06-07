@@ -18,6 +18,12 @@
     Drupal.behaviors.general = {
         attach: function (context, settings) {
 
+            $(".commerce-add-to-cart .colorbox-inline").colorbox({
+                width:"80%",
+                height:"auto",
+                onComplete:function(){ console.log('onComplete: colorbox has displayed the loaded content'); }
+            });
+
             $("#block-sy-commerce-add-select-city a").removeAttr("href");
 
             $(".line-item-quantity-raw", context).wrap("<a href='/cart'></a>");
@@ -43,15 +49,14 @@
             });
 
             $("#block-sy-commerce-add-select-city a", context).first().click(function () {
-                $(this).toggleClass("active");
                 $("#block-block-3", context).toggleClass("show");
+                $("#block-block-9", context).removeClass("show");
             });
 
             $("#block-sy-commerce-add-select-city a", context).last().click(function () {
-                $(this).toggleClass("active");
                 $("#block-block-9", context).toggleClass("show");
+                $("#block-block-3", context).removeClass("show");
             });
-
 
             var forEach = function (t, o, r) {
                 if ("[object Object]" === Object.prototype.toString.call(t))for (var c in t)Object.prototype.hasOwnProperty.call(t, c) && o.call(r, t[c], c, t); else for (var e = 0, l = t.length; l > e; e++)o.call(r, t[e], e, t)

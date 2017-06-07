@@ -2335,3 +2335,41 @@ article.node-5 {
     border: none;
   }
 }
+
+#id-of-content {
+  .sticky-table {
+    margin-top: 35px;
+    margin-bottom: 35px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  thead {
+    background-color: #e8e8e8;
+    .views-field {
+      font-weight: 600;
+      padding-top: 7px;
+      padding-bottom: 7px;
+    }
+  }
+  tbody {
+    .views-field {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+  }
+  table, th, td {
+    border: 1px solid #c1c1c1;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  th:empty, td:empty {
+    display: none !important;
+  }
+}
+
+#cboxContent {
+  margin-bottom: unset !important;
+}
