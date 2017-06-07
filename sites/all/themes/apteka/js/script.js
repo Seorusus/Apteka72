@@ -44,16 +44,18 @@
                 $("#block-multiblock-7 .content", context).toggleClass("show");
             });
 
-            $("#block-sy-commerce-add-select-city a", context).click(function () {
+            $("#block-sy-commerce-add-select-city > a").wrapAll("<div class='select'></div>");
+
+            $("#block-sy-commerce-add-select-city .select a", context).click(function () {
                 $(this).toggleClass("active");
             });
 
-            $("#block-sy-commerce-add-select-city a", context).first().click(function () {
+            $("#block-sy-commerce-add-select-city .select a", context).first().click(function () {
                 $("#block-block-3", context).toggleClass("show");
                 $("#block-block-9", context).removeClass("show");
             });
 
-            $("#block-sy-commerce-add-select-city a", context).last().click(function () {
+            $("#block-sy-commerce-add-select-city .select a", context).last().click(function () {
                 $("#block-block-9", context).toggleClass("show");
                 $("#block-block-3", context).removeClass("show");
             });
