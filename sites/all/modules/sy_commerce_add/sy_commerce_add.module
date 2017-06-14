@@ -127,6 +127,8 @@ function sy_commerce_add_feeds_after_import(FeedsSource $source) {
 function sy_commerce_add_cron()
 {
     //db_query('update elysia_cron set running = 0'); разблокировка
+    $output = sy_commerce_add_get_orders_xml();
+    file_unmanaged_save_data($output , drupal_realpath('public://feeds-tmp/output.xml'), FILE_EXISTS_REPLACE);
     watchdog('sy commerce add', 'GO');
     $source=drupal_realpath('public://feeds-tmp/import.xml');
 
