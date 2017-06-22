@@ -18,10 +18,29 @@
     Drupal.behaviors.general = {
         attach: function (context, settings) {
 
+            $(".custom-search-selector option[value='c-all']").text('Любой');
+
+            $(".back-to-top").on('click', function (event) {
+                if (this.hash !== "") {
+                    event.preventDefault();
+
+                    var hash = this.hash;
+
+                    $('html, body').animate({
+                        scrollTop: $(hash).offset().top
+                    }, 1500, function () {
+
+                        window.location.hash = hash;
+                    });
+                }  // End if
+            });
+
             $(".commerce-add-to-cart .colorbox-inline").colorbox({
-                width:"80%",
-                height:"auto",
-                onComplete:function(){ console.log('onComplete: colorbox has displayed the loaded content'); }
+                width: "80%",
+                height: "auto",
+                onComplete: function () {
+                    console.log('onComplete: colorbox has displayed the loaded content');
+                }
             });
 
             $("#block-sy-commerce-add-select-city a").removeAttr("href");
