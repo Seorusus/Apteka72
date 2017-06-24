@@ -46,6 +46,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
                     $def_city = $keys_location[0];
                 }
             }
+            /*
             $form['city'] = array(
                 '#type' => 'select',
                 '#title' => 'Город',
@@ -58,6 +59,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
                     'effect' => 'fade',
                 ),
             );
+            */
             $form['table']=sy_commerce_add_get_stocks_table($form_state['context']['entity_id'],$def_city);
 
             if(array_key_exists($def_city, $city_stocks) ) {
