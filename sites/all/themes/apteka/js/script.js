@@ -18,6 +18,14 @@
     Drupal.behaviors.general = {
         attach: function (context, settings) {
 
+            $("#id-of-content tbody td:nth-child(1)").attr('data-th','Название магазина');
+            $("#id-of-content tbody td:nth-child(2)").attr('data-th','Телефон');
+            $("#id-of-content tbody td:nth-child(3)").attr('data-th','Адрес');
+            $("#id-of-content tbody td:nth-child(4)").attr('data-th','Артикуль');
+            $("#id-of-content tbody td:nth-child(5)").attr('data-th','Кол-во');
+            $("#id-of-content tbody td:nth-child(6)").attr('data-th','Цена');
+            $("#id-of-content tbody td:nth-child(7)").hide();
+
             $(".custom-search-selector option[value='c-all']").text('Любой');
 
             $(".back-to-top").on('click', function (event) {
@@ -36,10 +44,12 @@
             });
 
             $(".commerce-add-to-cart .colorbox-inline").colorbox({
-                width: "80%",
+                width: "90%",
                 height: "auto",
-                onComplete: function () {
-                    console.log('onComplete: colorbox has displayed the loaded content');
+                onComplete:function(){
+
+                    $("#id-of-content tbody td").wrapInner("<span></span>");
+
                 }
             });
 

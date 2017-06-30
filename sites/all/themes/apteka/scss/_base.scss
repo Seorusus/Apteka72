@@ -339,9 +339,6 @@
   background-color: #F1F1F1;
   padding-top: 11.5px;
   padding-bottom: 11.5px;
-  * {
-    font-weight: 600;
-  }
   .block {
     padding-top: 5px;
     padding-bottom: 5px;
@@ -536,6 +533,7 @@
     font-size: 15px;
     float: left;
     padding-left: 30px;
+    font-weight: 400;
     @media (max-width: 1080px) {
       margin-right: 40px;
       background: url("../images/shopping-cart.png") no-repeat left center;
@@ -601,7 +599,6 @@
   }
   .menu__link {
     display: block;
-    font-weight: 600;
     transition: .3s;
     &.active-trail {
       border-top-color: $orange;
@@ -825,6 +822,9 @@
   @media (max-width: 815px) {
     padding: 20px 15px;
   }
+  @media (max-width: 360px){
+    padding: 15px 5px;
+  }
   > h2 {
     text-transform: uppercase;
     margin-bottom: 15px;
@@ -969,6 +969,7 @@
   .block__title {
     text-transform: uppercase;
     margin-bottom: 5px;
+    font-weight: 400;
   }
   .block-menu {
     padding-left: 15px;
@@ -994,9 +995,6 @@
   .menu__item {
     margin-top: 5px;
     margin-bottom: 5px;
-  }
-  .menu__link {
-    font-weight: 600;
   }
 }
 
@@ -1337,10 +1335,14 @@
     border: 1px solid #ccc;
   }
   .views-row {
-    //box-shadow: 0 0 10px 0 rgba(199, 199, 199, 0.5);
-    padding: 20px;
     border-bottom: 1px solid #ccc;
     transition: .3s;
+    @media (min-width: 526px) {
+      padding: 20px;
+    }
+    @media (max-width: 525px) {
+      padding: 10px 5px;
+    }
     &:hover {
       -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, .3);
       -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, .3);
@@ -1353,22 +1355,88 @@
 }
 
 .product-row {
-  @include flexbox;
-  @include align-items(center);
+  @media (min-width: 769px) {
+    @include flexbox;
+    @include align-items(center);
+  }
+  @media (max-width: 768px) {
+    clear: both;
+    overflow: hidden;
+  }
   .img-wrap {
-    width: 12%;
+    @media (min-width: 769px) {
+      width: 12%;
+    }
+    @media (max-width: 768px) and (min-width: 451px) {
+      max-width: 130px;
+      width: 100%;
+      float: left;
+    }
+    @media (max-width: 450px) {
+      max-width: 90px;
+      width: 100%;
+      float: left;
+    }
+    @media (max-width: 341px){
+      max-width: 80px;
+      height: 100px;
+      @include flexbox;
+      @include align-items(center);
+    }
     img {
-      width: 95%;
+      width: 100%;
       height: auto;
     }
   }
   .product-title {
-    width: 52.6%;
     padding-left: 20px;
-    padding-right: 20px;
+    @media (min-width: 601px) {
+      padding-right: 20px;
+    }
+    @media (min-width: 769px) {
+      width: 52.6%;
+    }
+    @media (max-width: 768px) {
+      float: left;
+      padding-top: 15px;
+    }
+    @media (max-width: 481px) {
+      width: 65%;
+      margin-bottom: 5px;
+    }
+    @media (max-width: 360px){
+      width: 70%;
+    }
   }
+
   .group-price-wrapping {
-    width: 13%;
+    @media (min-width: 601px) {
+      width: 70%;
+    }
+    @media (max-width: 600px) {
+      margin-right: 20px;
+    }
+    @media (min-width: 769px) {
+      width: 20%;
+    }
+    @media (max-width: 768px) {
+      float: left;
+      padding-left: 15px;
+      padding-top: 15px;
+    }
+  }
+  form {
+    @media (max-width: 768px) {
+      width: 70%;
+      float: left;
+      [type="submit"] {
+        max-width: 150px;
+        width: 100%;
+      }
+      > div {
+        text-align: right;
+      }
+    }
   }
 }
 
@@ -1489,6 +1557,7 @@
   padding-bottom: 45px;
   .block__title {
     padding-bottom: 20px;
+    font-weight: 400;
   }
 }
 
@@ -2311,7 +2380,7 @@ article.node-5 {
     padding-left: 2px;
   }
   .commerce-product-field {
-    color: #c40000;
+    color: #000;
     margin-left: 5px;
     width: 70px;
     font-weight: bold;
@@ -2357,21 +2426,32 @@ article.node-5 {
     margin-bottom: 35px;
   }
   table {
-    border-collapse: collapse;
     width: 100%;
+    @media (min-width: 601px) {
+      border-collapse: collapse;
+    }
   }
   thead {
-    background-color: #e8e8e8;
+    background-color: #45AF4A;
     .views-field {
       font-weight: 600;
       padding-top: 7px;
       padding-bottom: 7px;
+    }
+    th {
+      color: #ffffff;
     }
   }
   tbody {
     .views-field {
       padding-top: 15px;
       padding-bottom: 15px;
+    }
+    td {
+      @media (max-width: 600px) {
+        padding-top: unset !important;
+        padding-bottom: unset !important;
+      }
     }
   }
   table, th, td {
@@ -2387,6 +2467,13 @@ article.node-5 {
 
 #cboxContent {
   margin-bottom: unset !important;
+}
+
+#id-of-content tbody td:nth-child(5) {
+  text-align: center;
+  span {
+    color: #f66600;
+  }
 }
 
 .view-recipes {
@@ -2452,5 +2539,39 @@ article.node-5 {
         margin-top: 2px;
       }
     }
+  }
+}
+
+#block-sy-commerce-add-select-city-new {
+  @include span(3);
+  padding-left: 45px;
+  background: url("../images/local.png") no-repeat left center;
+  select {
+    border: 1px solid #c1c1c1;
+    width: 55%;
+  }
+}
+
+.view-taxonomy-term {
+  form {
+    width: 28%;
+    @media (max-width: 600px) {
+      margin-top: 10px;
+    }
+    select {
+      display: none;
+    }
+    @media (min-width: 415px){
+      min-width: 160px;
+    }
+    @media (max-width: 414px){
+      min-width: 105px;
+      float: right;
+    }
+  }
+}
+.commerce-add-to-cart{
+  select{
+    display: none;
   }
 }
