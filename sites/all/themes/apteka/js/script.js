@@ -18,6 +18,14 @@
     Drupal.behaviors.general = {
         attach: function (context, settings) {
 
+
+            $("#views-form-commerce-cart-form-default tbody td:nth-child(1)").attr('data-th','Удалить').wrapInner("<span></span>");
+            $("#views-form-commerce-cart-form-default tbody td:nth-child(2)").attr('data-th','Товар');
+            $("#views-form-commerce-cart-form-default tbody td:nth-child(3)").attr('data-th','Описание');
+            $("#views-form-commerce-cart-form-default tbody td:nth-child(4)").attr('data-th','Количество');
+            $("#views-form-commerce-cart-form-default tbody td:nth-child(5)").attr('data-th','Итого').wrapInner("<span></span>");
+
+
             $("#id-of-content tbody td:nth-child(1)").attr('data-th','Название магазина');
             $("#id-of-content tbody td:nth-child(2)").attr('data-th','Телефон');
             $("#id-of-content tbody td:nth-child(3)").attr('data-th','Адрес');

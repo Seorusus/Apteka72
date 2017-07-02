@@ -1,6 +1,8 @@
+@import "flex";
+
 $breakpoint-alpha: 600px;
 
-#id-of-content .sticky-table{
+#id-of-content .sticky-table {
   th {
     display: none; // for accessibility, use a visually hidden method here instead! Thanks, reddit!
   }
@@ -13,7 +15,7 @@ $breakpoint-alpha: 600px;
       padding-bottom: .5em;
     }
     &:before {
-      content: attr(data-th)": "; // who knew you could do this? The internet, that's who.
+      content: attr(data-th) ": "; // who knew you could do this? The internet, that's who.
       background-color: #45AF4A;
       width: 6.5em;
       display: inline-block;
@@ -40,7 +42,6 @@ $breakpoint-alpha: 600px;
   }
 }
 
-
 #id-of-content .sticky-table {
   th, td {
     margin: .5em 1em;
@@ -48,13 +49,89 @@ $breakpoint-alpha: 600px;
       padding: 1em !important;
     }
   }
-  tbody{
-    td{
-      span{
+  tbody {
+    td {
+      span {
         @media (max-width: $breakpoint-alpha) {
           padding: 10px;
         }
       }
+    }
+  }
+}
+
+#views-form-commerce-cart-form-default table {
+  th {
+    display: none; // for accessibility, use a visually hidden method here instead! Thanks, reddit!
+  }
+  td {
+    display: block;
+    &:first-child {
+      padding-top: .5em;
+    }
+    &:last-child {
+      padding-bottom: .5em;
+    }
+    &:before {
+      content: attr(data-th) ": "; // who knew you could do this? The internet, that's who.
+      background-color: #45AF4A;
+      width: 6.5em;
+      display: inline-block;
+      color: #ffffff;
+      padding: 10px;
+      line-height: 1;
+      min-width: 100px;
+      @media (min-width: 610px) {
+        display: none;
+      }
+    }
+  }
+  th, td {
+    text-align: left;
+    @media (min-width: 610px) {
+      display: table-cell;
+      padding: .25em .5em;
+      &:first-child {
+        padding-left: 0;
+      }
+      &:last-child {
+        padding-right: 0;
+      }
+    }
+  }
+  th, td {
+    margin: .5em 1em;
+    @media (min-width: 610px) {
+      padding: 1em !important;
+    }
+  }
+  tbody {
+    td {
+      span {
+        @media (max-width: 610px) {
+          padding: 10px;
+        }
+      }
+    }
+  }
+  @media (max-width: 610px) {
+    td {
+      @include flexbox;
+      overflow: hidden;
+      clear: both;
+      padding-top: unset !important;
+      padding-bottom: unset !important;
+    }
+    .img, .title, .views-field-edit-quantity > div, .views-field-commerce-total span, .views-field-edit-delete span {
+      width: 70%;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      position: relative;
+    }
+  }
+  @media (max-width: 381px) {
+    th, td {
+      margin: 5px !important;
     }
   }
 }
