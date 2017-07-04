@@ -29,6 +29,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
         $city_stocks = sy_commerce_add_get_city_stocks_in($form_state['list_product_in_stok']);
         $city_stocks_all = sy_commerce_add_get_city_stocks();
         $keys_location = array_keys($city_stocks_all);
+
         if(count($city_stocks_all)>0) {
 
             $form['#prefix'] = '<div id="cart-gip-form-wrapper">';
