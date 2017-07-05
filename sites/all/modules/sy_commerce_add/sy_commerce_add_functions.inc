@@ -229,13 +229,13 @@ function sy_commerce_add_get_stocks_table($nid,$city)
     }
     else
     {
-      $out='Товар в '.l($count_in,'',$lnk).' '.sy_commerce_add_human_plural($count_in);
+      $out='В наличии в '.l($count_in,'',$lnk).' '.sy_commerce_add_human_plural($count_in);
     }
     $out.='<div style="display: none;"><div id="id-of-content" style="padding: 10px;">'.theme('table', array('header' => $header, 'rows' => $rows)).'</div></div>';
     return array('#markup' =>$out);
   } else return array('#markup' => 'Товар временно отсутствует');
 }
-function sy_commerce_add_human_plural($number, $titles=array('аптеке','аптеках','аптеках')){
+function sy_commerce_add_human_plural($number, $titles=array('магазине','магазинах','магазинах')){
   $cases = array (2, 0, 1, 1, 1, 2);
   return $titles[ ($number%100 >4 && $number%100< 20)? 2 : $cases[min($number%10, 5)] ];
 }
