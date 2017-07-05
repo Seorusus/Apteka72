@@ -4140,6 +4140,21 @@ article.node-5 .step-1-p-last {
   display: none;
 }
 
+/* line 2621, ../scss/_base.scss */
+.view-price-xml .view-content {
+  padding-bottom: 15px;
+}
+/* line 2624, ../scss/_base.scss */
+.view-price-xml .feed-icon {
+  display: flex;
+  align-items: center;
+}
+/* line 2627, ../scss/_base.scss */
+.view-price-xml .feed-icon span {
+  padding-bottom: 5px;
+  padding-left: 5px;
+}
+
 /*!
  * Hamburgers
  * @description Tasty CSS-animated hamburgers
