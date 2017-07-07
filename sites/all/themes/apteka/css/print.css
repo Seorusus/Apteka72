@@ -1,0 +1,61 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th img {
+    display: none !important;
+}
+
+thead tr, thead td {
+    background-color: #E8E8E8 !important;
+    color: #555555;
+    font-weight: 600;
+}
+
+thead * {
+    color: #555555 !important;
+    font-weight: 600 !important;
+}
+
+thead tr a, thead td a {
+    color: #555555;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+tbody tr, tbody td {
+    background-color: transparent !important;
+}
+
+thead th {
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+tbody td {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+table, th, td {
+    border: 1px solid #c1c1c1;
+}
+
+.views-field {
+    text-align: center;
+}
+
+a {
+    display: none;
+}
+
+form,
+.submitted, .view-footer,
+.breadcrumb, h2 {
+    display: none !important;
+}
+
+th, td{
+    text-align: center;
+}

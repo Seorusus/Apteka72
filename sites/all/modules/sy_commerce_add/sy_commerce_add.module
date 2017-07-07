@@ -13,6 +13,7 @@ function sy_commerce_add_menu() {
         'access callback' => TRUE,
         'type' => MENU_CALLBACK,
     );
+
     return $items;
 }
 
@@ -73,6 +74,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
                 $form['product_id']['#attributes']['style'] = 'display:none;';
                 $form['quantity']['#disabled'] = TRUE;
                 $form['submit']['#disabled'] = TRUE;
+                $form['submit']['#access'] = FALSE; // issues/476 #3
             }
         }
         else

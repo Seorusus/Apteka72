@@ -283,3 +283,17 @@ function sy_commerce_add_get_location()
 
   return $location;
 }
+
+
+function sy_commerce_add_node_presave($node)
+{
+  if($node->type=='product_display' && count($node->field_image['und'])>0)
+  {
+    foreach ($node->field_product['und'] as $prd)
+    {
+      $product=commerce_product_load($prd['product_id']);
+      $product->field_image['und'][0]=$node->field_image['und'][0];
+      commerce_product_save($product);
+    }
+  }
+}

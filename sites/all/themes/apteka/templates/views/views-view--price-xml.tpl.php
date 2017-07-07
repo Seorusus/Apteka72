@@ -52,11 +52,6 @@
     </div>
   <?php endif; ?>
 
-  <?php if ($feed_icon): ?>
-    <div class="feed-icon">
-      <?php print $feed_icon; ?>
-      <span>Прайс-лист в формате PDF</span>
-    </div>
-  <?php endif; ?>
+
 
 </div><?php /* class view */ ?>

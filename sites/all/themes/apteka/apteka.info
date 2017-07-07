@@ -52,6 +52,7 @@ stylesheets[all][] = system.theme.css
 stylesheets[all][] = comment.css
 stylesheets[all][] = node.css
 
+;stylesheets[all][] = css/print.css
 stylesheets[all][] = css/main.css
 
 scripts[] = js/justifiedGallery.js
