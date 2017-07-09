@@ -1,0 +1,19 @@
+<?php
+
+function godsman_query_alter(QueryAlterableInterface $query) {
+  if ($query->hasTag('views')) {
+
+    static $count;
+
+    $view =& $query->getMetaData('view');
+
+    if (strstr($groupby = $view->query->options['query_comment'], 'groupby')) {
+      list($action, $field) = explode(':', $groupby);
+
+      if (strlen($field) > 0) {
+        $query->groupBy($field);
+      }
+    }
+    
+  }
+}
