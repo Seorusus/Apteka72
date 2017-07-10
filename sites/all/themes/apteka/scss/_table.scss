@@ -1,13 +1,27 @@
 @import "flex";
+@import "mixin";
 
 $breakpoint-alpha: 600px;
 
 #id-of-content .sticky-table {
+  @media (max-width: 361px) {
+    display: block;
+    tbody, tr {
+      width: 100%;
+      display: block;
+    }
+  }
   th {
-    display: none; // for accessibility, use a visually hidden method here instead! Thanks, reddit!
+    display: none;
   }
   td {
     display: block;
+    @media (max-width: 599px) {
+      display: flex;
+    }
+    @media (max-width: 361px) {
+      margin: 5px !important;
+    }
     &:first-child {
       padding-top: .5em;
     }
@@ -17,13 +31,20 @@ $breakpoint-alpha: 600px;
     &:before {
       content: attr(data-th) ": "; // who knew you could do this? The internet, that's who.
       background-color: #45AF4A;
-      width: 6.5em;
       display: inline-block;
       color: #ffffff;
       padding: 10px;
       line-height: 1;
+      flex-basis: 25%;
+      min-width: 95px;
       @media (min-width: $breakpoint-alpha) {
         display: none;
+      }
+    }
+    @media (max-width: 341px){
+      span{
+        width: 55%;
+        word-wrap: break-word;
       }
     }
   }
