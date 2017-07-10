@@ -96,6 +96,9 @@
 <div class="footer">
     <div class="wrap">
         <div class="row">
+          <?php print render($page['footer_top']); ?>
+        </div>
+        <div class="row">
             <?php print render($page['footer']); ?>
         </div>
     </div>
