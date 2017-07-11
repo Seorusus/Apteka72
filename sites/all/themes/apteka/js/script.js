@@ -63,7 +63,8 @@
 
             $("#block-sy-commerce-add-select-city a").removeAttr("href");
 
-            $(".line-item-quantity-raw", context).wrap("<a href='/cart'></a>");
+            var $block_carlnk=$("#cart-lnk", context).html();
+            $(".line-item-quantity-raw", context).wrap($block_carlnk);
 
             $("#block-block-1 button", context).click(function () {
                 $("#block-block-3", context).toggleClass("show");
@@ -126,7 +127,6 @@
 
             });
 
-            $(".commerce-line-item-actions").prepend("<a class='catalog-link' href='/catalog'>Продолжить покупки</a>");
 
             $("[name='search_block_form']").attr('placeholder', 'Поиск по сайту');
 

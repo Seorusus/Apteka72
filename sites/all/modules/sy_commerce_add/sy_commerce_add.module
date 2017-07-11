@@ -23,6 +23,13 @@ function sy_commerce_add_ctools_plugin_directory($owner, $plugin_type){
     }
 }
 
+
+function sy_commerce_add_form_views_form_commerce_cart_form_default_alter(&$form, &$form_state, $form_id)
+{
+    $form['actions']['lnk']=array(
+        '#markup'=>l('Продолжить покупки',  (isset($_GET['return']))?$_GET['return']:'catalog' , array('attributes' => array('class'=>'catalog-link'))),
+        '#weight'=>-50);
+}
 function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$form_state, $form_id)
 {
     if(isset($form_state['context']['entity_id']) && $form_state['context']['view_mode']=='node_full' && isset($form_state['default_product']->type) && $form_state['default_product']->type=='product') {
@@ -76,25 +83,49 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
                 $form['submit']['#disabled'] = TRUE;
                 $form['submit']['#access'] = FALSE; // issues/476 #3
             }
+            $go2cart_class =array('class'=>'catalog-link');
+            $product_in_cart=sy_commerce_add_product_in_cart(isset($form['product_id']['#default_value'])?$form['product_id']['#default_value']:$form['product_id']['#value']);
+            if($product_in_cart)
+            {
+                $form['submit']['#attributes']['class'][]='element-invisible';
+            }
+            else
+            {
+                $go2cart_class =array('class'=>'catalog-link element-invisible');
+            }
+            $form['go2cart']=array('#markup'=>l('В корзине',  'cart' , array('query' => array('return'=>'node/'.$form_state['context']['entity_id']),'attributes'=>$go2cart_class)));
         }
         else
         {
             $form['city_information'] = array('#markup' => 'Нет городов', );
         }
-
+        if(module_exists('dc_ajax_add_cart')) {
+            drupal_add_css(drupal_get_path('module', 'dc_ajax_add_cart') . '/css/dc_ajax_add_cart.css');
+            drupal_add_js(drupal_get_path('module', 'dc_ajax_add_cart') . '/js/dc_ajax_add_cart_html.js');
+        }
+        $form['#attached']['js'] = array(
+            drupal_get_path('module', 'sy_commerce_add') . '/add_cart.js',
+        );
     }
 }
 
 function sy_commerce_add_city_choice_js($form, &$form_state)
 {
-//    $_SESSION['sy_commerce_add_city'] = $form_state['values']['city'];
     $form_state['no_cache'] = TRUE;
     $form_state['rebuild'] = TRUE;
     return commerce_cart_add_to_cart_form_attributes_refresh($form, $form_state);
 
 }
 
-
+/**
+ * Implements hook_commerce_cart_attributes_refresh_alter().
+ */
+function sy_commerce_add_commerce_cart_attributes_refresh_alter(&$commands, $form, $form_state)
+{
+  //  $product_in_cart=sy_commerce_add_product_in_cart($form_state['values']['product_id']);
+ //  if($product_in_cart) $commands[] = ajax_command_invoke('input.form-submit', 'addClass', array('element-invisible'));
+   // $commands[] = ajax_command_invoke('input.form-submit', 'addClass', array('element-invisible'));
+}
 
 function sy_commerce_add_feeds_after_import(FeedsSource $source) {
     // watchdog('sy commerce add',$source->id . '  =  '.variable_get('sy_commerce_add_cron',0));

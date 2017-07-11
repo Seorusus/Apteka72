@@ -1306,19 +1306,19 @@ ul.tabs a.active, ul.tabs a:hover {
 }
 
 /* line 527, ../scss/_base.scss */
-#block-commerce-cart-cart {
+#block-commerce-cart-cart,#block-dc-ajax-add-cart-ajax-shopping-cart {
   position: relative;
 }
 @media (min-width: 1081px) {
   /* line 527, ../scss/_base.scss */
-  #block-commerce-cart-cart {
+  #block-commerce-cart-cart, #block-dc-ajax-add-cart-ajax-shopping-cart {
     float: right;
     background: url("../images/shopping-cart.png") no-repeat left center;
   }
 }
 @media (max-width: 1080px) and (min-width: 601px) {
   /* line 527, ../scss/_base.scss */
-  #block-commerce-cart-cart {
+  #block-commerce-cart-cart, #block-dc-ajax-add-cart-ajax-shopping-cart {
     width: 33.33333%;
     float: left;
     -webkit-box-ordinal-group: 5;
@@ -1340,14 +1340,15 @@ ul.tabs a.active, ul.tabs a:hover {
 }
 @media (max-width: 600px) {
   /* line 527, ../scss/_base.scss */
-  #block-commerce-cart-cart {
+  #block-commerce-cart-cart, #block-dc-ajax-add-cart-ajax-shopping-cart {
     width: 130px;
     margin-left: auto;
     margin-right: auto;
   }
 }
 /* line 544, ../scss/_base.scss */
-#block-commerce-cart-cart .block__title {
+#block-commerce-cart-cart .block__title,
+#block-dc-ajax-add-cart-ajax-shopping-cart .block__title {
   font-size: 15px;
   float: left;
   padding-left: 30px;
@@ -1355,23 +1356,33 @@ ul.tabs a.active, ul.tabs a:hover {
 }
 @media (max-width: 1080px) {
   /* line 544, ../scss/_base.scss */
-  #block-commerce-cart-cart .block__title {
+  #block-commerce-cart-cart .block__title ,
+  #block-dc-ajax-add-cart-ajax-shopping-cart.block__title {
     margin-right: 40px;
     background: url("../images/shopping-cart.png") no-repeat left center;
   }
 }
 /* line 554, ../scss/_base.scss */
-#block-commerce-cart-cart .cart-contents {
+#block-commerce-cart-cart .cart-contents ,
+#block-dc-ajax-add-cart-ajax-shopping-cart .cart-contents {
   float: right;
   margin-top: -16px;
   margin-left: 10px;
 }
+#block-dc-ajax-add-cart-ajax-shopping-cart .line-item-summary {
+  margin-bottom: 0;
+}
+#block-dc-ajax-add-cart-ajax-shopping-cart .cart-contents {
+  margin-top: -1px;
+}
 /* line 558, ../scss/_base.scss */
-#block-commerce-cart-cart .cart-contents a {
+#block-commerce-cart-cart .cart-contents a ,
+#block-dc-ajax-add-cart-ajax-shopping-cart .cart-contents a {
   text-decoration: none;
 }
 /* line 562, ../scss/_base.scss */
-#block-commerce-cart-cart .line-item-quantity-raw {
+#block-commerce-cart-cart .line-item-quantity-raw ,
+#block-dc-ajax-add-cart-ajax-shopping-cart .line-item-quantity-raw {
   display: block;
   background-color: #f66600;
   border-radius: 100%;
@@ -1382,8 +1393,9 @@ ul.tabs a.active, ul.tabs a:hover {
   font-weight: 600;
   text-align: center;
 }
-
-/* line 575, ../scss/_base.scss */
+#block-dc-ajax-add-cart-ajax-shopping-cart .ajax-shopping-cart-wrapper{ width: inherit;  position: relative;
+  width: inherit;}
+  /* line 575, ../scss/_base.scss */
 .cart-empty-block {
   background-color: #f66600;
   font-size: 0;
@@ -3214,7 +3226,13 @@ ul.tabs a.active, ul.tabs a:hover {
     left: 0;
   }
 }
-
+.commerce-add-to-cart .catalog-link {
+  height: 35px;
+  margin: 10px 0;
+  max-width: 195px;color: #fff;
+  position: relative;
+}
+.commerce-add-to-cart .catalog-link.element-invisible{display: none;}
 /* line 1860, ../scss/_base.scss */
 #commerce-checkout-form-checkout fieldset {
   border: none;
@@ -4166,10 +4184,7 @@ article.node-5 .step-1-p-last {
   }
 }
 
-/* line 2615, ../scss/_base.scss */
-.commerce-add-to-cart select {
-  display: none;
-}
+
 
 /* line 2621, ../scss/_base.scss */
 .view-price-xml .view-content {
@@ -5262,4 +5277,36 @@ article.node-5 .step-1-p-last {
   margin: 0 4px;
   background-color: #000;
   border-radius: 6px;
+}
+
+.add-cart-message-wrapper .messages-cat {
+  background-color: #45af4a;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 15px;
+  padding: 15px 0;
+  text-align: center;
+  text-transform: uppercase;
+  width: 100%;
+}
+.add-cart-message-wrapper .catalog-link {
+  max-width: inherit;
+  position: relative;
+}
+.add-cart-message-wrapper .option-buttonn{
+  position: relative; float: left; width: 195px;
+}
+.add-cart-message-wrapper .continuen{
+ float: right;
+}
+@media (max-width: 1080px) {
+
+  .add-cart-message-wrapper {
+
+    left:auto;
+    right: 10px; width: 260px;
+  }
+  .add-cart-message-wrapper .option-buttonn{
+  float: left; margin: 5px;
+  }
 }

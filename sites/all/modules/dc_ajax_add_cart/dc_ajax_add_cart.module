@@ -248,11 +248,11 @@ function dc_ajax_add_cart_ajax_cart_form(&$form, &$form_state) {
       $last_line_item = $form_state['line_item'];
       $last_line_item_product = commerce_product_load($form_state['values']['product_id']);
       $last_line_item_quantity = $form_state['values']['quantity'];
-
       $content = theme('dc_ajax_add_to_cart_message', array(
         'line_item' => $last_line_item,
         'product' => $last_line_item_product,
         'quantity' => $last_line_item_quantity,
+        'path_return' => 'node/'.$form_state['context']['entity_id'],
       ));
       $commands[] = ajax_command_prepend('body', $content);
     }
@@ -429,6 +429,7 @@ function dc_ajax_add_cart_theme() {
         'line_item' => NULL,
         'product' => NULL,
         'quantity' => NULL,
+          'path_return' => NULL,
       ),
       'template' => 'templates/dc-ajax-add-to-cart-message',
     ),

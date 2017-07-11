@@ -42,48 +42,48 @@ function sy_commerce_add_entity_presave($entity, $type)
 function sy_commerce_add_quantity_over_del($qty_id)
 {
   db_delete('sy_commerce_add_quantity')
-    ->condition('qty_id', $qty_id)
-    ->execute();
+      ->condition('qty_id', $qty_id)
+      ->execute();
 }
 function sy_commerce_add_quantity_over_add($line_item_id,$quantity_over)
 {
 
   db_insert('sy_commerce_add_quantity')
-    ->fields(array(
-      'line_item_id' => $line_item_id,
-      'quantity' => $quantity_over,
-    ))
-    ->execute();
+      ->fields(array(
+          'line_item_id' => $line_item_id,
+          'quantity' => $quantity_over,
+      ))
+      ->execute();
 }
 function sy_commerce_add_quantity_over_update($qty_id,$quantity_over)
 {
   db_update('sy_commerce_add_quantity')
-    ->fields(array('quantity' => $quantity_over))
-    ->condition('qty_id', $qty_id)
-    ->execute();
+      ->fields(array('quantity' => $quantity_over))
+      ->condition('qty_id', $qty_id)
+      ->execute();
 }
 function sy_commerce_add_get_qty_id_li($line_item_id)
 {
   $qty_id = db_select('sy_commerce_add_quantity', 'q')
-    ->fields('q', array('qty_id'))
-    ->condition('q.line_item_id', $line_item_id)
-    ->execute()
-    ->fetchField();
+      ->fields('q', array('qty_id'))
+      ->condition('q.line_item_id', $line_item_id)
+      ->execute()
+      ->fetchField();
   return (is_numeric($qty_id)?$qty_id:0);
 }
 function sy_commerce_add_get_quantity_over_li($line_item_id)
 {
-$quantity = db_select('sy_commerce_add_quantity', 'q')
-  ->fields('q', array('quantity'))
-  ->condition('q.line_item_id', $line_item_id)
-  ->execute()
-  ->fetchField();
-return (is_numeric($quantity)?floatval($quantity):0);
+  $quantity = db_select('sy_commerce_add_quantity', 'q')
+      ->fields('q', array('quantity'))
+      ->condition('q.line_item_id', $line_item_id)
+      ->execute()
+      ->fetchField();
+  return (is_numeric($quantity)?floatval($quantity):0);
 }
 function sy_commerce_add_get_list_product_in_stocks($nid)
 {
-$arr_out = array();
-    $stoks = db_query("SELECT
+  $arr_out = array();
+  $stoks = db_query("SELECT
                         product.sku,
                         product.title,
                         product.product_id
@@ -93,24 +93,24 @@ $arr_out = array();
                         WHERE
                         tovar.entity_id = :nid", array(':nid' => $nid))->fetchAllAssoc('product_id');
 
-    foreach ($stoks as $stok) {
-      $stock_sets = db_query("SELECT * FROM {commerce_stock_calculation} WHERE name = :name", array(':name' => 'stock_calculation:' . $stok->product_id))->fetchObject();
-      if (isset($stock_sets->plugin)) {
+  foreach ($stoks as $stok) {
+    $stock_sets = db_query("SELECT * FROM {commerce_stock_calculation} WHERE name = :name", array(':name' => 'stock_calculation:' . $stok->product_id))->fetchObject();
+    if (isset($stock_sets->plugin)) {
       $settings = array();
       if ($stock_sets->plugin == 'sum_calculation') {
         $settings = sy_commerce_add_get_stoks_for_product($stok->product_id, $stock_sets->settings);
       }
       $arr_out[$stok->product_id] = array(
-        'product_id' => $stok->product_id,
-        'sku' => $stok->sku,
-        'title' => $stok->title,
-        'plugin' => $stock_sets->plugin,
-        'settings' => $settings,
+          'product_id' => $stok->product_id,
+          'sku' => $stok->sku,
+          'title' => $stok->title,
+          'plugin' => $stock_sets->plugin,
+          'settings' => $settings,
 
       );
     }
-    }
-    return $arr_out;
+  }
+  return $arr_out;
 }
 function sy_commerce_add_get_stoks_for_product($pid, $settings)
 {
@@ -142,7 +142,8 @@ function sy_commerce_add_get_city_stocks_in($list_product_in_stok)
   {
     foreach ($item['settings'] as $value)
     {
-      if($value['qty']>0) $citys[$value['field_city_value']]=$value['field_city_value'];
+//      if($value['qty']>0) $citys[$value['field_city_value']]=$value['field_city_value'];
+      $citys[$value['field_city_value']]=$value['field_city_value'];
     }
   }
 
@@ -157,12 +158,13 @@ function sy_commerce_add_get_city_stocks()
       ->execute()
       ->fetchAllKeyed();
   return $citys;
-} 
+}
 function sy_commerce_add_get_options_product($list_product_in_stok, $def_city)
 {
   $arr_out = array();
   foreach ($list_product_in_stok as $key => $value) {
-    if (count($value['settings']) > 0 && $value['settings'][0]['field_city_value'] == $def_city && $value['settings'][0]['qty']>0) {
+//    if (count($value['settings']) > 0 && $value['settings'][0]['field_city_value'] == $def_city && $value['settings'][0]['qty']>0) {
+    if (count($value['settings']) > 0 && $value['settings'][0]['field_city_value'] == $def_city) {
       $arr_out[$value['product_id']] = $value['settings'][0]['name'] . '(' . $value['settings'][0]['qty'] . ') ' . $value['sku'];
     }
   }
@@ -201,7 +203,7 @@ function sy_commerce_add_get_stocks_table($nid,$city)
           }
           if($stok->commerce_stock_value>0) $count_in++;
           $rows[] = array(
-               check_plain($stok->name),check_plain($stok->field_phone_value),check_plain($stok->field_address_value), check_plain($stok->sku),
+              check_plain($stok->name),check_plain($stok->field_phone_value),check_plain($stok->field_address_value), check_plain($stok->sku),
               floatval($stok->commerce_stock_value > 0 ? $stok->commerce_stock_value : 0),
               commerce_currency_format($stok->commerce_price_amount, $stok->commerce_price_currency_code), $edr
 
@@ -269,15 +271,15 @@ function sy_commerce_add_get_location()
   $smart_ip_session = smart_ip_session_get('smart_ip');
   if (!isset($smart_ip_session['location']['country_code'])) {
     $location = array(
-      'country_code' => 'RU',
-      'region' => "Tyumen'",
-      'city' => "Tyumen"
+        'country_code' => 'RU',
+        'region' => "Tyumen'",
+        'city' => "Tyumen"
     );
   } else {
     $location = array(
-      'country_code' => $smart_ip_session['location']['country_code'],
-      'region' => $smart_ip_session['location']['region'],
-      'city' => $smart_ip_session['location']['city']
+        'country_code' => $smart_ip_session['location']['country_code'],
+        'region' => $smart_ip_session['location']['region'],
+        'city' => $smart_ip_session['location']['city']
     );
   }
 
@@ -296,4 +298,17 @@ function sy_commerce_add_node_presave($node)
       commerce_product_save($product);
     }
   }
+}
+function sy_commerce_add_product_in_cart($pid)
+{
+  if (($order_id = commerce_cart_order_id($GLOBALS['user']->uid)) != FALSE) {
+    $order_wrap = entity_metadata_wrapper('commerce_order', $order_id);
+    $line_item_types = commerce_product_line_item_types();
+    foreach ($order_wrap->commerce_line_items as $line_item) {
+      if (in_array($line_item->type->value(), $line_item_types)) {
+        if($line_item->commerce_product->product_id->value()==$pid) return TRUE;
+      }
+    }
+  }
+  return FALSE;
 }
