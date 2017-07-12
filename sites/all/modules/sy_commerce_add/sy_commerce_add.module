@@ -37,7 +37,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
         $city_stocks = sy_commerce_add_get_city_stocks_in($form_state['list_product_in_stok']);
         $city_stocks_all = sy_commerce_add_get_city_stocks();
         $keys_location = array_keys($city_stocks_all);
-
+        //dpm($form_state['list_product_in_stok']);
         if(count($city_stocks_all)>0) {
 
             $form['#prefix'] = '<div id="cart-gip-form-wrapper">';
@@ -99,6 +99,8 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
         {
             $form['city_information'] = array('#markup' => 'Нет городов', );
         }
+
+//        dpm($form['product_id']);
         if(module_exists('dc_ajax_add_cart')) {
             drupal_add_css(drupal_get_path('module', 'dc_ajax_add_cart') . '/css/dc_ajax_add_cart.css');
             drupal_add_js(drupal_get_path('module', 'dc_ajax_add_cart') . '/js/dc_ajax_add_cart_html.js');
@@ -107,6 +109,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
             drupal_get_path('module', 'sy_commerce_add') . '/add_cart.js',
         );
     }
+    //commerce_cart_add_to_cart_form_attributes_refresh($form, $form_state);
 }
 
 function sy_commerce_add_city_choice_js($form, &$form_state)

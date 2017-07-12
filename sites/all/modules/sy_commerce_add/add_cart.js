@@ -18,6 +18,7 @@
                console.log('2');
                hide_add2cart();
             });
+            $('#edit-product-id').change();
 }
 };
 
