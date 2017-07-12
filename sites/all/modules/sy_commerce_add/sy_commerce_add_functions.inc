@@ -173,7 +173,10 @@ function sy_commerce_add_get_options_product($list_product_in_stok, $def_city)
 function sy_commerce_add_get_stocks_table($nid,$city)
 {
   $stoks = db_query("SELECT product.product_id, product.sku, s_s.`name`, qty.commerce_stock_value,
-                    f_city.field_city_value, f_address.field_address_value, f_phone.field_phone_value, s_s.source_id, price.commerce_price_amount,price.commerce_price_currency_code, edr.field_expected_date_receipt_value 
+                    f_city.field_city_value, 
+                    f_omode.field_operating_mode_value, 
+                    f_address.field_address_value, 
+                    f_phone.field_phone_value, s_s.source_id, price.commerce_price_amount,price.commerce_price_currency_code, edr.field_expected_date_receipt_value 
                     FROM {commerce_product} AS product
                     INNER JOIN {field_data_field_product} AS f_pr ON f_pr.field_product_product_id = product.product_id
                     INNER JOIN {field_data_commerce_stock} AS qty ON qty.revision_id = product.revision_id 
@@ -181,6 +184,7 @@ function sy_commerce_add_get_stocks_table($nid,$city)
                     INNER JOIN {commerce_stock_sources} AS s_s ON s_s.source_id = s_qty.source_id
                     INNER JOIN {field_data_field_city} AS f_city ON f_city.entity_id = s_s.source_id 
                     LEFT JOIN {field_data_field_address} AS f_address ON f_address.entity_id = s_s.source_id 
+                    LEFT JOIN {field_data_field_operating_mode} AS f_omode ON f_omode.entity_id = s_s.source_id 
                     LEFT JOIN {field_data_field_phone} AS f_phone ON f_phone.entity_id = s_s.source_id 
                     INNER JOIN {field_data_commerce_price} AS price ON price.revision_id = product.revision_id 
                     LEFT JOIN {field_data_field_expected_date_receipt} AS edr ON edr.revision_id = product.revision_id
@@ -189,7 +193,7 @@ function sy_commerce_add_get_stocks_table($nid,$city)
   $rows = array();
   $count_in=0;
   $date_receipt_value=0;
-  foreach ($stoks as $stok) {
+  foreach ($stoks as $stok) { 
     $stock_sets = db_query("SELECT * FROM {commerce_stock_calculation} WHERE name = :name", array(':name' => 'stock_calculation:' . $stok->product_id))->fetchObject();
     if (isset($stock_sets->plugin)) {
       if ($stock_sets->plugin == 'sum_calculation') {
@@ -203,7 +207,7 @@ function sy_commerce_add_get_stocks_table($nid,$city)
           }
           if($stok->commerce_stock_value>0) $count_in++;
           $rows[] = array(
-              check_plain($stok->name),check_plain($stok->field_phone_value),check_plain($stok->field_address_value), check_plain($stok->sku),
+              check_plain($stok->name),check_plain($stok->field_phone_value),check_plain($stok->field_address_value), check_plain($stok->field_operating_mode_value),
               floatval($stok->commerce_stock_value > 0 ? $stok->commerce_stock_value : 0),
               commerce_currency_format($stok->commerce_price_amount, $stok->commerce_price_currency_code), $edr
 
@@ -212,7 +216,7 @@ function sy_commerce_add_get_stocks_table($nid,$city)
       }
     }
   }
-  $header = array( 'Название магазина', 'Телефон', 'Адрес', 'Артикуль', 'Кол-во', 'Цена', '');
+  $header = array( 'Название магазина', 'Телефон', 'Адрес', 'Режим работы', 'Кол-во', 'Цена', '');
   if(count($rows)>0){
 
     $lnk=array(

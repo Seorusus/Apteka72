@@ -201,6 +201,11 @@ function sy_commerce_add_cron()
 
 function sy_commerce_add_get_orders_xml()
 {
+    $stock_names = db_select('commerce_stock_sources', 's')
+        ->fields('s', array('source_id', 'name'))
+        ->execute()
+        ->fetchAllKeyed();
+
     $out='<?xml version="1.0" encoding="UTF-8" ?>'." \n";
     $oids = db_query("SELECT order_id FROM {commerce_order} WHERE status=:status", array(':status'=>'pending'))->fetchCol();
     $orders=commerce_order_load_multiple($oids);
@@ -212,7 +217,8 @@ function sy_commerce_add_get_orders_xml()
             $out .= "<E-mail>$order->mail</E-mail> \n";
             $out .= "<Date-created>" . date("d/m/Y - H:i", $order->created) . "</Date-created> \n";
             $out .= "<Order-total>" . ($order->commerce_order_total['und'][0]['amount'] / 100) . "</Order-total> \n";
-            $out .= "<list-products>" . sy_commerce_add_get_orders_xml_lines($order->order_id,$out) . "</list-products> \n";
+            $out .= "<list-products>" . sy_commerce_add_get_orders_xml_lines($order->order_id,$stock_names) . "</list-products> \n";
+            $out .= isset($order->commerce_customer_billing['und'][0]['profile_id'])?sy_commerce_add_get_orders_xml_profiles($order->commerce_customer_billing['und'][0]['profile_id']):'';
             $out .= "</commerce_order> \n";
         }
         $out .= "</commerce_orders> \n";
@@ -224,8 +230,9 @@ function sy_commerce_add_get_orders_xml()
         return '';
     }
 }
-function sy_commerce_add_get_orders_xml_lines($order_id,&$out) {
-    $oids = db_query("SELECT prd.title, prc.commerce_price_amount, prd.sku, cli.quantity, adqt.quantity as add_qty 
+function sy_commerce_add_get_orders_xml_lines($order_id,$stock_names) {
+    $out='';
+    $oids = db_query("SELECT prd.title, prc.commerce_price_amount, prd.sku, prd.product_id, cli.quantity, adqt.quantity as add_qty 
                     FROM {commerce_line_item} AS cli
                     LEFT JOIN {commerce_product} AS prd ON prd.sku = cli.line_item_label
                     LEFT JOIN {field_data_commerce_price} AS prc ON prc.entity_id = prd.product_id 
@@ -237,8 +244,51 @@ function sy_commerce_add_get_orders_xml_lines($order_id,&$out) {
         $out.="<name>$val->title</name> \n";
         $out.="<SKU>$val->sku</SKU> \n";
         $out.="<price>".($val->commerce_price_amount/100)."</price> \n";
+        $out.=sy_commerce_add_get_orders_xml_lines_stock($val->product_id,$stock_names);
         $out.="<qty>$val->quantity</qty> \n";
         $out.="<qty-add>".($val->add_qty!=0?$val->add_qty:0)."</qty-add> \n";
         $out.="</product> \n";
     }
+    return $out;
+}
+function sy_commerce_add_get_orders_xml_lines_stock($pid,$stock_names) {
+    $stock_sets = db_query("SELECT * FROM {commerce_stock_calculation} WHERE name = :name", array(':name' => 'stock_calculation:' . $pid))->fetchObject();
+    if (isset($stock_sets->plugin)) {
+        if ($stock_sets->plugin == 'sum_calculation') {
+            $settings = unserialize($stock_sets->settings);
+            dpm($settings);
+            foreach ($settings as $key=>$value)
+            {
+                if($value==1)
+                {
+                    return "<stock-name>".$stock_names[$key]."</stock-name> \n";
+                }
+            }
+        }
+    }
+    return '';
+}
+function sy_commerce_add_get_orders_xml_profiles($order_id) {
+    $out='';
+
+    $profile=commerce_customer_profile_load($order_id);
+    if(isset($profile->commerce_customer_address['und'][0]))
+    {
+        $cb=$profile->commerce_customer_address['und'][0];
+
+        module_load_include('inc', 'addressfield', 'addressfield.administrative_areas');
+        $administrative_areas = addressfield_get_administrative_areas($cb['country']);
+
+        $out.="<customer_address> \n";
+        $out.="<first_name>".$cb['first_name']."</first_name> \n";
+        $out.="<last_name>".$cb['last_name']."</last_name> \n";
+        $out.="<organisation_name>".$cb['organisation_name']."</organisation_name> \n";
+        $out.="<thoroughfare>".$cb['thoroughfare']."</thoroughfare> \n";
+        $out.="<premise>".$cb['premise']."</premise> \n";
+        $out.="<locality>".$cb['locality']."</locality> \n";
+        $out.="<administrative_area>".$administrative_areas[$cb['administrative_area']]."</administrative_area> \n";
+        $out.="<postal_code>".$cb['postal_code']."</postal_code> \n";
+        $out.="</customer_address> \n";
+    }
+    return $out;
 }
