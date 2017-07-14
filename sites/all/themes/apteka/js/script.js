@@ -18,6 +18,7 @@
     Drupal.behaviors.general = {
         attach: function (context, settings) {
 
+            $('.form-item-account-login-mail input').attr('placeholder','Введите e-mail');
 
             $("#views-form-commerce-cart-form-default tbody td:nth-child(1)").attr('data-th','Удалить').wrapInner("<span></span>");
             $("#views-form-commerce-cart-form-default tbody td:nth-child(2)").attr('data-th','Товар');
@@ -29,7 +30,7 @@
             $("#id-of-content tbody td:nth-child(1)").attr('data-th','Название магазина');
             $("#id-of-content tbody td:nth-child(2)").attr('data-th','Телефон');
             $("#id-of-content tbody td:nth-child(3)").attr('data-th','Адрес');
-            $("#id-of-content tbody td:nth-child(4)").attr('data-th','Артикуль');
+            $("#id-of-content tbody td:nth-child(4)").attr('data-th','Режим Работы');
             $("#id-of-content tbody td:nth-child(5)").attr('data-th','Кол-во');
             $("#id-of-content tbody td:nth-child(6)").attr('data-th','Цена');
             $("#id-of-content tbody td:nth-child(7)").hide();
@@ -52,7 +53,7 @@
             });
 
             $(".commerce-add-to-cart .colorbox-inline").colorbox({
-                width: "90%",
+                width: "90%", 
                 height: "auto",
                 onComplete:function(){
 

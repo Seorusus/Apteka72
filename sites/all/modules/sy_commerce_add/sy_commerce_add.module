@@ -13,7 +13,15 @@ function sy_commerce_add_menu() {
         'access callback' => TRUE,
         'type' => MENU_CALLBACK,
     );
-
+    $items['admin/test_form'] = array(
+        'title' => 'test form',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('sy_commerce_add_test_form'),
+        'access arguments' => array('administer content'),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'test.inc',
+        'weight' => 5,
+    );
     return $items;
 }
 

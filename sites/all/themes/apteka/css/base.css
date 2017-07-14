@@ -1,0 +1,37 @@
+#colorbox {
+    border-radius: 10px;
+}
+
+#cboxClose {
+    top: 0;
+    right: 0;
+}
+
+.form-item-account-login-mail {
+    position: relative;
+    margin-top: 10px;
+}
+
+.form-item-account-login-mail:before {
+    content: '*';
+    position: absolute;
+    left: 10px;
+    top: 25%;
+    color: #f66600;
+}
+
+.form-item-account-login-mail input {
+    max-width: 455px;
+    width: 100%;
+    font-size: 15px;
+    font-style: italic;
+    color: #555;
+    border: 1px solid #c1c1c1;
+    background-color: #f0f0f0;
+    border-radius: 3px;
+    padding: 9px 10px 9px 20px;
+}
+
+.order-title {
+    margin-bottom: 5px;
+}
