@@ -295,13 +295,86 @@ function sy_commerce_add_get_location()
 
 function sy_commerce_add_node_presave($node)
 {
-  if($node->type=='product_display' && count($node->field_image['und'])>0)
-  {
-    foreach ($node->field_product['und'] as $prd)
-    {
-      $product=commerce_product_load($prd['product_id']);
-      $product->field_image['und'][0]=$node->field_image['und'][0];
-      commerce_product_save($product);
+
+  if ($node->type == 'product_display') {
+
+    $dest = 'public://products/';
+    $image_in = FALSE;
+
+    if (count($node->field_product['und']) == 0) {
+      //  drupal_set_message('пустой');
+    } else {
+      $product = commerce_product_load($node->field_product['und'][0]['product_id']);
+      if (substr_count($product->sku, ';') > 0 && strpos($product->sku, ';') > 0) {
+        // если есть нормальный ску
+        $sku = substr($product->sku, 0, strpos($product->sku, ';'));
+        $file_in = $dest . $sku;
+        dpm($file_in, '$file_in');
+
+        if ($file_image = image_get_info($file_in . '.JPG')) {
+          $file_in .= '.JPG';
+        } elseif ($file_image = image_get_info($file_in . '.JPEG')) {
+          $file_in .= '.JPEG';
+        } elseif ($file_image = image_get_info($file_in . '.PNG')) {
+          $file_in .= '.PNG';
+        } elseif ($file_image = image_get_info($file_in . '.GIF')) {
+          $file_in .= '.GIF';
+        } else { // ФАЙЛА НЕТ
+        }
+
+        if ($file_image) {
+          dpm($file_image);
+          $file_add = FALSE;
+          if (count($node->field_image['und']) > 0) {
+            // если есть вообще картинка
+            $image_extis =(array)  file_load($node->field_image['und'][0]['fid']);
+            dpm($image_extis);
+            if ($file_image['width'] == $image_extis['width'] && $file_image['height'] == $image_extis['height'] &&
+                $file_image['mime_type'] == $image_extis['filemime'] && $file_image['file_size'] == $image_extis['filesize']
+            ) {
+              $image_in = $image_extis;
+            } else {
+              db_delete('file_managed')
+                  ->condition('uri', $file_in)
+                  ->execute();
+              unset($node->field_image['und']);
+              $file_add = TRUE;
+            }
+          } else {
+            $file_add = TRUE;
+          }
+          if ($file_add == TRUE) {
+            db_delete('file_managed')
+                ->condition('uri', $file_in)
+                ->execute();
+
+                      $file = file_save((object)array(
+                          'filename' => basename($file_in),
+                          'uri' => $file_in,
+                          'status' => FILE_STATUS_PERMANENT,
+                          'filemime' => file_get_mimetype($file_in),
+                      ));
+                      $image_in = file_load($file->fid);
+                              $node->field_image['und'][0] = (array) $image_in;
+          }
+
+        } else {
+          if (count($node->field_image['und']) > 0) $image_in = $node->field_image['und'][0];
+        }
+      }
+      else
+      {
+        if (count($node->field_image['und']) > 0) $image_in = $node->field_image['und'][0];
+      }
+      if($image_in)
+      {
+        foreach ($node->field_product['und'] as $prd)
+        {
+          $product=commerce_product_load($prd['product_id']);
+          $product->field_image['und'][0]=(array) $image_in;
+          commerce_product_save($product);
+        }
+      }
     }
   }
 }
