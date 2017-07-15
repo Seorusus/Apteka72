@@ -309,7 +309,6 @@ function sy_commerce_add_node_presave($node)
         // если есть нормальный ску
         $sku = substr($product->sku, 0, strpos($product->sku, ';'));
         $file_in = $dest . $sku;
-        dpm($file_in, '$file_in');
 
         if ($file_image = image_get_info($file_in . '.JPG')) {
           $file_in .= '.JPG';
@@ -323,12 +322,10 @@ function sy_commerce_add_node_presave($node)
         }
 
         if ($file_image) {
-          dpm($file_image);
           $file_add = FALSE;
           if (count($node->field_image['und']) > 0) {
             // если есть вообще картинка
             $image_extis =(array)  file_load($node->field_image['und'][0]['fid']);
-            dpm($image_extis);
             if ($file_image['width'] == $image_extis['width'] && $file_image['height'] == $image_extis['height'] &&
                 $file_image['mime_type'] == $image_extis['filemime'] && $file_image['file_size'] == $image_extis['filesize']
             ) {
