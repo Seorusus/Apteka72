@@ -303,7 +303,7 @@ function sy_commerce_add_node_presave($node)
 
     if (count($node->field_product['und']) == 0) {
       //  drupal_set_message('пустой');
-    } else {
+    } else { 
       $product = commerce_product_load($node->field_product['und'][0]['product_id']);
       if (substr_count($product->sku, ';') > 0 && strpos($product->sku, ';') > 0) {
         // если есть нормальный ску
