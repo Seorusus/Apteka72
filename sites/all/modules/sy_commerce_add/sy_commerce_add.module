@@ -40,12 +40,46 @@ function sy_commerce_add_form_views_form_commerce_cart_form_default_alter(&$form
 }
 function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$form_state, $form_id)
 {
-    if(isset($form_state['context']['entity_id']) && $form_state['context']['view_mode']=='node_full' && isset($form_state['default_product']->type) && $form_state['default_product']->type=='product') {
+    if(isset($form_state['context']['entity_id'])
+        && isset($form_state['default_product']->type) && $form_state['default_product']->type=='product') {
+
         if (!isset($form_state['list_product_in_stok'])) $form_state['list_product_in_stok'] = sy_commerce_add_get_list_product_in_stocks($form_state['context']['entity_id']);
         $city_stocks = sy_commerce_add_get_city_stocks_in($form_state['list_product_in_stok']);
         $city_stocks_all = sy_commerce_add_get_city_stocks();
         $keys_location = array_keys($city_stocks_all);
-        //dpm($form_state['list_product_in_stok']);
+    }
+
+    if(isset($form_state['context']['entity_id'])
+                                && $form_state['context']['view_mode']=='node_product' && $form_state['context']['display']=='product'
+                                && isset($form_state['default_product']->type) && $form_state['default_product']->type=='product') {
+            if (isset($_SESSION['sy_commerce_add_city'])) {
+            $def_city = $_SESSION['sy_commerce_add_city'];
+        } else {
+            $city_location = sy_commerce_add_get_city_stocks_location();
+            if (is_string($city_location) && in_array($city_location, $city_stocks_all)) {
+                $def_city = $city_location;
+            } else {
+                $def_city = $keys_location[0];
+            }
+        }
+        if(array_key_exists($def_city, $city_stocks) ) {
+            $options_product = sy_commerce_add_get_options_product($form_state['list_product_in_stok'], $def_city);
+            $form['product_id']['#options'] = $options_product;
+  //          $form['product_id']['#default_value']=14360;
+//            $form['product_id']['#value']=14360;
+      //     $form['product_id']['#disabled'] = TRUE;
+            $form['product_id']['#attributes']['style'] = 'display:none;';
+        }
+
+        $form['#attached']['js'][] = array(
+            'data' => '(function ($) { Drupal.behaviors.sy_commerce_add_views_add_cart = { attach: function (context, settings) { $("#edit-product-id").change(); } }; }(jQuery));',
+            'type' => 'inline',
+        );
+    }
+
+
+    if(isset($form_state['context']['entity_id']) && $form_state['context']['view_mode']=='node_full' && isset($form_state['default_product']->type) && $form_state['default_product']->type=='product') {
+      //dpm($form_state['list_product_in_stok']);
         if(count($city_stocks_all)>0) {
 
             $form['#prefix'] = '<div id="cart-gip-form-wrapper">';
@@ -82,6 +116,8 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
             if(array_key_exists($def_city, $city_stocks) ) {
                 $options_product = sy_commerce_add_get_options_product($form_state['list_product_in_stok'], $def_city);
                 $form['product_id']['#options'] = $options_product;
+
+                if(count($options_product)==1) $form['product_id']['#attributes']['style'] = 'display:none;';
             }
             else
             {
@@ -212,23 +248,13 @@ function sy_commerce_add_cron()
 
 function sy_commerce_add_views_query_alter(&$view, &$query) {
 
-    if ($view->name == 'taxonomy_term') {
-/*
-        // Получаем значени выбранного города из сессии
-   //     $city = $_SESSION['city'];
+    if ($view->name == 'taxonomy_term' && isset($_SESSION['sy_commerce_add_city'])) {
 
-        // Присоединяем к запросу таблицу field_data_field_action_city
+        $city = $_SESSION['sy_commerce_add_city'];
         $join = new views_join();
-//        $join->construct('field_data_field_action_city', 'node', 'nid', 'entity_id');
-        // construct($table = NULL, $left_table = NULL, $left_field = NULL, $field = NULL, $extra = array(), $type = 'LEFT')
        $join->construct('field_data_field_city_stock', 'commerce_product_field_data_field_product', 'product_id', 'entity_id');
-
         $query->add_relationship('field_data_field_city_stock', $join, 'commerce_product_field_data_field_product');
-
-        // Добавляем в секцию WHERE фильтр, в котором значени города должно
-        // равняться значению города из сессии
-        $query->add_where(1, 'field_data_field_city_stock.field_city_stock_value', 'Тюмень');
-        */
+        $query->add_where(1, 'field_data_field_city_stock.field_city_stock_value', $city);
     }
 }
 
@@ -289,8 +315,7 @@ function sy_commerce_add_get_orders_xml_lines_stock($pid,$stock_names) {
     if (isset($stock_sets->plugin)) {
         if ($stock_sets->plugin == 'sum_calculation') {
             $settings = unserialize($stock_sets->settings);
-            dpm($settings);
-            foreach ($settings as $key=>$value)
+             foreach ($settings as $key=>$value)
             {
                 if($value==1)
                 {
@@ -320,7 +345,7 @@ function sy_commerce_add_get_orders_xml_profiles($order_id) {
         $out.="<thoroughfare>".$cb['thoroughfare']."</thoroughfare> \n";
         $out.="<premise>".$cb['premise']."</premise> \n";
         $out.="<locality>".$cb['locality']."</locality> \n";
-        $out.="<administrative_area>".$administrative_areas[$cb['administrative_area']]."</administrative_area> \n";
+        if(isset($cb['administrative_area']) && isset($administrative_areas[$cb['administrative_area']])) $out.="<administrative_area>".$administrative_areas[$cb['administrative_area']]."</administrative_area> \n";
         $out.="<postal_code>".$cb['postal_code']."</postal_code> \n";
         $out.="</customer_address> \n";
     }

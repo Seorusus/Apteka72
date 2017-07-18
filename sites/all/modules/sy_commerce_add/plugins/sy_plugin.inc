@@ -30,7 +30,7 @@ function sy_commerce_add_sy_plugin_callback($source, $item_key, $element_key, &$
     $shop_quantity=$source->current_item['xpathparser:'.(( (int) str_replace('xpathparser:','',$element_key) )+1)];
     commerce_stock_calculation_save_config('stock_calculation:'.$product->product_id, 'sum_calculation', array());
  sy_commerce_add_change_stocks_settings($product->product_id, $field, $shop_quantity);
-//        sy_commerce_add_set_city_stock($product->product_id);
+        sy_commerce_add_set_city_stock($product->product_id);
     }
 }
 function sy_commerce_add_change_stocks_settings($product_id, $shop_name, $shop_quantity)
@@ -86,13 +86,17 @@ function sy_commerce_add_set_city_stock($product_id) {
         ->execute()
         ->fetchField();
     $settings_ar=unserialize($settings);
+    $city='';
+    dpm($settings_ar,$product_id);
     foreach ($settings_ar as $key=>$value)
     {
-        if($value==1) {
+        dpm($value.'=>');
+        if($value!=0) {
             $city = db_query("SELECT city.field_city_value FROM {commerce_stock_sources} AS stk
                             LEFT JOIN {field_data_field_city} AS city ON city.entity_id = stk.source_id
                             LEFT JOIN {field_data_field_disabled} AS dsbl ON dsbl.entity_id = stk.source_id  WHERE city.bundle = 'commerce_stock_sources' AND
                             dsbl.bundle = 'commerce_stock_sources' AND dsbl.field_disabled_value <> 1 AND stk.source_id = :sid", array(':sid' => $key))->fetchField();
+            dpm($value.'<='.'['.$city.']');
         }
     }
     $product=commerce_product_load($product_id);
