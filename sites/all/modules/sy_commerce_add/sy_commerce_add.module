@@ -38,6 +38,8 @@ function sy_commerce_add_form_views_form_commerce_cart_form_default_alter(&$form
         '#markup'=>l('Продолжить покупки',  (isset($_GET['return']))?$_GET['return']:'catalog' , array('attributes' => array('class'=>'catalog-link'))),
         '#weight'=>-50);
 }
+
+
 function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$form_state, $form_id)
 {
     if(isset($form_state['context']['entity_id'])
@@ -65,16 +67,26 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
         if(array_key_exists($def_city, $city_stocks) ) {
             $options_product = sy_commerce_add_get_options_product($form_state['list_product_in_stok'], $def_city);
             $form['product_id']['#options'] = $options_product;
-  //          $form['product_id']['#default_value']=14360;
-//            $form['product_id']['#value']=14360;
-      //     $form['product_id']['#disabled'] = TRUE;
-            $form['product_id']['#attributes']['style'] = 'display:none;';
+     /*       $form['product_id']['#default_value']=14360;
+           $form['product_id']['#value']=14360;
+            $form_state['default_product']=commerce_product_load(14360);
+      */
+            //     $form['product_id']['#disabled'] = TRUE;
+       //     $form['product_id']['#attributes']['style'] = 'display:none;';
         }
+        /*
+                $form['#attached']['js'][] = array(
+                    'data' => '(function ($) { Drupal.behaviors.cart = { attach: function (context, settings) { $("#edit-product-id*").change(); } }; }(jQuery));',
+                    'type' ='inline',
+                );
 
-        $form['#attached']['js'][] = array(
-            'data' => '(function ($) { Drupal.behaviors.sy_commerce_add_views_add_cart = { attach: function (context, settings) { $("#edit-product-id").change(); } }; }(jQuery));',
-            'type' => 'inline',
-        );
+        /* '.$form['#id'].'
+                $form['#attached']['js'][] = array(
+                    'data' => '(function ($) { Drupal.behaviors.sy_commerce_add_views_add_cart = { attach: function (context, settings) { $("#edit-product-id").change(); } }; }(jQuery));',
+                    'type' => 'inline',
+                );
+                */
+
     }
 
 

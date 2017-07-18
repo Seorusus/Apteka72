@@ -3,6 +3,7 @@ description = Additional functions for Drupal Commerce of SY-Soft
 package = Commerce (stock)
 core = 7.x
 version = "7.x-1.0"
+scripts[] = views_cart.js
 dependencies[] = commerce
 dependencies[] = commerce_stock
 dependencies[] = commerce_stock_calculation
