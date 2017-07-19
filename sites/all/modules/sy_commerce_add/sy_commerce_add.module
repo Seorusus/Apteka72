@@ -86,7 +86,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
                     'type' => 'inline',
                 );
                 */
-
+ 
     }
 
 
