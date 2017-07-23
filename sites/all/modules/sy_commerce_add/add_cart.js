@@ -19,7 +19,7 @@
                hide_add2cart();
             });
             $('#edit-product-id').change();
-}
+        }
 };
 
 }(jQuery));

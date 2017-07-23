@@ -2,14 +2,14 @@
     Drupal.behaviors.yourName = {
         attach : function(context, settings) {
 
-/*
-            $( 'div.view-id-taxonomy_term .views-row select[name="product_id"][class!="refreshed"]' ).each(function( index ) {
-                console.log( index + ": " + $( this ).attr('class') );
-                $( this ).parent().addClass("refreshed");
-                $( this ).addClass("refreshed");
-               // $( this ).change();
+
+            $( 'div.view-id-taxonomy_term .views-row[class!="refreshed"] select[name="product_id"]' ).each(function( index ) {
+                if(!$( this ).parent().parent().parent().parent().parent().parent().hasClass("refreshed")) {
+                    $(this).parent().parent().parent().parent().parent().parent().addClass("refreshed");
+                    $(this).change();
+                }
             });
-*/
+
 
         }
 

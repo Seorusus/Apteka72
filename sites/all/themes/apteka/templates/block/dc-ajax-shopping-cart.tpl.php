@@ -38,11 +38,21 @@
  *   empty.
  */
 $dest=drupal_get_destination();
+
+$city_stock='';
+foreach ($products as $product) $city_stock=$product->field_city_stock['und'][0]['value'];
+
+
+
+
+
 ?>
+
 
 <h2 class="block__title">Корзина</h2>
 
 <div class="cart-contents ">
+    <div id="cart-city-stock" style="display: none;"><?php print $city_stock; ?></div>
     <div id="cart-lnk" style="display: none;">  <?php print l('',  'cart' , array('query' => array('return'=>$dest['destination']))); ?></div>
     <div class="view-footer">
         <div class="line-item-summary">
