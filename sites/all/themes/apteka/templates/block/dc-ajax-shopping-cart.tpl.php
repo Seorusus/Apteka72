@@ -40,7 +40,7 @@
 $dest=drupal_get_destination();
 
 $city_stock='';
-foreach ($products as $product) $city_stock=$product->field_city_stock['und'][0]['value'];
+foreach ($products as $product) {if(isset($product->field_city_stock['und'][0]['value'])){ $city_stock=$product->field_city_stock['und'][0]['value']; }}
 
 
 
