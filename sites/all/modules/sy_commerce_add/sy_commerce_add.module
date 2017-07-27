@@ -77,31 +77,23 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
         if (array_key_exists($def_city, $city_stocks)) {
             $options_product = sy_commerce_add_get_options_product($form_state['list_product_in_stok'], $def_city);
             $form['product_id']['#options'] = $options_product;
-            /*       $form['product_id']['#default_value']=14360;
-                  $form['product_id']['#value']=14360;
-                   $form_state['default_product']=commerce_product_load(14360);
-             */
-            //     $form['product_id']['#disabled'] = TRUE;
-            //     $form['product_id']['#attributes']['style'] = 'display:none;';
+            $go2cart_class = array('class' => 'catalog-link');
+            $product_in_cart = sy_commerce_add_product_in_cart(isset($form['product_id']['#default_value']) ? $form['product_id']['#default_value'] : $form['product_id']['#value']);
+            $form['submit']['#attributes']['class'][] = 'element-invisible';
+            $product_id= isset($form['product_id']['#default_value']) ? $form['product_id']['#default_value'] : $form['product_id']['#value'];
+            $class_go2cart = ' ';
+            $class_incart = ' ';
+            if ($product_in_cart) {
+                $class_go2cart = 'element-invisible';
+            } else {
+                $class_incart = 'element-invisible';
+            }
+            $form['incart'] = array('#markup' =>  l('В корзине', 'cart', array('query' => array('return' => 'node/' . $form_state['context']['entity_id']), 'attributes' => array('class' => array('catalog-link', $class_incart)))));
+            $form['go2cart'] = array('#markup' =>l('В корзину', 'add2cart/' .$product_id, array('query' => array('return' => 'node/' . $form_state['context']['entity_id'],
+                    'width' => '600', 'height' => '350', 'iframe' => 'true'), 'attributes' => array('type' => 'submit', 'class' => array("colorbox-load", "go2cart", $class_go2cart)))));
+            if(!in_array('add2cart-form-'.$product_id,$form['#attributes']['class']))$form['#attributes']['class'][]='add2cart-form-'.$product_id;
         }
-        /*
-                $form['#attached']['js'][] = array(
-                    'data' => '(function ($) { Drupal.behaviors.cart = { attach: function (context, settings) { $("#edit-product-id*").change(); } }; }(jQuery));',
-                    'type' ='inline',
-                );
 
-        /* '.$form['#id'].'
-                $form['#attached']['js'][] = array(
-                    'data' => '(function ($) { Drupal.behaviors.sy_commerce_add_views_add_cart = { attach: function (context, settings) { $("#edit-product-id").change(); } }; }(jQuery));',
-                    'type' => 'inline',
-                );
-
-        $form['#attached']['css'][] = array(
-            'data' => '.main-container .view-taxonomy-term form.commerce-add-to-cart select {
-    display: inline;
-}',
-            'type' => 'inline',
-        );             */
     }
 
 
@@ -142,6 +134,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
             $go2cart_class = array('class' => 'catalog-link');
             $product_in_cart = sy_commerce_add_product_in_cart(isset($form['product_id']['#default_value']) ? $form['product_id']['#default_value'] : $form['product_id']['#value']);
             $form['submit']['#attributes']['class'][] = 'element-invisible';
+            $product_id= isset($form['product_id']['#default_value']) ? $form['product_id']['#default_value'] : $form['product_id']['#value'];
             $class_go2cart = ' ';
             $class_incart = ' ';
             if ($product_in_cart) {
@@ -150,17 +143,16 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
                 $class_incart = 'element-invisible';
             }
             $form['incart'] = array('#markup' => '<br>' . l('В корзине', 'cart', array('query' => array('return' => 'node/' . $form_state['context']['entity_id']), 'attributes' => array('class' => array('catalog-link', $class_incart)))));
-            $form['go2cart'] = array('#markup' => '<br>' . l('В корзину', 'add2cart/' . $form['product_id']['#value'], array('query' => array('return' => 'node/' . $form_state['context']['entity_id'],
+            $form['go2cart'] = array('#markup' => '<br>' . l('В корзину', 'add2cart/' .$product_id, array('query' => array('return' => 'node/' . $form_state['context']['entity_id'],
                     'width' => '600', 'height' => '350', 'iframe' => 'true'), 'attributes' => array('type' => 'submit', 'class' => array("colorbox-load", "go2cart", $class_go2cart)))));
 
         } else {
             $form['city_information'] = array('#markup' => 'Нет городов',);
         }
 
-        $form['#attached']['js'] = array(
-            drupal_get_path('module', 'sy_commerce_add') . '/add_cart.js',
-        );
-        $form['#attached']['css'][] = array(
+        if(!in_array('add2cart-form-'.$product_id,$form['#attributes']['class']))$form['#attributes']['class'][]='add2cart-form-'.$product_id;
+    }
+    $form['#attached']['css'][] = array(
             'data' => '#cboxContent #cboxClose {right: -10px;top: -10px;}
             .node-product-display form a.go2cart{
                color: white;
@@ -170,9 +162,6 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
             }
             .node-product-display form a.element-invisible{display:  none;}',
             'type' => 'inline');
-//        $form['submit']['#suffix']='<span id="aasa">sy_commerce_addsy_commerce_addsy_commerce_addaa</span>';
-    }
-    //commerce_cart_add_to_cart_form_attributes_refresh($form, $form_state);
 }
 
 
@@ -207,11 +196,24 @@ function sy_commerce_add_add2cart_form($form, &$form_state)
         commerce_cart_product_add($user->uid, $line_item);
         $form['#attached']['js'][] = array(
             'data' => '(function ($) { Drupal.behaviors.add2cart_compl = { attach: function (context, settings) {  
-                parent.jQuery("a.go2cart").addClass("element-invisible");
-                parent.jQuery("a.catalog-link").removeClass("element-invisible");
+                parent.jQuery(".add2cart-form-'.$form['id_prod']['#default_value'].' a.go2cart").addClass("element-invisible");
+                parent.jQuery(".add2cart-form-'.$form['id_prod']['#default_value'].' a.catalog-link").removeClass("element-invisible");
+                console.log("=>");
                             var cart_qty=parseInt(parent.jQuery("div#block-commerce-cart-cart span.line-item-quantity-raw").text());
+                             if(isNaN(cart_qty)){
+                             
+            parent.jQuery("div#block-commerce-cart-cart div.cart-empty-block").html("<div id=\"cart-lnk\" style=\"display: none;\"><a href=\"/cart?return=node/'.$form['id_prod']['#default_value'].'\"></a>"+
+            "</div><div class=\"view-footer\"><div class=\"line-item-summary\"><div class=\"line-item-quantity\" style=\"margin-top: 15px\">"+
+                "<a href=\"/cart?return=node/'.$form['id_prod']['#default_value'].'\">"+
+                "<span class=\"line-item-quantity-raw\">1</span></a><span class=\"line-item-quantity-label\">товар</span></div></div>"+
+                "</div>");
+                parent.jQuery("div#block-commerce-cart-cart div.cart-empty-block").addClass("cart-contents");
+                parent.jQuery("div#block-commerce-cart-cart div.cart-empty-block").removeClass("cart-empty-block");
+                             }
+                             else{
             cart_qty=cart_qty+1;
-            parent.jQuery("div#block-commerce-cart-cart span.line-item-quantity-raw").text(cart_qty);
+            console.log(cart_qty);
+            parent.jQuery("div#block-commerce-cart-cart span.line-item-quantity-raw").text(cart_qty);}
         } }; 
         }(jQuery));',
             'type' => 'inline');
@@ -245,8 +247,8 @@ function sy_commerce_add_add2cart_form_ajax_submit($form, &$form_state)
     $form_state['rebuild'] = TRUE;
     $form = drupal_rebuild_form($form['#form_id'], $form_state, $form);
     $form['script_help'] = array('#markup' => '<script>(function ($) {
-                parent.jQuery("a.go2cart").addClass("element-invisible");
-                parent.jQuery("a.catalog-link").removeClass("element-invisible");
+                parent.jQuery(".add2cart-form-'.$form_state['values']['id_prod'].' a.go2cart").addClass("element-invisible");
+                parent.jQuery(".add2cart-form-'.$form_state['values']['id_prod'].' a.catalog-link").removeClass("element-invisible");
 
             parent.jQuery("div#block-commerce-cart-cart span.line-item-quantity-raw").text("1");
         }(jQuery));</script>');
