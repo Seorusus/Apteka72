@@ -4,7 +4,8 @@ include_once('sy_commerce_add_functions.inc');
 include_once('sy_commerce_add_block.inc');
 
 
-function sy_commerce_add_menu() {
+function sy_commerce_add_menu()
+{
     $items = array();
 
     $items['change-sity'] = array(
@@ -13,19 +14,26 @@ function sy_commerce_add_menu() {
         'access callback' => TRUE,
         'type' => MENU_CALLBACK,
     );
-/*    $items['admin/test_form'] = array(
-        'title' => 'test form',
+    $items['add2cart'] = array(
         'page callback' => 'drupal_get_form',
-        'page arguments' => array('sy_commerce_add_test_form'),
-        'access arguments' => array('administer content'),
-        'type' => MENU_NORMAL_ITEM,
-        'file' => 'test.inc',
-        'weight' => 5,
-    );*/
+        'page arguments' => array('sy_commerce_add_add2cart_form'),
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    /*    $items['admin/test_form'] = array(
+            'title' => 'test form',
+            'page callback' => 'drupal_get_form',
+            'page arguments' => array('sy_commerce_add_test_form'),
+            'access arguments' => array('administer content'),
+            'type' => MENU_NORMAL_ITEM,
+            'file' => 'test.inc',
+            'weight' => 5,
+        );*/
     return $items;
 }
 
-function sy_commerce_add_ctools_plugin_directory($owner, $plugin_type){
+function sy_commerce_add_ctools_plugin_directory($owner, $plugin_type)
+{
     if ($owner == 'feeds_tamper' && $plugin_type == 'plugins') {
         return 'plugins';
     }
@@ -34,16 +42,17 @@ function sy_commerce_add_ctools_plugin_directory($owner, $plugin_type){
 
 function sy_commerce_add_form_views_form_commerce_cart_form_default_alter(&$form, &$form_state, $form_id)
 {
-    $form['actions']['lnk']=array(
-        '#markup'=>l('Продолжить покупки',  (isset($_GET['return']))?$_GET['return']:'catalog' , array('attributes' => array('class'=>'catalog-link'))),
-        '#weight'=>-50);
+    $form['actions']['lnk'] = array(
+        '#markup' => l('Продолжить покупки', (isset($_GET['return'])) ? $_GET['return'] : 'catalog', array('attributes' => array('class' => 'catalog-link'))),
+        '#weight' => -50);
 }
 
 
 function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$form_state, $form_id)
 {
-    if(isset($form_state['context']['entity_id'])
-        && isset($form_state['default_product']->type) && $form_state['default_product']->type=='product') {
+    if (isset($form_state['context']['entity_id'])
+        && isset($form_state['default_product']->type) && $form_state['default_product']->type == 'product'
+    ) {
 
         if (!isset($form_state['list_product_in_stok'])) $form_state['list_product_in_stok'] = sy_commerce_add_get_list_product_in_stocks($form_state['context']['entity_id']);
         $city_stocks = sy_commerce_add_get_city_stocks_in($form_state['list_product_in_stok']);
@@ -51,10 +60,11 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
         $keys_location = array_keys($city_stocks_all);
     }
 
-    if(isset($form_state['context']['entity_id'])
-                                && $form_state['context']['view_mode']=='node_product' && $form_state['context']['display']=='product'
-                                && isset($form_state['default_product']->type) && $form_state['default_product']->type=='product') {
-            if (isset($_SESSION['sy_commerce_add_city'])) {
+    if (isset($form_state['context']['entity_id'])
+        && $form_state['context']['view_mode'] == 'node_product' && $form_state['context']['display'] == 'product'
+        && isset($form_state['default_product']->type) && $form_state['default_product']->type == 'product'
+    ) {
+        if (isset($_SESSION['sy_commerce_add_city'])) {
             $def_city = $_SESSION['sy_commerce_add_city'];
         } else {
             $city_location = sy_commerce_add_get_city_stocks_location();
@@ -64,15 +74,15 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
                 $def_city = $keys_location[0];
             }
         }
-        if(array_key_exists($def_city, $city_stocks) ) {
+        if (array_key_exists($def_city, $city_stocks)) {
             $options_product = sy_commerce_add_get_options_product($form_state['list_product_in_stok'], $def_city);
             $form['product_id']['#options'] = $options_product;
-     /*       $form['product_id']['#default_value']=14360;
-           $form['product_id']['#value']=14360;
-            $form_state['default_product']=commerce_product_load(14360);
-      */
+            /*       $form['product_id']['#default_value']=14360;
+                  $form['product_id']['#value']=14360;
+                   $form_state['default_product']=commerce_product_load(14360);
+             */
             //     $form['product_id']['#disabled'] = TRUE;
-       //     $form['product_id']['#attributes']['style'] = 'display:none;';
+            //     $form['product_id']['#attributes']['style'] = 'display:none;';
         }
         /*
                 $form['#attached']['js'][] = array(
@@ -95,9 +105,9 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
     }
 
 
-    if(isset($form_state['context']['entity_id']) && $form_state['context']['view_mode']=='node_full' && isset($form_state['default_product']->type) && $form_state['default_product']->type=='product') {
-      //dpm($form_state['list_product_in_stok']);
-        if(count($city_stocks_all)>0) {
+    if (isset($form_state['context']['entity_id']) && $form_state['context']['view_mode'] == 'node_full' && isset($form_state['default_product']->type) && $form_state['default_product']->type == 'product') {
+        //dpm($form_state['list_product_in_stok']);
+        if (count($city_stocks_all) > 0) {
 
             $form['#prefix'] = '<div id="cart-gip-form-wrapper">';
             $form['#suffix'] = '</div>';
@@ -114,68 +124,138 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
                     $def_city = $keys_location[0];
                 }
             }
-            /*
-            $form['city'] = array(
-                '#type' => 'select',
-                '#title' => 'Город',
-                '#default_value' => $def_city,
-                '#options' => $city_stocks_all,
-                '#ajax' => array(
-                    'callback' => 'sy_commerce_add_city_choice_js',
-                    'wrapper' => 'cart-gip-form-wrapper',
-                    'method' => 'replace',
-                    'effect' => 'fade',
-                ),
-            );
-            */
-            $form['table']=sy_commerce_add_get_stocks_table($form_state['context']['entity_id'],$def_city);
 
-            if(array_key_exists($def_city, $city_stocks) ) {
+            $form['table'] = sy_commerce_add_get_stocks_table($form_state['context']['entity_id'], $def_city);
+
+            if (array_key_exists($def_city, $city_stocks)) {
                 $options_product = sy_commerce_add_get_options_product($form_state['list_product_in_stok'], $def_city);
                 $form['product_id']['#options'] = $options_product;
 
-                if(count($options_product)==1) $form['product_id']['#attributes']['style'] = 'display:none;';
-            }
-            else
-            {
+                if (count($options_product) == 1) $form['product_id']['#attributes']['style'] = 'display:none;';
+            } else {
                 $form['product_id']['#disabled'] = TRUE;
                 $form['product_id']['#attributes']['style'] = 'display:none;';
                 $form['quantity']['#disabled'] = TRUE;
                 $form['submit']['#disabled'] = TRUE;
                 $form['submit']['#access'] = FALSE; // issues/476 #3
             }
-            $go2cart_class =array('class'=>'catalog-link');
-            $product_in_cart=sy_commerce_add_product_in_cart(isset($form['product_id']['#default_value'])?$form['product_id']['#default_value']:$form['product_id']['#value']);
-            if($product_in_cart)
-            {
-                $form['submit']['#attributes']['class'][]='element-invisible';
+            $go2cart_class = array('class' => 'catalog-link');
+            $product_in_cart = sy_commerce_add_product_in_cart(isset($form['product_id']['#default_value']) ? $form['product_id']['#default_value'] : $form['product_id']['#value']);
+            $form['submit']['#attributes']['class'][] = 'element-invisible';
+            $class_go2cart = ' ';
+            $class_incart = ' ';
+            if ($product_in_cart) {
+                $class_go2cart = 'element-invisible';
+            } else {
+                $class_incart = 'element-invisible';
             }
-            else
-            {
-                $go2cart_class =array('class'=>'catalog-link element-invisible');
-            }
-            $form['go2cart']=array('#markup'=>l('В корзине',  'cart' , array('query' => array('return'=>'node/'.$form_state['context']['entity_id']),'attributes'=>$go2cart_class)));
-        }
-        else
-        {
-            $form['city_information'] = array('#markup' => 'Нет городов', );
+            $form['incart'] = array('#markup' => '<br>' . l('В корзине', 'cart', array('query' => array('return' => 'node/' . $form_state['context']['entity_id']), 'attributes' => array('class' => array('catalog-link', $class_incart)))));
+            $form['go2cart'] = array('#markup' => '<br>' . l('В корзину', 'add2cart/' . $form['product_id']['#value'], array('query' => array('return' => 'node/' . $form_state['context']['entity_id'],
+                    'width' => '600', 'height' => '350', 'iframe' => 'true'), 'attributes' => array('type' => 'submit', 'class' => array("colorbox-load", "go2cart", $class_go2cart)))));
+
+        } else {
+            $form['city_information'] = array('#markup' => 'Нет городов',);
         }
 
-//        dpm($form['product_id']);
-        if(module_exists('dc_ajax_add_cart')) {
-            drupal_add_css(drupal_get_path('module', 'dc_ajax_add_cart') . '/css/dc_ajax_add_cart.css');
-            drupal_add_js(drupal_get_path('module', 'dc_ajax_add_cart') . '/js/dc_ajax_add_cart_html.js');
-        }
         $form['#attached']['js'] = array(
             drupal_get_path('module', 'sy_commerce_add') . '/add_cart.js',
         );
-//        $form['submit']['#suffix']='<span id="aasa">aaaaaaaaaaa</span>';
+        $form['#attached']['css'][] = array(
+            'data' => '#cboxContent #cboxClose {right: -10px;top: -10px;}
+            .node-product-display form a.go2cart{
+               color: white;
+    display: inline-block;
+    float: left;
+    text-decoration: none;
+            }
+            .node-product-display form a.element-invisible{display:  none;}',
+            'type' => 'inline');
+//        $form['submit']['#suffix']='<span id="aasa">sy_commerce_addsy_commerce_addsy_commerce_addaa</span>';
     }
     //commerce_cart_add_to_cart_form_attributes_refresh($form, $form_state);
 }
 
 
- 
+function sy_commerce_add_add2cart_form($form, &$form_state)
+{
+    global $user;
+
+    $id_prod = (int)arg(1);
+    if ($id_prod < 1 && !isset($form_state['values']['id_prod'])) return NULL;
+
+    $form['id_prod'] = array('#type' => 'hidden', '#default_value' => isset($form_state['values']['id_prod']) ? $form_state['values']['id_prod'] : $id_prod);
+
+    $product = commerce_product_load($form['id_prod']['#default_value']);
+    if (!is_object($product)) return NULL;
+
+    $other_city = sy_commerce_add_product_other_city_in_cart($product->field_city_stock['und'][0]['value']);
+    if ($other_city) {
+        $form['message'] = array('#markup' => 'В корзине товар с другого города/склада! очистить и положить этот товар ?', '#prefix' => '<div class="messages-cat">', '#suffix' => '</div>');
+        $form['clear'] = array(
+            '#type' => 'submit',
+            '#value' => 'Да',
+            '#attributes' => array('class' => array('clear-submit')),
+            '#ajax' => array(
+                'callback' => 'sy_commerce_add_add2cart_form_ajax_submit',
+                'wrapper' => 'add2cart-form',
+                'method' => 'replace',
+                'effect' => 'fade',
+            ),
+        );
+    } else {
+        $line_item = commerce_product_line_item_new($product);
+        commerce_cart_product_add($user->uid, $line_item);
+        $form['#attached']['js'][] = array(
+            'data' => '(function ($) { Drupal.behaviors.add2cart_compl = { attach: function (context, settings) {  
+                parent.jQuery("a.go2cart").addClass("element-invisible");
+                parent.jQuery("a.catalog-link").removeClass("element-invisible");
+                            var cart_qty=parseInt(parent.jQuery("div#block-commerce-cart-cart span.line-item-quantity-raw").text());
+            cart_qty=cart_qty+1;
+            parent.jQuery("div#block-commerce-cart-cart span.line-item-quantity-raw").text(cart_qty);
+        } }; 
+        }(jQuery));',
+            'type' => 'inline');
+        $form['message'] = array('#markup' => 'Добавили', '#prefix' => '<div class="messages-cat">', '#suffix' => '</div>');
+
+
+    }
+
+    $form['#prefix'] = '<div id="add2cart-form">';
+    $form['#suffix'] = '</div>';
+
+    $form['go2cart'] = array('#markup' => l('В корзину', 'cart', array('query' => array('return' => isset($_GET['return']) ? $_GET['return'] : 'node/' . $form['id_prod']['#default_value']),
+        'attributes' => array('class' => array("catalog-link"))))
+    , '#prefix' => '<div class="option-buttonn checkoutn">', '#suffix' => '</div><div class="option-buttonn continuen" data-dismiss="add-cart-message" type="submit">Продолжить покупки</div>');
+    $form['#attached']['js'][] = array(
+        'data' => '(function ($) { Drupal.behaviors.add2cart = { attach: function (context, settings) {
+        $(".checkoutn a").click(function () {  parent.jQuery.fn.colorbox.close(); window.parent.location.href = $(this).attr("href");});
+        $(".continuen").click(function () { parent.jQuery.fn.colorbox.close();  });
+        } }; 
+        }(jQuery));',
+        'type' => 'inline');
+    $form['#attached']['css'][] = drupal_get_path('module', 'sy_commerce_add') . '/add2cart_form.css';
+    return $form;
+}
+
+function sy_commerce_add_add2cart_form_ajax_submit($form, &$form_state)
+{
+       if (($order_id = commerce_cart_order_id($GLOBALS['user']->uid)) != FALSE) commerce_cart_order_empty(commerce_order_load($order_id));
+
+    $form_state['no_cache'] = TRUE;
+    $form_state['rebuild'] = TRUE;
+    $form = drupal_rebuild_form($form['#form_id'], $form_state, $form);
+    $form['script_help'] = array('#markup' => '<script>(function ($) {
+                parent.jQuery("a.go2cart").addClass("element-invisible");
+                parent.jQuery("a.catalog-link").removeClass("element-invisible");
+
+            parent.jQuery("div#block-commerce-cart-cart span.line-item-quantity-raw").text("1");
+        }(jQuery));</script>');
+
+
+    return $form;
+
+}
+
 function sy_commerce_add_city_choice_js($form, &$form_state)
 {
     $form_state['no_cache'] = TRUE;
@@ -189,57 +269,56 @@ function sy_commerce_add_city_choice_js($form, &$form_state)
  */
 function sy_commerce_add_commerce_cart_attributes_refresh_alter(&$commands, $form, $form_state)
 {
-  //  $product_in_cart=sy_commerce_add_product_in_cart($form_state['values']['product_id']);
- //  if($product_in_cart) $commands[] = ajax_command_invoke('input.form-submit', 'addClass', array('element-invisible'));
-   // $commands[] = ajax_command_invoke('input.form-submit', 'addClass', array('element-invisible'));
+    //  $product_in_cart=sy_commerce_add_product_in_cart($form_state['values']['product_id']);
+    //  if($product_in_cart) $commands[] = ajax_command_invoke('input.form-submit', 'addClass', array('element-invisible'));
+    // $commands[] = ajax_command_invoke('input.form-submit', 'addClass', array('element-invisible'));
 }
 
-function sy_commerce_add_feeds_after_import(FeedsSource $source) {
+function sy_commerce_add_feeds_after_import(FeedsSource $source)
+{
     // watchdog('sy commerce add',$source->id . '  =  '.variable_get('sy_commerce_add_cron',0));
     // похоже сам себя не запускает :(
-    if ($source->id == 'import_catalog_pharm'  || $source->id == 'import_display_product_pharm') {
-        variable_set('sy_commerce_add_cron',($source->id == 'import_display_product_pharm'?2:1));
-        watchdog('sy commerce add','step 2');
+    if ($source->id == 'import_catalog_pharm' || $source->id == 'import_display_product_pharm') {
+        variable_set('sy_commerce_add_cron', ($source->id == 'import_display_product_pharm' ? 2 : 1));
+        watchdog('sy commerce add', 'step 2');
         $fetcher_config = $source->getConfigFor($source->importer->fetcher);
         $second_source = feeds_source('import_product_pharm');
         $second_source->setConfigFor($second_source->importer->fetcher, $fetcher_config);
         $second_source->save();
         $second_source->startImport();
 
-    }
-    elseif ($source->id == 'import_product_pharm' && variable_get('sy_commerce_add_cron',0)!=2 ) {
-        watchdog('sy commerce add','step 3');
+    } elseif ($source->id == 'import_product_pharm' && variable_get('sy_commerce_add_cron', 0) != 2) {
+        watchdog('sy commerce add', 'step 3');
         $fetcher_config = $source->getConfigFor($source->importer->fetcher);
         $second_source = feeds_source('import_display_product_pharm');
         $second_source->setConfigFor($second_source->importer->fetcher, $fetcher_config);
         $second_source->save();
         $second_source->startImport();
-    }
-    elseif ($source->id == 'import_product_pharm' && variable_get('sy_commerce_add_cron',0)==2 ) {
+    } elseif ($source->id == 'import_product_pharm' && variable_get('sy_commerce_add_cron', 0) == 2) {
         db_update('node')
             ->fields(array('status' => 0))
             ->condition('type', 'product_display')
             ->condition('uid', 0)
             ->execute();
 
-        watchdog('sy commerce add','step 4');
+        watchdog('sy commerce add', 'step 4');
         file_unmanaged_delete('public://feeds-tmp/import.xml');
-        variable_set('sy_commerce_add_cron',0);
+        variable_set('sy_commerce_add_cron', 0);
     }
 }
+
 function sy_commerce_add_cron()
 {
     //db_query('update elysia_cron set running = 0'); разблокировка
     $output = sy_commerce_add_get_orders_xml();
-    file_unmanaged_save_data($output , drupal_realpath('public://feeds-tmp/output.xml'), FILE_EXISTS_REPLACE);
+    file_unmanaged_save_data($output, drupal_realpath('public://feeds-tmp/output.xml'), FILE_EXISTS_REPLACE);
     watchdog('sy commerce add', 'GO');
-    $source=drupal_realpath('public://feeds-tmp/import.xml');
+    $source = drupal_realpath('public://feeds-tmp/import.xml');
 
-    if(file_exists($source)) watchdog('sy commerce add','file is & var='.variable_get('sy_commerce_add_cron',0));
-    if(variable_get('sy_commerce_add_cron',0)<1) watchdog('sy commerce add','cron 0');
-    if(file_exists($source) && variable_get('sy_commerce_add_cron',0)==0) {
-        watchdog('sy commerce add','step 1');
-
+    if (file_exists($source)) watchdog('sy commerce add', 'file is & var=' . variable_get('sy_commerce_add_cron', 0));
+    if (variable_get('sy_commerce_add_cron', 0) < 1) watchdog('sy commerce add', 'cron 0');
+    if (file_exists($source) && variable_get('sy_commerce_add_cron', 0) == 0) {
+        watchdog('sy commerce add', 'step 1');
 
 
         db_update('node')
@@ -248,31 +327,28 @@ function sy_commerce_add_cron()
             ->execute();
 
 
-        variable_set('sy_commerce_add_cron',1);
+        variable_set('sy_commerce_add_cron', 1);
         $myFeed = feeds_source('import_catalog_pharm');
         $config = array('FeedsFileFetcher' => array('source' => $source));
         $myFeed->addConfig($config);
         $myFeed->import();
-    }
-    elseif(!file_exists($source) )
-    {
+    } elseif (!file_exists($source)) {
 //        watchdog('sy commerce add',' not file_exists');
-        variable_set('sy_commerce_add_cron',0);
-    }
-    else
-    {
+        variable_set('sy_commerce_add_cron', 0);
+    } else {
         //   watchdog('sy commerce add','not');
     }
 }
 
 
-function sy_commerce_add_views_query_alter(&$view, &$query) {
+function sy_commerce_add_views_query_alter(&$view, &$query)
+{
 
     if ($view->name == 'taxonomy_term' && isset($_SESSION['sy_commerce_add_city'])) {
 
         $city = $_SESSION['sy_commerce_add_city'];
         $join = new views_join();
-       $join->construct('field_data_field_city_stock', 'commerce_product_field_data_field_product', 'product_id', 'entity_id');
+        $join->construct('field_data_field_city_stock', 'commerce_product_field_data_field_product', 'product_id', 'entity_id');
         $query->add_relationship('field_data_field_city_stock', $join, 'commerce_product_field_data_field_product');
         $query->add_where(1, 'field_data_field_city_stock.field_city_stock_value', $city);
     }
@@ -285,10 +361,10 @@ function sy_commerce_add_get_orders_xml()
         ->execute()
         ->fetchAllKeyed();
 
-    $out='<?xml version="1.0" encoding="UTF-8" ?>'." \n";
-    $oids = db_query("SELECT order_id FROM {commerce_order} WHERE status=:status", array(':status'=>'pending'))->fetchCol();
-    $orders=commerce_order_load_multiple($oids);
-    if(count($orders)>0) {
+    $out = '<?xml version="1.0" encoding="UTF-8" ?>' . " \n";
+    $oids = db_query("SELECT order_id FROM {commerce_order} WHERE status=:status", array(':status' => 'pending'))->fetchCol();
+    $orders = commerce_order_load_multiple($oids);
+    if (count($orders) > 0) {
         $out .= "<commerce_orders> \n";
         foreach ($orders as $order) {
             $out .= "<commerce_order> \n";
@@ -296,54 +372,53 @@ function sy_commerce_add_get_orders_xml()
             $out .= "<E-mail>$order->mail</E-mail> \n";
             $out .= "<Date-created>" . date("d/m/Y - H:i", $order->created) . "</Date-created> \n";
             $out .= "<Order-total>" . ($order->commerce_order_total['und'][0]['amount'] / 100) . "</Order-total> \n";
-            $product_id=0;
-            $list_products=sy_commerce_add_get_orders_xml_lines($order->order_id,$product_id);
-            if($product_id>0) $out.=sy_commerce_add_get_orders_xml_lines_stock($product_id,$stock_names);
+            $product_id = 0;
+            $list_products = sy_commerce_add_get_orders_xml_lines($order->order_id, $product_id);
+            if ($product_id > 0) $out .= sy_commerce_add_get_orders_xml_lines_stock($product_id, $stock_names);
             $out .= "<list-products>" . $list_products . "</list-products> \n";
-            $out .= isset($order->commerce_customer_billing['und'][0]['profile_id'])?sy_commerce_add_get_orders_xml_profiles($order->commerce_customer_billing['und'][0]['profile_id']):'';
+            $out .= isset($order->commerce_customer_billing['und'][0]['profile_id']) ? sy_commerce_add_get_orders_xml_profiles($order->commerce_customer_billing['und'][0]['profile_id']) : '';
             $out .= "</commerce_order> \n";
         }
         $out .= "</commerce_orders> \n";
 
         return $out;
-    }
-    else
-    {
+    } else {
         return '';
     }
 }
-function sy_commerce_add_get_orders_xml_lines($order_id,&$product_id) {
-    $out='';
+
+function sy_commerce_add_get_orders_xml_lines($order_id, &$product_id)
+{
+    $out = '';
     $oids = db_query("SELECT prd.title, prc.commerce_price_amount, prd.sku, prd.product_id, cli.quantity, adqt.quantity as add_qty 
                     FROM {commerce_line_item} AS cli
                     LEFT JOIN {commerce_product} AS prd ON prd.sku = cli.line_item_label
                     LEFT JOIN {field_data_commerce_price} AS prc ON prc.entity_id = prd.product_id 
                     LEFT JOIN {sy_commerce_add_quantity} AS adqt ON adqt.line_item_id = cli.line_item_id  
-                    WHERE cli.order_id = :order_id AND cli.type = 'product'",array(':order_id'=>$order_id));
-    foreach ($oids as $key=>$val)
-    {
-        $product_id=$val->product_id;
-        $out.="<product> \n";
-        $out.="<name>$val->title</name> \n";
-        $out.="<SKU>$val->sku</SKU> \n";
-        $out.="<price>".($val->commerce_price_amount/100)."</price> \n";
+                    WHERE cli.order_id = :order_id AND cli.type = 'product'", array(':order_id' => $order_id));
+    foreach ($oids as $key => $val) {
+        $product_id = $val->product_id;
+        $out .= "<product> \n";
+        $out .= "<name>$val->title</name> \n";
+        $out .= "<SKU>$val->sku</SKU> \n";
+        $out .= "<price>" . ($val->commerce_price_amount / 100) . "</price> \n";
 //        $out.=sy_commerce_add_get_orders_xml_lines_stock($val->product_id,$stock_names);
-        $out.="<qty>$val->quantity</qty> \n";
-        $out.="<qty-add>".($val->add_qty!=0?$val->add_qty:0)."</qty-add> \n";
-        $out.="</product> \n";
+        $out .= "<qty>$val->quantity</qty> \n";
+        $out .= "<qty-add>" . ($val->add_qty != 0 ? $val->add_qty : 0) . "</qty-add> \n";
+        $out .= "</product> \n";
     }
     return $out;
 }
-function sy_commerce_add_get_orders_xml_lines_stock($pid,$stock_names) {
+
+function sy_commerce_add_get_orders_xml_lines_stock($pid, $stock_names)
+{
     $stock_sets = db_query("SELECT * FROM {commerce_stock_calculation} WHERE name = :name", array(':name' => 'stock_calculation:' . $pid))->fetchObject();
     if (isset($stock_sets->plugin)) {
         if ($stock_sets->plugin == 'sum_calculation') {
             $settings = unserialize($stock_sets->settings);
-             foreach ($settings as $key=>$value)
-            {
-                if($value==1)
-                {
-                    return "<stock-name>".$stock_names[$key]."</stock-name> \n";
+            foreach ($settings as $key => $value) {
+                if ($value == 1) {
+                    return "<stock-name>" . $stock_names[$key] . "</stock-name> \n";
                 }
             }
         }
@@ -351,27 +426,27 @@ function sy_commerce_add_get_orders_xml_lines_stock($pid,$stock_names) {
     return '';
 }
 
-function sy_commerce_add_get_orders_xml_profiles($order_id) {
-    $out='';
+function sy_commerce_add_get_orders_xml_profiles($order_id)
+{
+    $out = '';
 
-    $profile=commerce_customer_profile_load($order_id);
-    if(isset($profile->commerce_customer_address['und'][0]))
-    {
-        $cb=$profile->commerce_customer_address['und'][0];
+    $profile = commerce_customer_profile_load($order_id);
+    if (isset($profile->commerce_customer_address['und'][0])) {
+        $cb = $profile->commerce_customer_address['und'][0];
 
         module_load_include('inc', 'addressfield', 'addressfield.administrative_areas');
         $administrative_areas = addressfield_get_administrative_areas($cb['country']);
 
-        $out.="<customer_address> \n";
-        $out.="<first_name>".$cb['first_name']."</first_name> \n";
-        $out.="<last_name>".$cb['last_name']."</last_name> \n";
-        $out.="<organisation_name>".$cb['organisation_name']."</organisation_name> \n";
-        $out.="<thoroughfare>".$cb['thoroughfare']."</thoroughfare> \n";
-        $out.="<premise>".$cb['premise']."</premise> \n";
-        $out.="<locality>".$cb['locality']."</locality> \n";
-        if(isset($cb['administrative_area']) && isset($administrative_areas[$cb['administrative_area']])) $out.="<administrative_area>".$administrative_areas[$cb['administrative_area']]."</administrative_area> \n";
-        $out.="<postal_code>".$cb['postal_code']."</postal_code> \n";
-        $out.="</customer_address> \n";
+        $out .= "<customer_address> \n";
+        $out .= "<first_name>" . $cb['first_name'] . "</first_name> \n";
+        $out .= "<last_name>" . $cb['last_name'] . "</last_name> \n";
+        $out .= "<organisation_name>" . $cb['organisation_name'] . "</organisation_name> \n";
+        $out .= "<thoroughfare>" . $cb['thoroughfare'] . "</thoroughfare> \n";
+        $out .= "<premise>" . $cb['premise'] . "</premise> \n";
+        $out .= "<locality>" . $cb['locality'] . "</locality> \n";
+        if (isset($cb['administrative_area']) && isset($administrative_areas[$cb['administrative_area']])) $out .= "<administrative_area>" . $administrative_areas[$cb['administrative_area']] . "</administrative_area> \n";
+        $out .= "<postal_code>" . $cb['postal_code'] . "</postal_code> \n";
+        $out .= "</customer_address> \n";
     }
     return $out;
 }

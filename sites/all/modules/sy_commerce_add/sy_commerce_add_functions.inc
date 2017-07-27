@@ -388,3 +388,17 @@ function sy_commerce_add_product_in_cart($pid)
   }
   return FALSE;
 }
+function sy_commerce_add_product_other_city_in_cart($city)
+{
+  if (($order_id = commerce_cart_order_id($GLOBALS['user']->uid)) != FALSE) {
+    $order_wrap = entity_metadata_wrapper('commerce_order', $order_id);
+    $line_item_types = commerce_product_line_item_types();
+    foreach ($order_wrap->commerce_line_items as $line_item) {
+
+      if (in_array($line_item->type->value(), $line_item_types)) {
+        if($line_item->commerce_product->field_city_stock->raw()!=$city) return TRUE;
+      }
+    }
+  }
+  return FALSE;
+}
