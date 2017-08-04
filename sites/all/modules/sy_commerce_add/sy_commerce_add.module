@@ -39,14 +39,17 @@ function sy_commerce_add_ctools_plugin_directory($owner, $plugin_type)
     }
 }
 
-
+function sy_commerce_add_form_commerce_checkout_form_checkout_alter(&$form, &$form_state, $form_id)
+{
+    $form['commerce_shipping']['shipping_service']['#default_value']='';
+    $form['commerce_shipping']['shipping_service']['#required']=TRUE;
+}
 function sy_commerce_add_form_views_form_commerce_cart_form_default_alter(&$form, &$form_state, $form_id)
 {
     $form['actions']['lnk'] = array(
         '#markup' => l('Продолжить покупки', (isset($_GET['return'])) ? $_GET['return'] : 'catalog', array('attributes' => array('class' => 'catalog-link'))),
         '#weight' => -50);
 }
-
 
 function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$form_state, $form_id)
 {

@@ -3240,6 +3240,22 @@ ul.tabs a.active, ul.tabs a:hover {
 #commerce-checkout-form-checkout legend {
   display: none;
 }
+#commerce-checkout-form-checkout fieldset.terms-of-service {
+  margin: 15px 0;
+}
+#commerce-checkout-form-checkout fieldset.commerce_shipping {
+  border-top: 1px solid #c1c1c1;
+  margin-top: 25px;
+  padding-top: 25px;
+}
+#commerce-checkout-form-checkout fieldset.commerce_shipping legend {
+  display: inline-block;
+  float: left;
+  margin-bottom: 5px;
+  width: 100%;font-weight: bold;
+ }
+
+
 /* line 1867, ../scss/_base.scss */
 #commerce-checkout-form-checkout .cart_contents .view-header {
   margin-bottom: 25px;

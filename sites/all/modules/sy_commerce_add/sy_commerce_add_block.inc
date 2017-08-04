@@ -73,7 +73,8 @@ function sy_commerce_add_block_select_city_new_form()
         '#default_value' => $def,
     );
     $form['#attached']['js'] = array(
-        drupal_get_path('module', 'sy_commerce_add') . '/select_city.js',
+        drupal_get_path('module', 'sy_commerce_add') . '/select_city.js', 
     );
+    if(arg(0)=='cart' || arg(0)=='checkout') $form['selected']['#disabled']=TRUE;
     return $form;
 }

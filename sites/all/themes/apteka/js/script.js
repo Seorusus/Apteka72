@@ -134,10 +134,13 @@
 
             $("#commerce-checkout-form-checkout label").each(function () {
                 var labelText = $(this).text().replace(' *', '').toLowerCase();
-                $(this).hide();
+                
+
+               if( !$(this).parent().parent().parent().hasClass("terms-of-service") &&
+                   !$(this).parent().hasClass("form-item-commerce-shipping-shipping-service")) $(this).hide();
                 //$(this).next().attr('placeholder', 'Введите ' + labelText);
             });
-
+            $("#commerce-checkout-form-checkout .terms-of-service article").hide();
             $("#commerce-checkout-form-checkout .form-item").each(function () {
                 if ($(this).children().hasClass("required")) {
                     $(this).addClass('required-row');
