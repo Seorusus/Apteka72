@@ -348,8 +348,13 @@ function commerce_order_ui_set_breadcrumb($view_mode = 'administrator') {
  *   An array as expected by drupal_render().
  */
 function commerce_order_ui_order_view($order, $view_mode = 'administrator') {
+  global $user;
   drupal_add_css(drupal_get_path('module', 'commerce_order') . '/theme/commerce_order.theme.css');
-  return entity_view('commerce_order', array($order->order_id => $order), $view_mode, NULL, TRUE);
+  $order_view= entity_view('commerce_order', array($order->order_id => $order), $view_mode, NULL, TRUE);
+  $order_view_key=key($order_view['commerce_order']);
+  $order_view['commerce_order'][$order_view_key]['#prefix']=
+      l('Нажмите, чтобы открыть окно со счетом для печати','user/'.$user->uid.'/orders/'.$order->order_id.'/print',array('attributes'=>array('target'=>'_blank')));
+  return $order_view;
 }
 
 /**

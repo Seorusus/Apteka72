@@ -402,3 +402,46 @@ function sy_commerce_add_product_other_city_in_cart($city)
   }
   return FALSE;
 }
+
+
+/**
+ * Implements hook_form_alter().
+ */
+function sy_commerce_add_form_commerce_order_ui_order_form_alter(&$form, &$form_state, $form_id)
+{
+
+  $form['order_status']['status']['#options']= array(
+'canceled'=>'Отменен',
+'checkout'=>'В процессе оформления',
+'accepted_for_execution'=>'Принят к исполнению',
+'processing'=>'Обработка',
+'payment_accepted'=>'Платеж принят',
+'sent'=>'Отправлен',
+'completed'=>'Завершен',
+  );
+  $form['order_status']['notification_status']= array(
+
+      '#type' =>
+          'checkbox',
+
+      '#title' => 'Выслать уведомление',
+      '#states' => array(
+
+        // Hide the settings when the cancel notify checkbox is disabled.
+
+          'invisible' => array(
+
+              'select#edit-status' => array('value' => $form['order_status']['status_original']['#value']),
+          ),
+      ),
+  );
+  $form['actions']['submit']['#submit'][] = 'sy_commerce_add_form_commerce_order_change';
+}
+
+function sy_commerce_add_form_commerce_order_change($form, &$form_state) {
+  $values=$form_state['values'];
+if($values['status']!=$values['status_original'] && $values['notification_status']==1)
+{
+drupal_set_message('на pantheonsite.io отправка не работает - нет возможности закончить');
+}
+}

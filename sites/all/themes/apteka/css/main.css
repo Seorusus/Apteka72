@@ -433,6 +433,9 @@ ul.tabs a.active, ul.tabs a:hover {
   text-transform: uppercase;
   font-weight: 600;
 }
+.messages.messages--error {
+  background-color: #f66600;
+}
 /* line 190, ../scss/_reset.scss */
 .messages .messages__icon {
   display: none;
@@ -3255,6 +3258,13 @@ ul.tabs a.active, ul.tabs a:hover {
   width: 100%;font-weight: bold;
  }
 
+#commerce-checkout-form-checkout fieldset.commerce_shipping .messages {
+  display: inline-block;
+  float: left;
+  margin-bottom: 5px;
+  width: 100%;
+ }
+
 
 /* line 1867, ../scss/_base.scss */
 #commerce-checkout-form-checkout .cart_contents .view-header {
@@ -5331,3 +5341,4 @@ article.node-5 .step-1-p-last {
   float: left; margin: 5px;
   }
 }
+.page-user-orders .main-container ul.tabs{display: none;}

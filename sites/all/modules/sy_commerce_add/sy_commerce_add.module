@@ -2,6 +2,7 @@
 
 include_once('sy_commerce_add_functions.inc');
 include_once('sy_commerce_add_block.inc');
+include_once('sy_commerce_add_fix_order_total.inc');
 
 
 function sy_commerce_add_menu()
@@ -43,6 +44,8 @@ function sy_commerce_add_form_commerce_checkout_form_checkout_alter(&$form, &$fo
 {
     $form['commerce_shipping']['shipping_service']['#default_value']='';
     $form['commerce_shipping']['shipping_service']['#required']=TRUE;
+    $form['extra_pane__node__16361']['termsofservice']['#default_value']=1;
+    $form['extra_pane__node__16361']['termsofservice']['#value']=1;
 }
 function sy_commerce_add_form_views_form_commerce_cart_form_default_alter(&$form, &$form_state, $form_id)
 {

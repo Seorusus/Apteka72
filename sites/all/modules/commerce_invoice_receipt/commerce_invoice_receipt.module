@@ -85,9 +85,8 @@ function commerce_invoice_receipt_view_print($order, $view_mode = 'invoice', $br
   $html = drupal_get_css($styles);
   
   $build = entity_view('commerce_order', array($order->order_id => $order), $view_mode, NULL, TRUE);
-  
-  $invoice_info = _commerce_invoice_receipt_get_invoice_info($order, $build);
 
+  $invoice_info = _commerce_invoice_receipt_get_invoice_info($order, $build);
   $html .= theme('commerce_order_invoice_view', array('info' => $invoice_info, 'order' => $order));
   
   print _emogrifier_process($html, NULL, NULL, NULL, NULL, NULL);
@@ -151,7 +150,7 @@ function commerce_invoice_receipt_mail($key, &$message, $params) {
         'browsers' => array(),
       );
       $html = drupal_get_css($styles);
-      
+
       $build = entity_view('commerce_order', array($params['order']->order_id => $params['order']), 'invoice', NULL, TRUE);
       $invoice_info = _commerce_invoice_receipt_get_invoice_info($params['order'], $build);
       
@@ -234,14 +233,16 @@ function commerce_invoice_receipt_action_mail($order, $to, $subject, $from = NUL
  * Generate an array for rendering all the invoice info.
  */
 function _commerce_invoice_receipt_get_invoice_info($order, $build) {
+  $o_user=user_load($order->uid);
   $info = array(
     'order_uid' => $order->uid,
+    'order_u_name' => $o_user->name,
     'order_created' => $order->created,
     'order_changed' => $order->changed,
     'order_number' => $order->order_number,
     'order_mail' => $order->mail,
     'order_status' => $order->status,
-		'site_logo'	=> theme_get_setting('logo'),
+		'site_logo'	=> str_replace('adminimal_theme','apteka',theme_get_setting('logo')),
   );
   
   if (isset($build['commerce_order'][$order->order_id]['commerce_customer_shipping'])) {

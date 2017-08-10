@@ -15,11 +15,6 @@
 											<!-- Invoice Header -->
 											<img src="<?php print $info['site_logo']; ?>" />
                     </td>
-                    <td nowrap="nowrap" style="line-height: 1.6em;" valign="middle" align="right">
-                    Зеленая Аптека<br>
-                    Мельникайте, 135<br>
-                    625007 Тюмень<br>
-                    (3452) 34-98-54</td>
                   </tr>
                 </table>
               </td>
@@ -37,16 +32,21 @@
                         <tr>
                           <td valign="top" width="50%">
                             <br/>
-                            <b>Покупатель</b> <?php print $info['order_u_name']; ?><br/>
+                            <b><?php print t('Account No:'); ?></b> <?php print $info['order_uid']; ?><br/>
                             <br/>
-                            <b>Адрес электр. почты</b> <?php print $info['order_mail']; ?><br/>
+                            <b><?php print t('Order Date:'); ?></b> <?php print date('j F, Y', $info['order_created']); ?><br/>
                             <br/>
-                            <b>Дата заказа</b> <?php print format_date($info['order_created']); ?><br/><br/>
-                            <b>Номер заказа</b> <?php print $info['order_number']; ?>
+                            <b><?php print t('Billing Address:'); ?></b><br />
+                            <?php print isset($info['customer_billing']) ? $info['customer_billing'] : ''; ?><br />
                           </td>
                           <td valign="top" width="50%">
-                            <b>Адрес доставки:</b><br />
-                            <?php print isset($info['customer_billing']) ? $info['customer_billing'] : ''; ?><br />
+                            <br/>
+                            <b><?php print t('Web Order No:'); ?></b> <?php print $info['order_number']; ?><br/>
+                            <br/>
+                            <b><?php print t('Email Address:'); ?></b> <?php print $info['order_mail']; ?><br/>
+                            <br/>
+                            <b><?php print t('Shipping Address:'); ?></b><br />
+                            <?php print isset($info['customer_shipping']) ? $info['customer_shipping'] : ''; ?><br />
                           </td>
                         </tr>
                       </table>
@@ -70,22 +70,21 @@
                 </table>
               </td>
             </tr>
-            <!--             <tr>
-                         <td>
-                           <table>
-                             <tr>
-                               <td colspan="2" style="background: #EEE; color: #666; padding: 1em; font-size: 0.9em; line-height: 1.6em; border-top: #CCC 1px dotted;align: center;">
-                                 <!-- Invoice Header
-                                                       [INSERT FOOTER]
-                               </td>
-                             </tr>
-                           </table>
+            <tr>
+              <td>
+                <table>
+                  <tr>
+                    <td colspan="2" style="background: #EEE; color: #666; padding: 1em; font-size: 0.9em; line-height: 1.6em; border-top: #CCC 1px dotted; text-align: center;">
+                      <!-- Invoice Header -->
+											[INSERT FOOTER]
+                    </td>
+                  </tr>
+                </table>
               </td>
-            </tr> -->
+            </tr>
           </table>
         </td>
       </tr>
     </table>
-    <div align="right" style="margin-top: 1em; margin-right: 1em;"><input type="button" value="Распечатать" onclick="window.print();" /> <input type="button" value="Закрыть окно" onclick="window.close();" /></div>
   </body>
 </html>
