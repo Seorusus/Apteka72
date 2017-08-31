@@ -3,6 +3,7 @@
 include_once('sy_commerce_add_functions.inc');
 include_once('sy_commerce_add_block.inc');
 include_once('sy_commerce_add_fix_order_total.inc');
+include_once('sy_commerce_add_tokens.inc');
 
 
 function sy_commerce_add_menu()

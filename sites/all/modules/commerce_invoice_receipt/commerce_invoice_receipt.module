@@ -153,7 +153,7 @@ function commerce_invoice_receipt_mail($key, &$message, $params) {
 
       $build = entity_view('commerce_order', array($params['order']->order_id => $params['order']), 'invoice', NULL, TRUE);
       $invoice_info = _commerce_invoice_receipt_get_invoice_info($params['order'], $build);
-      
+
       $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed;';
       $message['subject'] = isset($params['subject']) ? $params['subject'] : t('Your Order Invoice', array(), $options);
       
