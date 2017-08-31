@@ -7,7 +7,7 @@
   top: 0;
   z-index: 100;
 }
-
+/*
 .add-cart-message-wrapper {
   background-color: #fff;
   border: 2px solid #ccc;
@@ -21,7 +21,12 @@
   top: 100px;
   z-index: 101;
 }
-
+*/
+.add-cart-message-wrapper {
+left: auto;
+right: 10px;
+width: 260px;
+}
 .add-to-cart-close {
   background: url(../images/cancel.png) no-repeat;
   cursor: pointer;

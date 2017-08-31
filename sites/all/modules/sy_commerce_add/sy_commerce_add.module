@@ -2,8 +2,8 @@
 
 include_once('sy_commerce_add_functions.inc');
 include_once('sy_commerce_add_block.inc');
-include_once('sy_commerce_add_fix_order_total.inc');
 include_once('sy_commerce_add_tokens.inc');
+include_once('sy_commerce_add_fix_order_total.inc');
 
 
 function sy_commerce_add_menu()
@@ -159,16 +159,43 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
 
         if(!in_array('add2cart-form-'.$product_id,$form['#attributes']['class']))$form['#attributes']['class'][]='add2cart-form-'.$product_id;
     }
+
+    if (isset($form['product_id']['#value']) && isset($form_state['context']) && count($form_state['context']) == 0 &&
+        isset($form_state['default_product']->type) && $form_state['default_product']->type == 'product')
+    {
+        $destination=drupal_get_destination();
+        $product_id=$form['product_id']['#value'];
+        $product_in_cart = sy_commerce_add_product_in_cart($product_id);
+        $form['submit']['#attributes']['class'][] = 'element-invisible';
+        $class_go2cart = ' ';
+        $class_incart = ' ';
+        if ($product_in_cart) {
+            $class_go2cart = 'element-invisible';
+        } else {
+            $class_incart = 'element-invisible';
+        }
+        $form['incart'] = array('#markup' => '' . l('В корзине', 'cart', array('query' => array('return' => $destination['destination']),
+                'attributes' => array('class' => array('catalog-link', $class_incart)))));
+        $form['go2cart'] = array('#markup' => '' . l('В корзину', 'add2cart/' .$product_id, array('query' => array('return' => $destination['destination'],
+                'width' => '600', 'height' => '350', 'iframe' => 'true'), 'attributes' => array('type' => 'submit', 'class' => array("colorbox-load", "go2cart", $class_go2cart)))));
+
+    }
     $form['#attached']['css'][] = array(
-            'data' => '#cboxContent #cboxClose {right: -10px;top: -10px;}
+        'data' => '#cboxContent #cboxClose {right: -10px;top: -10px;}
+            .view-promotions-discounts  form a.go2cart,
             .node-product-display form a.go2cart{
                color: white;
     display: inline-block;
     float: left;
     text-decoration: none;
             }
-            .node-product-display form a.element-invisible{display:  none;}',
-            'type' => 'inline');
+            .view-promotions-discounts form a.element-invisible,
+            .node-product-display form a.element-invisible{display:  none;}
+            form.commerce-add-to-cart   [type="submit"] {
+    margin-top: 10px;
+}',
+        'type' => 'inline');
+
 }
 
 
@@ -204,8 +231,11 @@ function sy_commerce_add_add2cart_form($form, &$form_state)
         $form['#attached']['js'][] = array(
             'data' => '(function ($) { Drupal.behaviors.add2cart_compl = { attach: function (context, settings) {  
                 parent.jQuery(".add2cart-form-'.$form['id_prod']['#default_value'].' a.go2cart").addClass("element-invisible");
+                parent.jQuery(".commerce-cart-add-to-cart-form-'.$form['id_prod']['#default_value'].' a.go2cart").addClass("element-invisible");
+                
                 parent.jQuery(".add2cart-form-'.$form['id_prod']['#default_value'].' a.catalog-link").removeClass("element-invisible");
-                console.log("=>");
+                parent.jQuery(".commerce-cart-add-to-cart-form-'.$form['id_prod']['#default_value'].' a.catalog-link").removeClass("element-invisible");
+
                             var cart_qty=parseInt(parent.jQuery("div#block-commerce-cart-cart span.line-item-quantity-raw").text());
                              if(isNaN(cart_qty)){
                              
@@ -219,11 +249,11 @@ function sy_commerce_add_add2cart_form($form, &$form_state)
                              }
                              else{
             cart_qty=cart_qty+1;
-            console.log(cart_qty);
             parent.jQuery("div#block-commerce-cart-cart span.line-item-quantity-raw").text(cart_qty);}
         } }; 
         }(jQuery));',
             'type' => 'inline');
+
         $form['message'] = array('#markup' => 'Добавили', '#prefix' => '<div class="messages-cat">', '#suffix' => '</div>');
 
 

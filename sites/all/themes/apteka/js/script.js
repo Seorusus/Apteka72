@@ -134,7 +134,7 @@
 
             $("#commerce-checkout-form-checkout label").each(function () {
                 var labelText = $(this).text().replace(' *', '').toLowerCase();
-                
+
 
                if( !$(this).parent().parent().parent().hasClass("terms-of-service") &&
                    !$(this).parent().hasClass("form-item-commerce-shipping-shipping-service")) $(this).hide();

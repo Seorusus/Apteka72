@@ -272,12 +272,12 @@ function dc_ajax_add_cart_ajax_cart_form(&$form, &$form_state) {
  */
 function dc_ajax_add_cart_block_info() {
   $blocks['ajax_shopping_cart'] = array(
-    'info' => t('AJAX shopping cart'),
+    'info' => t('AJAX shopping cart (Не нужно! Не включайте! Или спросите Антона!!!)'),
     'cache' => DRUPAL_NO_CACHE,
   );
 
   $blocks['ajax_shopping_cart_teaser'] = array(
-    'info' => t('AJAX shopping cart teaser'),
+    'info' => t('AJAX shopping cart teaser (Не нужно! Не включайте! Или спросите Антона!!!)'),
     'cache' => DRUPAL_NO_CACHE,
   );
 

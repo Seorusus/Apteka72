@@ -86,6 +86,8 @@
         </td>
       </tr>
     </table>
+    <?php if( $mode == 'print'){ ?>
     <div align="right" style="margin-top: 1em; margin-right: 1em;"><input type="button" value="Распечатать" onclick="window.print();" /> <input type="button" value="Закрыть окно" onclick="window.close();" /></div>
+    <?php } ?>
   </body>
 </html>

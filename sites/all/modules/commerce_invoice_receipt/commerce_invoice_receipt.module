@@ -87,7 +87,7 @@ function commerce_invoice_receipt_view_print($order, $view_mode = 'invoice', $br
   $build = entity_view('commerce_order', array($order->order_id => $order), $view_mode, NULL, TRUE);
 
   $invoice_info = _commerce_invoice_receipt_get_invoice_info($order, $build);
-  $html .= theme('commerce_order_invoice_view', array('info' => $invoice_info, 'order' => $order));
+  $html .= theme('commerce_order_invoice_view', array('info' => $invoice_info, 'order' => $order, 'mode' => 'print'));
   
   print _emogrifier_process($html, NULL, NULL, NULL, NULL, NULL);
 }
@@ -135,10 +135,10 @@ function commerce_invoice_receipt_mail($key, &$message, $params) {
     'langcode' => $langcode,
     'context' => '',
   );
-  
+
   switch ($key) {
     // Setup an e-mailed invoice.
-    case 'invoice':  
+    case 'invoice':
       $styles[] = array(
         'type' => 'file',
         'media' => 'all',
@@ -153,12 +153,12 @@ function commerce_invoice_receipt_mail($key, &$message, $params) {
 
       $build = entity_view('commerce_order', array($params['order']->order_id => $params['order']), 'invoice', NULL, TRUE);
       $invoice_info = _commerce_invoice_receipt_get_invoice_info($params['order'], $build);
-
+      
       $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed;';
       $message['subject'] = isset($params['subject']) ? $params['subject'] : t('Your Order Invoice', array(), $options);
       
-      $html .= theme('commerce_order_invoice_view', array('info' => $invoice_info, 'order' => $params['order']));
-      
+      $html .= (isset($params['body'])?$params['body']:'').theme('commerce_order_invoice_view', array('info' => $invoice_info, 'order' => $params['order'], 'mode' => 'send'));
+
       $message['body'][] = _emogrifier_process($html, NULL, NULL, NULL, NULL, NULL);
       break;
   }
@@ -208,7 +208,7 @@ function commerce_invoice_receipt_rules_action_info() {
 function commerce_invoice_receipt_action_mail($order, $to, $subject, $from = NULL) {
   $to = str_replace(array("\r", "\n"), '', $to);
   $from = !empty($from) ? str_replace(array("\r", "\n"), '', $from) : NULL;
-  
+
   $recipients = explode(',', $to);
   
   $params = array(
@@ -221,8 +221,11 @@ function commerce_invoice_receipt_action_mail($order, $to, $subject, $from = NUL
   
   foreach ($recipients as $recipient) {
     if ($recipient == '') continue;
+
+    dpm($recipient);
+    dpm($params);
     $message = drupal_mail('commerce_invoice_receipt', 'invoice', $recipient, $language, $params, $from);
-    
+    dpm($message);
     if ($message['result']) {
       watchdog('rules', 'Successfully sent email to %recipient', array('%recipient' => $recipient));
     }

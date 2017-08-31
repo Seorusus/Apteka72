@@ -5,7 +5,8 @@
 
             $('.block-sy-commerce-add select').change(function() {
                 // set the window's location property to the value of the option the user has selected
-                window.location = $(this).val();
+                window.location = '/'+$(this).val();
+//                console.log($(this).val());
             });
      
 }
