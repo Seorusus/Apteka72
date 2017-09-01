@@ -218,7 +218,7 @@ function drupal_ftp_ftp_to_file($file, $filename, $directory, &$ftp) {
   }
 
   // We have changed into the directory, let's attempt to get the file
-  $fp = @fopen($file, 'wb');
+  $fp = @fopen($filename, 'wb');
   $get_file = @ftp_fget($ftp->__conn, $fp, $filename, FTP_BINARY);
   fclose($fp);
 
