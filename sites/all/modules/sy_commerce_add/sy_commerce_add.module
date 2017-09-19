@@ -197,7 +197,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
         'type' => 'inline');
     $form['#attached']['js'][] = array(
         'data' => '(function ($) { Drupal.behaviors.add2cart_refresh = { attach: function (context, settings) {
-$(\'#edit-product-id\').change(); console.log(\'2\');
+$(\'select[name="product_id"]\').change(); 
         } }; 
         }(jQuery));',
         'type' => 'inline');

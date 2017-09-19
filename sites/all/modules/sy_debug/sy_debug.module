@@ -13,9 +13,8 @@ function sy_debug_menu() {
   return $items;
 }
 function sy_debug_form() {
-
-// $nodes=taxonomy_select_nodes(34); dpm($d);
-/*    */
+/*
+ 
     $nodes=array(36411,30702,30653,213);
     foreach ($nodes as $node)
     {
@@ -53,7 +52,7 @@ function sy_debug_form() {
     node_save($node);
     $node=node_load(36411);
     dpm($node);
-
+*/
   $form['reopen'] = array(
     '#type'  => 'submit',
     '#value' => 'Обновить','#weight' => 150,
