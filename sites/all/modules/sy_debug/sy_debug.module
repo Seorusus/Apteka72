@@ -1,0 +1,66 @@
+<?php
+function sy_debug_menu() {
+
+    $items['admin/sy_debug'] = array(
+    'title' => 'Отладка',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('sy_debug_form'),
+    'access arguments' => array('administer content'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 5,
+  );
+
+  return $items;
+}
+function sy_debug_form() {
+
+// $nodes=taxonomy_select_nodes(34); dpm($d);
+/*    */
+    $nodes=array(36411,30702,30653,213);
+    foreach ($nodes as $node)
+    {
+        $node=node_load($node);
+        dpm($node);
+        if(is_object($node))
+        {
+            $is_not_34=TRUE;
+            foreach ($node->field_term_catalog['und'] as $tid)
+            {
+                if($tid['tid']==34) $is_not_34=FALSE;
+            }
+            if($is_not_34)
+            {
+                $node->field_term_catalog['und'][]=array('tid'=>34);
+                node_save($node);
+            }
+        }
+    }
+
+    $node=node_load(36411);
+    $node->field_term_catalog['und'][]=array('tid'=>34);
+    node_save($node);
+    $node=node_load(36411);
+
+    $node=node_load(36411);
+    $is_not_34=FALSE;
+    foreach ($node->field_term_catalog['und'] as $tid)
+    {
+        if($tid['tid']==34) dpm($tid,'=d=');
+    }
+    node_save($node);
+    $node=node_load(36411);
+    $node->field_term_catalog['und']=array(array('tid'=>34));
+    node_save($node);
+    $node=node_load(36411);
+    dpm($node);
+
+  $form['reopen'] = array(
+    '#type'  => 'submit',
+    '#value' => 'Обновить','#weight' => 150,
+  );
+;
+
+  return $form;
+}
+function sy_debug_form_submit($form, &$form_state) {
+}

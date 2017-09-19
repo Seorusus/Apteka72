@@ -358,10 +358,10 @@ function sy_commerce_add_node_presave($node)
                     }
 
                 } else {
-                    if (count($node->field_image['und']) > 0) $image_in = $node->field_image['und'][0];
+                    if (isset($node->field_image['und']) && count($node->field_image['und']) > 0) $image_in = $node->field_image['und'][0];
                 }
             } else {
-                if (count($node->field_image['und']) > 0) $image_in = $node->field_image['und'][0];
+                if (isset($node->field_image['und']) && count($node->field_image['und']) > 0) $image_in = $node->field_image['und'][0];
             }
             if ($image_in) {
                 foreach ($node->field_product['und'] as $prd) {

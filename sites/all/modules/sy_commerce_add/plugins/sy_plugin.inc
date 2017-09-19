@@ -87,16 +87,16 @@ function sy_commerce_add_set_city_stock($product_id) {
         ->fetchField();
     $settings_ar=unserialize($settings);
     $city='';
-    dpm($settings_ar,$product_id);
+    //dpm($settings_ar,$product_id);
     foreach ($settings_ar as $key=>$value)
     {
-        dpm($value.'=>');
+//        dpm($value.'=>');
         if($value!=0) {
             $city = db_query("SELECT city.field_city_value FROM {commerce_stock_sources} AS stk
                             LEFT JOIN {field_data_field_city} AS city ON city.entity_id = stk.source_id
                             LEFT JOIN {field_data_field_disabled} AS dsbl ON dsbl.entity_id = stk.source_id  WHERE city.bundle = 'commerce_stock_sources' AND
                             dsbl.bundle = 'commerce_stock_sources' AND dsbl.field_disabled_value <> 1 AND stk.source_id = :sid", array(':sid' => $key))->fetchField();
-            dpm($value.'<='.'['.$city.']');
+  //          dpm($value.'<='.'['.$city.']');
         }
     }
     $product=commerce_product_load($product_id);
