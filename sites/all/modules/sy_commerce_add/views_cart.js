@@ -9,8 +9,12 @@
                     $(this).change();
                 }
             });
-
-
+            $( '.node-product-display.view-mode-full[class!="refreshed"] select[name="product_id"]' ).each(function( index ) {
+                if(!$( this ).parent().parent().parent().parent().parent().parent().parent().parent().hasClass("refreshed")) {
+                    $(this).parent().parent().parent().parent().parent().parent().parent().addClass("refreshed");
+                    $(this).change();
+                }
+            });
         }
 
     };

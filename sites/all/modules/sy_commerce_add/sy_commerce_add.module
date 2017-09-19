@@ -158,6 +158,12 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
         }
 
         if(!in_array('add2cart-form-'.$product_id,$form['#attributes']['class']))$form['#attributes']['class'][]='add2cart-form-'.$product_id;
+/*        $form['#attached']['js'][] = array(
+            'data' => '(function ($) { Drupal.behaviors.add2cart_refresh = { attach: function (context, settings) {
+$(\'select[name="product_id"]\').change(); 
+        } }; 
+        }(jQuery));',            'type' => 'inline');
+        */
     }
 
     if (isset($form['product_id']['#value']) && isset($form_state['context']) && count($form_state['context']) == 0 &&
@@ -195,12 +201,7 @@ function sy_commerce_add_form_commerce_cart_add_to_cart_form_alter(&$form, &$for
     margin-top: 10px;
 }',
         'type' => 'inline');
-    $form['#attached']['js'][] = array(
-        'data' => '(function ($) { Drupal.behaviors.add2cart_refresh = { attach: function (context, settings) {
-$(\'select[name="product_id"]\').change(); 
-        } }; 
-        }(jQuery));',
-        'type' => 'inline');
+
 }
 
 
