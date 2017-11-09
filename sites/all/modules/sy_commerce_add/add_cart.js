@@ -11,15 +11,12 @@
             }
 
            $('.add-cart-message-wrapper .continuen').live('click', function(){
-               console.log('1');
                hide_add2cart();
             });
            $('.add-cart-message-wrapper .add-to-cart-close').live('click', function(){
-               console.log('2');
                hide_add2cart();
             });
             $('#edit-product-id').change();
-            console.log('2');
         }
 };
 

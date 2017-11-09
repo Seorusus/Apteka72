@@ -864,7 +864,7 @@ ul.tabs a.active, ul.tabs a:hover {
   /* line 199, ../scss/_base.scss */
   #block-views-novelty-block,
   #block-views-promotions-discounts-block {
-    display: none !important;
+    // display: none !important;
   }
 }
 
@@ -3301,6 +3301,7 @@ ul.tabs a.active, ul.tabs a:hover {
 /* line 1895, ../scss/_base.scss */
 #commerce-checkout-form-checkout .views-field {
   position: relative;
+  text-align: center;
 }
 /* line 1898, ../scss/_base.scss */
 #commerce-checkout-form-checkout .cart_contents {
@@ -5342,3 +5343,17 @@ article.node-5 .step-1-p-last {
   }
 }
 .page-user-orders .main-container ul.tabs{display: none;}
+
+
+/*Field Phone*/
+#customer-profile-billing-field-phone-add-more-wrapper input {
+  max-width: 455px;
+  width: 100%;
+  font-size: 15px;
+  font-style: italic;
+  color: #555;
+  border: 1px solid #c1c1c1;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+  padding: 9px 10px 9px 15px;
+}

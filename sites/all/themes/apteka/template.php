@@ -1,5 +1,15 @@
 <?php
 
+//подключаем файлы .tpl.php для форм
+function apteka_theme() {
+  $items = array();
+  $items['comment_form'] = array(
+    'render element' => 'comment_form',
+    'path' => drupal_get_path('theme', 'apteka') . '/templates',
+    'template' => 'comment-form',
+  );
+  return $items;
+}
 
 function apteka_form_alter(&$form, &$form_state, $form_id)
 {

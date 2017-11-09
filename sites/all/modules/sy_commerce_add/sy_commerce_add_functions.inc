@@ -227,7 +227,7 @@ function sy_commerce_add_get_stocks_table($nid, $city)
         $lnk = array(
             'query' => array('width' => 500, 'height' => 500, 'inline' => 'true'),
             'fragment' => 'id-of-content',  // Replace $id
-            //'html' =>TRUE,
+            'html' =>TRUE,
             'attributes' => array('class' => 'colorbox-inline') // lightframe mode to create a modal frame
         );
         if ($count_in == 0 && $date_receipt_value == 0) {
@@ -235,7 +235,7 @@ function sy_commerce_add_get_stocks_table($nid, $city)
         } elseif ($count_in == 0 && $date_receipt_value > 0) {
             $out = 'Товар ' . l('ожидается', '', $lnk) . ' ' . date("d/m/Y", $date_receipt_value);
         } else {
-            $out = 'В наличии в ' . l($count_in, '', $lnk) . ' ' . sy_commerce_add_human_plural($count_in);
+            $out = '<div class="shop-line1">' . 'В наличии в ' . ' ' . '</div>'. ' ' . '<div class="shop-line11">' . ' ' . l($count_in. ' ' . sy_commerce_add_human_plural($count_in), '', $lnk)  . '</div>';
         }
         $out .= '<div style="display: none;"><div id="id-of-content" style="padding: 10px;">' . theme('table', array('header' => $header, 'rows' => $rows)) . '</div></div>';
         return array('#markup' => $out);
@@ -245,7 +245,7 @@ function sy_commerce_add_get_stocks_table($nid, $city)
 function sy_commerce_add_human_plural($number, $titles = array('магазине', 'магазинах', 'магазинах'))
 {
     $cases = array(2, 0, 1, 1, 1, 2);
-    return $titles[($number % 100 > 4 && $number % 100 < 20) ? 2 : $cases[min($number % 10, 5)]];
+      return ' <span class="added-class-shop-line">' .$titles[($number % 100 > 4 && $number % 100 < 20) ? 2 : $cases[min($number % 10, 5)]].'</span>';
 }
 
 function sy_commerce_add_get_city_stocks_location()
