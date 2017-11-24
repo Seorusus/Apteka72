@@ -386,6 +386,12 @@ function sy_commerce_add_cron()
         watchdog('sy commerce add', 'step 1');
         variable_set('sy_commerce_add_tids34',serialize(taxonomy_select_nodes(34)));
 
+        db_update('commerce_stock_quantity')
+            ->fields(array('quantity' => 0))
+            ->execute();
+
+
+
         db_update('node')
             ->fields(array('uid' => 0))
             ->condition('type', 'product_display')
